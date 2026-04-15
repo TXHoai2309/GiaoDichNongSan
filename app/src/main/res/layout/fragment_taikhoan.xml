@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F8F1EC">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomNavTaiKhoan"
         android:orientation="vertical">
 
         <!-- Header -->
@@ -442,16 +441,4 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavTaiKhoan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#F7F3E8"
-        app:itemIconTint="#4A423D"
-        app:itemTextColor="#4A423D"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_menu" />
-
-</RelativeLayout>
+</ScrollView>
