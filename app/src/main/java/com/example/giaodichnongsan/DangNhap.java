@@ -2,6 +2,7 @@ package com.example.giaodichnongsan;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -22,6 +23,12 @@ public class DangNhap extends AppCompatActivity {
         tvForgotPassword.setOnClickListener(v -> {
             Intent intent = new Intent(DangNhap.this, QuenMatKhau.class);
             startActivity(intent);
+        });
+        Button btnLogin;
+        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(v -> {
+        Intent intent = new Intent(DangNhap.this, TrangChu.class);
+        startActivity(intent);
         });
     }
 }

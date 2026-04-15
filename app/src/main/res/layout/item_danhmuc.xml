@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="90dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_marginRight="10dp">
+
+    <ImageView
+        android:id="@+id/imgDanhMuc"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_danhmuc"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_rau"/>
+    <TextView
+        android:id="@+id/tvDanhMuc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rau củ"
+        android:textSize="12sp"
+        android:layout_marginTop="5dp"/>
+</LinearLayout>

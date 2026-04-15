@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fontFamily="sans-serif-medium"
+    android:background="#F8F1EC">
+
+    <!-- Nội dung chính -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNav">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Giữ nguyên toàn bộ code cũ của bạn -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Trang chủ"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="#4A423D"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:hint="Tìm kiếm sản phẩm"
+                android:textSize="15dp"
+                android:fontFamily="sans-serif-medium"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_search"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:drawablePadding="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sản phẩm nổi bật"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:textColor="#4A423D"
+                android:layout_marginTop="20dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvNoiBat"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Danh mục"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:textColor="#4A423D"
+                android:layout_marginTop="10dp"
+               />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDanhMuc"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="5dp"
+                android:clipToPadding="false"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sản phẩm mới"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:textColor="#4A423D"
+                android:layout_marginTop="5dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSanPhamMoi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 🔥 MENU Ở ĐÂY -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#F7F3E8"
+        app:menu="@menu/bottom_menu"
+
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="#4A423D"
+        app:itemTextColor="#4A423D"
+ />
+</RelativeLayout>
