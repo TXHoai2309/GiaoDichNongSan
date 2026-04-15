@@ -34,7 +34,7 @@ public class NhapLaiMatKhau extends AppCompatActivity {
                 Toast.makeText(this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
 
                 // Chuyển về màn đăng nhập
-                Intent intent = new Intent(NhapLaiMatKhau.this, MainActivity.class);
+                Intent intent = new Intent(NhapLaiMatKhau.this, DangNhap.class);
                 startActivity(intent);
 
                 // Xóa stack (không quay lại được nữa)

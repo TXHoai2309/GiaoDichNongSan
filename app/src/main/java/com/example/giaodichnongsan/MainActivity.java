@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         // Tự động chuyển sang Quên mật khẩu
-        Intent intent = new Intent(MainActivity.this, QuenMatKhau.class);
+        Intent intent = new Intent(MainActivity.this, DangNhap.class);
         startActivity(intent);
 
     }
