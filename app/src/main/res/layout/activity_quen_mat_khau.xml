@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#F7F3E8 ">
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quên mật khẩu"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Mô tả -->
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_email"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhập Email đã nhận OTP"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Nhập email -->
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập email"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Nút gửi -->
+    <Button
+        android:id="@+id/btnGui"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gửi yêu cầu"
+        android:backgroundTint="#68A25A"
+        android:textColor="#FFFFFF"/>
+
+    <!-- Quay lại -->
+    <TextView
+        android:id="@+id/tvQuayLai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quay lại đăng nhập"
+        android:textColor="#2196F3"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"/>
+
+</LinearLayout>
