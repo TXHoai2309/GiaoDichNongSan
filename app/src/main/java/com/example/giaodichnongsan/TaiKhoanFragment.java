@@ -30,7 +30,6 @@ public class TaiKhoanFragment extends Fragment {
         itemThongTinCaNhan = view.findViewById(R.id.itemThongTinCaNhan);
         itemDoiMatKhau = view.findViewById(R.id.itemDoiMatKhau);
         itemDangKyBanHang = view.findViewById(R.id.itemDangKyBanHang);
-        itemVoucher = view.findViewById(R.id.itemVoucher);
         itemGioiThieu = view.findViewById(R.id.itemGioiThieu);
         itemDieuKhoan = view.findViewById(R.id.itemDieuKhoan);
         itemTroGiup = view.findViewById(R.id.itemTroGiup);
