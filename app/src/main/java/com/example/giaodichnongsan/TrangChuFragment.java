@@ -62,22 +62,58 @@ public class TrangChuFragment extends Fragment {
         // ===== DATA =====
 
         listNoiBat = new ArrayList<>();
-        listNoiBat.add(new SanPham(R.drawable.ic_sup_lo, 1, "Súp lơ nhà trồng", 15000, 120));
-        listNoiBat.add(new SanPham(R.drawable.ic_ca_chua, 2, "Cà chua tươi", 25000, 98));
-        listNoiBat.add(new SanPham(R.drawable.ic_ngo, 3, "Ngô ngọt", 20000, 200));
 
+        listNoiBat.add(new SanPham(
+                1,
+                R.drawable.ic_sup_lo,
+                "Súp lơ nhà trồng",
+                15000,
+                120,
+                "Súp lơ sạch, trồng tại vườn, không thuốc hóa học",
+                "Đà Lạt",
+                4.5f, "shop rau sạch"
+        ));
+
+        listNoiBat.add(new SanPham(
+                2,
+                R.drawable.ic_ca_chua,
+                "Cà chua tươi",
+                25000,
+                98,
+                "Cà chua đỏ mọng, thu hoạch trong ngày",
+                "Lâm Đồng",
+                4.2f,"shop rau sạch"
+        ));
+
+        listNoiBat.add(new SanPham(
+                3,
+                R.drawable.ic_ngo,
+                "Ngô ngọt",
+                20000,
+                200,
+                "Ngô ngọt tự nhiên, ăn rất thơm",
+                "Hà Nội",
+                4.7f, "shop rau sạch"
+        ));
         listMoi = new ArrayList<>();
-        listMoi.add(new SanPham(R.drawable.ic_ca_rot, 4, "Cà rốt", 18000, 75));
-        listMoi.add(new SanPham(R.drawable.ic_dau_ha_lan, 5, "Đậu hà lan", 30000, 60));
-        listMoi.add(new SanPham(R.drawable.ic_ca_chua, 2, "Cà chua tươi", 25000, 98));
-        listMoi.add(new SanPham(R.drawable.ic_ngo, 3, "Ngô ngọt", 20000, 200));
-        listMoi.add(new SanPham(R.drawable.ic_khoai_tay, 6, "Khoai tây", 22000, 150));
+        listMoi.add(new SanPham(4, R.drawable.ic_ca_rot, "Cà rốt", 18000, 75));
+        listMoi.add(new SanPham(5, R.drawable.ic_dau_ha_lan, "Đậu hà lan", 30000, 60));
+        listMoi.add(new SanPham(2, R.drawable.ic_ca_chua, "Cà chua tươi", 25000, 98));
+        listMoi.add(new SanPham(3, R.drawable.ic_ngo, "Ngô ngọt", 20000, 200));
+        listMoi.add(new SanPham(6, R.drawable.ic_khoai_tay, "Khoai tây", 22000, 150));
 
         listDanhMuc = new ArrayList<>();
         listDanhMuc.add(new DanhMuc(R.drawable.ic_rau, "Rau củ"));
         listDanhMuc.add(new DanhMuc(R.drawable.ic_traicay, "Trái cây"));
         listDanhMuc.add(new DanhMuc(R.drawable.ic_gao, "Gạo"));
         listDanhMuc.add(new DanhMuc(R.drawable.ic_more, "Thêm"));
+
+        adapterMoi = new SanPhamMoiAdapter(getContext(), listMoi);
+        danhMucAdapter = new DanhMucAdapter(getContext(), listDanhMuc);
+
+        rvNoiBat.setAdapter(adapterNoiBat);
+        rvSanPhamMoi.setAdapter(adapterMoi);
+        rvDanhMuc.setAdapter(danhMucAdapter);
 
         // ===== ADAPTER =====
 

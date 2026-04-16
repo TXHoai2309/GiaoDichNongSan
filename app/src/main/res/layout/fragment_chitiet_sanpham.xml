@@ -1,0 +1,148 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F1EC">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Ảnh -->
+        <ImageView
+            android:id="@+id/imgSP"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_khoai_tay"/>
+
+        <!-- Tên -->
+        <TextView
+            android:id="@+id/tvTen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Khoai tây Đà Lạt"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+
+        <!-- Đánh giá + đã bán -->
+        <TextView
+            android:id="@+id/tvDanhGia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⭐ 4.5 | 1245 đã bán"
+            android:textSize="14sp"
+            android:textColor="#666"/>
+
+        <!-- Giá -->
+        <TextView
+            android:id="@+id/tvGia"
+            android:text="15.000đ/kg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FF5722"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"/>
+
+        <!-- Mô tả -->
+        <TextView
+            android:text="Mô tả"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tvMoTa"
+            android:text="Khoai tây sạch, trồng tự nhiên..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"/>
+
+        <!-- Nguồn gốc -->
+        <TextView
+            android:text="Nguồn gốc"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tvNguonGoc"
+            android:text="Đà Lạt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"/>
+
+        <!-- BUTTON -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+
+            <Button
+                android:id="@+id/btnGioHang"
+                android:layout_weight="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thêm vào giỏ"
+                android:layout_marginEnd="8dp"/>  <!-- 🔥 thêm dòng này -->
+
+            <Button
+                android:id="@+id/btnMua"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Mua ngay"
+                android:backgroundTint="#68A25A"
+                android:textColor="#fff"
+                android:layout_marginStart="8dp"/> <!-- 🔥 thêm dòng này -->
+        </LinearLayout>
+
+        <!-- ĐÁNH GIÁ -->
+        <TextView
+            android:text="Nhận xét"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvDanhGia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- SHOP -->
+        <TextView
+            android:text="Thông tin shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:id="@+id/tvShop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shop Nông Sản Sạch Đà Lạt"/>
+
+        <!-- SẢN PHẨM LIÊN QUAN -->
+        <TextView
+            android:text="Sản phẩm liên quan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLienQuan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -47,8 +48,21 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.Vi
 
         holder.img.setImageResource(sp.getHinh());
         holder.ten.setText(sp.getTen());
-        holder.gia.setText(String.format("%,dđ/kg", sp.getGia()));
-        holder.daBan.setText(sp.getDaBan() + " đã bán");
+
+        // 🔥 THÊM ĐOẠN NÀY
+        holder.itemView.setOnClickListener(v -> {
+            if (context instanceof AppCompatActivity) {
+                AppCompatActivity activity = (AppCompatActivity) context;
+
+                ChiTietSanPhamFragment fragment = ChiTietSanPhamFragment.newInstance(sp);
+
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 
     @Override
