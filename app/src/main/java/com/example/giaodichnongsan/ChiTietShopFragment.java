@@ -1,13 +1,19 @@
 package com.example.giaodichnongsan;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,6 +31,7 @@ public class ChiTietShopFragment extends Fragment {
 
     RecyclerView rvSanPhamShop;
 
+    ImageView btnMenu;
     public static ChiTietShopFragment newInstance(Shop shop) {
         ChiTietShopFragment fragment = new ChiTietShopFragment();
         Bundle bundle = new Bundle();
@@ -54,6 +61,8 @@ public class ChiTietShopFragment extends Fragment {
         btnChat = view.findViewById(R.id.btnChat);
 
         rvSanPhamShop = view.findViewById(R.id.rvSanPhamShop);
+
+        btnMenu = view.findViewById(R.id.btnMenu);
         rvSanPhamShop.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -129,6 +138,87 @@ public class ChiTietShopFragment extends Fragment {
                 "Shop A"
         ));
 
+        btnMenu.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(getContext(), v);
+            popup.inflate(R.menu.menu_shop);
+
+            popup.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.menu_share) {
+
+                    String tenShop = tvTenShop.getText().toString();
+
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+
+                    String noiDung = "🌿 Khám phá shop nông sản này: " + tenShop +
+                            "\n👉 Chất lượng cao - Giá tốt!" +
+                            "\n📲 Tải app ngay để xem thêm!";
+
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, noiDung);
+
+                    startActivity(Intent.createChooser(shareIntent, "Chia sẻ shop qua"));
+
+                    return true;
+                }
+                else if (item.getItemId() == R.id.menu_report) {
+
+                    String[] lyDo = {
+                            "Lừa đảo",
+                            "Hàng kém chất lượng",
+                            "Spam / Quảng cáo",
+                            "Khác"
+                    };
+
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Chọn lý do báo cáo");
+
+                    builder.setItems(lyDo, (dialog, which) -> {
+
+                        String selected = lyDo[which];
+
+                        Toast.makeText(getContext(),
+                                "Đã báo cáo: " + selected,
+                                Toast.LENGTH_SHORT).show();
+                    });
+
+                    builder.setNegativeButton("Hủy", null);
+
+                    builder.show();
+
+                    return true;
+                }
+                else if (item.getItemId() == R.id.menu_rate) {
+
+                    View dialogView = LayoutInflater.from(getContext())
+                            .inflate(R.layout.dialog_danhgia, null);
+
+                    RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
+                    EditText edtNhanXet = dialogView.findViewById(R.id.edtNhanXet);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setView(dialogView);
+
+                    builder.setPositiveButton("Gửi", (dialog, which) -> {
+                        float soSao = ratingBar.getRating();
+                        String nhanXet = edtNhanXet.getText().toString();
+
+                        Toast.makeText(getContext(),
+                                "Bạn đã đánh giá: " + soSao + "⭐\n" + nhanXet,
+                                Toast.LENGTH_LONG).show();
+                    });
+
+                    builder.setNegativeButton("Hủy", null);
+
+                    builder.show();
+
+                    return true;
+                }
+                return false;
+            });
+
+            popup.show();
+        });
 
 // ===== ADAPTER =====
         adapterMoi = new SanPhamMoiAdapter(getContext(), listMoi);
@@ -137,5 +227,6 @@ public class ChiTietShopFragment extends Fragment {
         rvSanPhamShop.setLayoutManager(new GridLayoutManager(getContext(), 2));
         rvSanPhamShop.setAdapter(adapterMoi);
         return view;
+
     }
 }

@@ -9,6 +9,45 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="12dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp">
+
+            <!-- BACK -->
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_media_previous"/>
+
+            <!-- TITLE -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Chi tiết shop"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#333"
+                android:gravity="center"/>
+
+            <!-- MENU -->
+            <ImageView
+                android:id="@+id/btnMenu"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_more"/>
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="10dp"/>
 
         <!-- ===== HEADER SHOP ===== -->
         <LinearLayout
