@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F1EC">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:id="@+id/btnBackQuanLyShop"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:contentDescription="Quay lại"
+                android:src="@android:drawable/ic_media_previous"
+                app:tint="#4A423D" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Quản lý cửa hàng"
+                android:textColor="#4A423D"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/btnMenuQuanLyShop"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="Menu"
+                android:src="@android:drawable/ic_menu_sort_by_size"
+                app:tint="#4A423D" />
+        </RelativeLayout>
+
+        <!-- Card shop -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="14dp"
+            android:background="#FFF8F4"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:contentDescription="Shop"
+                    android:src="@android:drawable/ic_menu_gallery"
+                    app:tint="#B8AEA8" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nông sản xanh"
+                        android:textColor="#4A423D"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Shop uy tín"
+                        android:textColor="#7A6F67"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="★ 4.8 | 1,234 đánh giá"
+                        android:textColor="#7A6F67"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="92dp"
+                    android:layout_height="36dp"
+                    android:backgroundTint="#EFE6E1"
+                    android:text="Xem shop >"
+                    android:textAllCaps="false"
+                    android:textColor="#4A423D"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Stats -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1.2k"
+                        android:textColor="#4A423D"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Người theo dõi"
+                        android:textColor="#7A6F67"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1.5k"
+                        android:textColor="#4A423D"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đã bán"
+                        android:textColor="#7A6F67"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 năm"
+                        android:textColor="#4A423D"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tham gia"
+                        android:textColor="#7A6F67"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="14dp"
+            android:background="#EFE6E1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1. Quản lý sản phẩm"
+                android:textColor="#4A423D"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/arrow_down_float"
+                app:tint="#6E625B" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:background="#FFF8F4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/itemTenGianHang"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    app:tint="#8A7F77" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên gian hàng"
+                        android:textColor="#4A423D"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xem sản phẩm , thêm sản phẩm mới"
+                        android:textColor="#8A7F77"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#8A7F77" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E6DCD5" />
+
+            <LinearLayout
+                android:id="@+id/itemQuanLyDonHang1"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_agenda"
+                    app:tint="#8A7F77" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quản lý đơn hàng"
+                        android:textColor="#4A423D"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xử lý và kiểm tra các đơn hàng của shop"
+                        android:textColor="#8A7F77"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#8A7F77" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E6DCD5" />
+
+            <LinearLayout
+                android:id="@+id/itemQuanLyKhuyenMai"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_share"
+                    app:tint="#8A7F77" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text="Quản lý khuyến mãi"
+                    android:textColor="#4A423D"
+                    android:textSize="17sp" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#8A7F77" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="14dp"
+            android:background="#EFE6E1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="2. Thông tin gian hàng"
+                android:textColor="#4A423D"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/arrow_down_float"
+                app:tint="#6E625B" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:background="#FFF8F4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/itemThongTinSanPham"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    app:tint="#8A7F77" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên gian phẩm"
+                        android:textColor="#4A423D"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xem sản phẩm , thêm sản phẩm mới"
+                        android:textColor="#8A7F77"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#8A7F77" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E6DCD5" />
+
+            <LinearLayout
+                android:id="@+id/itemQuanLyDonHang2"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_agenda"
+                    app:tint="#8A7F77" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quản lý đơn hàng"
+                        android:textColor="#4A423D"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xử lý và kiểm tra các đơn hàng của shop"
+                        android:textColor="#8A7F77"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#8A7F77" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E6DCD5" />
+
+            <LinearLayout
+                android:id="@+id/itemXuLyYeuCau"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_send"
+                    app:tint="#8A7F77" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text="Xử lý yêu cầu đăng ký"
+                    android:textColor="#4A423D"
+                    android:textSize="17sp" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#8A7F77" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E6DCD5" />
+
+            <LinearLayout
+                android:id="@+id/itemDanhGiaPhanHoi"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/btn_star_big_off"
+                    app:tint="#8A7F77" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đánh giá , phản hồi"
+                        android:textColor="#4A423D"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Xem và phản hồi đánh giá của khách hàng"
+                        android:textColor="#8A7F77"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#8A7F77" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E6DCD5" />
+
+            <LinearLayout
+                android:id="@+id/itemThongKeDoanhThu"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_sort_by_size"
+                    app:tint="#8A7F77" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Thống kê , doanh thu"
+                        android:textColor="#4A423D"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Báo cáo hoạt động kinh doanh"
+                        android:textColor="#8A7F77"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="#8A7F77" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="14dp"
+            android:background="#EFE6E1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="3. Cài đặt shop"
+                android:textColor="#4A423D"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/arrow_down_float"
+                app:tint="#6E625B" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/itemCaiDatShop"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/ic_menu_preferences"
+                app:tint="#8A7F77" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="Cài đặt shop"
+                android:textColor="#4A423D"
+                android:textSize="17sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <!-- 4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="14dp"
+            android:background="#EFE6E1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="4. Trung tâm trợ giúp"
+                android:textColor="#4A423D"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/arrow_down_float"
+                app:tint="#6E625B" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/itemTrungTamTroGiup"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="18dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/ic_menu_help"
+                app:tint="#8A7F77" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:text="Trung tâm trợ giúp"
+                android:textColor="#4A423D"
+                android:textSize="17sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

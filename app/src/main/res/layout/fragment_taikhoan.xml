@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#F8F1EC">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <!-- Header -->
@@ -22,8 +22,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
-                android:src="@android:drawable/ic_media_previous"
                 android:contentDescription="Quay lại"
+                android:src="@android:drawable/ic_media_previous"
                 app:tint="#4A423D" />
 
             <TextView
@@ -41,404 +41,441 @@
             android:layout_height="1dp"
             android:background="#DDD3CC" />
 
-        <ScrollView
+        <!-- Thông tin user -->
+        <LinearLayout
+            android:id="@+id/layoutUser"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:minHeight="90dp"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="Avatar"
+                android:src="@android:drawable/sym_def_app_icon" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
-                <!-- Thông tin user -->
-                <LinearLayout
-                    android:id="@+id/layoutUser"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:minHeight="90dp"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:text="Nguyễn Văn A"
+                    android:textColor="#4A423D"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:src="@android:drawable/sym_def_app_icon"
-                        android:contentDescription="Avatar" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvUserName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Nguyễn Văn A"
-                            android:textColor="#4A423D"
-                            android:textSize="22sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvPhone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="0123 456 789"
-                            android:textColor="#6E625B"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Chi tiết"
-                        app:tint="#8A7F77" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <!-- Danh sách mục -->
-                <LinearLayout
-                    android:id="@+id/itemThongTinCaNhan"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_myplaces"
-                        android:contentDescription="Thông tin cá nhân"
-                        app:tint="#7A6F67" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Thông tin cá nhân"
-                        android:textColor="#4A423D"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Đi tới"
-                        app:tint="#8A7F77" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <LinearLayout
-                    android:id="@+id/itemDoiMatKhau"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_lock_lock"
-                        android:contentDescription="Đổi mật khẩu"
-                        app:tint="#7A6F67" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Đổi mật khẩu"
-                        android:textColor="#4A423D"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Đi tới"
-                        app:tint="#8A7F77" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <LinearLayout
-                    android:id="@+id/itemDangKyBanHang"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_agenda"
-                        android:contentDescription="Đăng ký bán hàng"
-                        app:tint="#7A6F67" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Đăng ký bán hàng"
-                        android:textColor="#4A423D"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Đi tới"
-                        app:tint="#8A7F77" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <LinearLayout
-                    android:id="@+id/itemVoucher"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_save"
-                        android:contentDescription="Voucher của tôi"
-                        app:tint="#7A6F67" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Voucher của tôi"
-                        android:textColor="#4A423D"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Đi tới"
-                        app:tint="#8A7F77" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <LinearLayout
-                    android:id="@+id/itemGioiThieu"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_info_details"
-                        android:contentDescription="Giới thiệu"
-                        app:tint="#7A6F67" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Giới thiệu về chúng tôi"
-                        android:textColor="#4A423D"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Đi tới"
-                        app:tint="#8A7F77" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <LinearLayout
-                    android:id="@+id/itemDieuKhoan"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_edit"
-                        android:contentDescription="Điều khoản"
-                        app:tint="#7A6F67" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Điều khoản và chính sách"
-                        android:textColor="#4A423D"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Đi tới"
-                        app:tint="#8A7F77" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <LinearLayout
-                    android:id="@+id/itemTroGiup"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@android:drawable/ic_menu_help"
-                        android:contentDescription="Trung tâm trợ giúp"
-                        app:tint="#7A6F67" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:text="Trung tâm trợ giúp"
-                        android:textColor="#4A423D"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@android:drawable/ic_media_next"
-                        android:contentDescription="Đi tới"
-                        app:tint="#8A7F77" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <!-- Switch -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Tắt cảm ứng hỗ trợ"
-                        android:textColor="#4A423D"
-                        android:textSize="17sp" />
-
-                    <Switch
-                        android:id="@+id/switchCamUng"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E2D8D1" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="#FFF8F4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Tắt tự động chỉnh độ sáng"
-                        android:textColor="#4A423D"
-                        android:textSize="17sp" />
-
-                    <Switch
-                        android:id="@+id/switchDoSang"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="false" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="12dp"
-                    android:background="#F8F1EC" />
+                <TextView
+                    android:id="@+id/tvPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="0123 456 789"
+                    android:textColor="#6E625B"
+                    android:textSize="16sp" />
             </LinearLayout>
-        </ScrollView>
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="Chi tiết"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Thông tin cá nhân -->
+        <LinearLayout
+            android:id="@+id/itemThongTinCaNhan"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Thông tin cá nhân"
+                android:src="@android:drawable/ic_menu_myplaces"
+                app:tint="#7A6F67" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Thông tin cá nhân"
+                android:textColor="#4A423D"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Đi tới"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Đổi mật khẩu -->
+        <LinearLayout
+            android:id="@+id/itemDoiMatKhau"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Đổi mật khẩu"
+                android:src="@android:drawable/ic_lock_lock"
+                app:tint="#7A6F67" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Đổi mật khẩu"
+                android:textColor="#4A423D"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Đi tới"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Đăng ký bán hàng -->
+        <LinearLayout
+            android:id="@+id/itemDangKyBanHang"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Đăng ký bán hàng"
+                android:src="@android:drawable/ic_menu_agenda"
+                app:tint="#7A6F67" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Đăng ký bán hàng"
+                android:textColor="#4A423D"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Đi tới"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Quản lý cửa hàng -->
+        <LinearLayout
+            android:id="@+id/itemQuanLyCuaHang"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Quản lý cửa hàng"
+                android:src="@android:drawable/ic_menu_manage"
+                app:tint="#7A6F67" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Quản lý cửa hàng"
+                android:textColor="#4A423D"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Đi tới"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Voucher -->
+        <LinearLayout
+            android:id="@+id/itemVoucher"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Voucher của tôi"
+                android:src="@android:drawable/ic_menu_save"
+                app:tint="#7A6F67" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Voucher của tôi"
+                android:textColor="#4A423D"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Đi tới"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Giới thiệu -->
+        <LinearLayout
+            android:id="@+id/itemGioiThieu"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Giới thiệu"
+                android:src="@android:drawable/ic_menu_info_details"
+                app:tint="#7A6F67" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Giới thiệu về chúng tôi"
+                android:textColor="#4A423D"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Đi tới"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Điều khoản -->
+        <LinearLayout
+            android:id="@+id/itemDieuKhoan"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Điều khoản"
+                android:src="@android:drawable/ic_menu_edit"
+                app:tint="#7A6F67" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Điều khoản và chính sách"
+                android:textColor="#4A423D"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Đi tới"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Trợ giúp -->
+        <LinearLayout
+            android:id="@+id/itemTroGiup"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Trung tâm trợ giúp"
+                android:src="@android:drawable/ic_menu_help"
+                app:tint="#7A6F67" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:text="Trung tâm trợ giúp"
+                android:textColor="#4A423D"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Đi tới"
+                android:src="@android:drawable/ic_media_next"
+                app:tint="#8A7F77" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Switch 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tắt cảm ứng hỗ trợ"
+                android:textColor="#4A423D"
+                android:textSize="17sp" />
+
+            <Switch
+                android:id="@+id/switchCamUng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E2D8D1" />
+
+        <!-- Switch 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tắt tự động chỉnh độ sáng"
+                android:textColor="#4A423D"
+                android:textSize="17sp" />
+
+            <Switch
+                android:id="@+id/switchDoSang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="#F8F1EC" />
     </LinearLayout>
 </ScrollView>
