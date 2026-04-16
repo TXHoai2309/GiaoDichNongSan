@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -39,7 +40,6 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
         View view = LayoutInflater.from(context).inflate(R.layout.item_sanpham, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         SanPham sp = list.get(position);
@@ -49,10 +49,27 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
 
         holder.tvGia.setText(String.format("%,dđ/kg", sp.getGia()));
         holder.tvDaBan.setText(sp.getDaBan() + " đã bán");
+
+        // 🔥 CLICK ITEM
+        holder.itemView.setOnClickListener(v -> {
+            if (context instanceof AppCompatActivity) {
+                AppCompatActivity activity = (AppCompatActivity) context;
+
+                ChiTietSanPhamFragment fragment = ChiTietSanPhamFragment.newInstance(sp);
+
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return list.size();
     }
+
+
 }

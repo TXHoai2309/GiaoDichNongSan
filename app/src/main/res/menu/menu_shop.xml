@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_share"
+        android:title="Chia sẻ shop" />
+
+    <item
+        android:id="@+id/menu_report"
+        android:title="Báo cáo shop" />
+
+    <item
+        android:id="@+id/menu_rate"
+        android:title="Đánh giá shop" />
+
+</menu>

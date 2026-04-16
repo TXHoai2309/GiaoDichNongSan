@@ -36,8 +36,9 @@ public class DangNhap extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
 
         btnLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(DangNhap.this, TrangChu.class);
+            Intent intent = new Intent(DangNhap.this, MainActivity.class);
             startActivity(intent);
+            finish(); // rất quan trọng
         });
     }
 }
