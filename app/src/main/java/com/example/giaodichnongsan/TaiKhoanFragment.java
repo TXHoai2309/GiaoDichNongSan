@@ -14,7 +14,8 @@ public class TaiKhoanFragment extends Fragment {
 
     ImageView btnBack;
     LinearLayout itemThongTinCaNhan, itemDoiMatKhau, itemDangKyBanHang,
-            itemVoucher, itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser;
+            itemVoucher, itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser,
+            itemQuanLyCuaHang;
 
     public TaiKhoanFragment() {}
 
@@ -24,7 +25,6 @@ public class TaiKhoanFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_taikhoan, container, false);
 
-        // ánh xạ
         btnBack = view.findViewById(R.id.btnBack);
         layoutUser = view.findViewById(R.id.layoutUser);
         itemThongTinCaNhan = view.findViewById(R.id.itemThongTinCaNhan);
@@ -34,8 +34,19 @@ public class TaiKhoanFragment extends Fragment {
         itemGioiThieu = view.findViewById(R.id.itemGioiThieu);
         itemDieuKhoan = view.findViewById(R.id.itemDieuKhoan);
         itemTroGiup = view.findViewById(R.id.itemTroGiup);
+        itemQuanLyCuaHang = view.findViewById(R.id.itemQuanLyCuaHang);
 
-        // ===== CLICK =====
+        boolean isSeller = requireActivity()
+                .getSharedPreferences("USER", requireActivity().MODE_PRIVATE)
+                .getBoolean("isSeller", false);
+
+        if (isSeller) {
+            itemDangKyBanHang.setVisibility(View.GONE);
+            itemQuanLyCuaHang.setVisibility(View.VISIBLE);
+        } else {
+            itemDangKyBanHang.setVisibility(View.VISIBLE);
+            itemQuanLyCuaHang.setVisibility(View.GONE);
+        }
 
         btnBack.setOnClickListener(v ->
                 requireActivity().getSupportFragmentManager().popBackStack()
@@ -54,7 +65,15 @@ public class TaiKhoanFragment extends Fragment {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frameLayout, new DangKiBanHangFragment())
-                    .addToBackStack(null) // 👈 QUAN TRỌNG
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        itemQuanLyCuaHang.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, new QuanLyCuaHangFragment())
+                    .addToBackStack(null)
                     .commit();
         });
 
