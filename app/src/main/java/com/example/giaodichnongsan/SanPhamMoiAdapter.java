@@ -48,6 +48,8 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.Vi
 
         holder.img.setImageResource(sp.getHinh());
         holder.ten.setText(sp.getTen());
+        holder.gia.setText(String.format("%,dđ/kg", sp.getGia()));
+        holder.daBan.setText(sp.getDaBan() + " đã bán");
 
         // 🔥 THÊM ĐOẠN NÀY
         holder.itemView.setOnClickListener(v -> {

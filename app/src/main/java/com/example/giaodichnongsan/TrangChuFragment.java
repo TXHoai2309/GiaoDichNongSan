@@ -177,13 +177,6 @@ public class TrangChuFragment extends Fragment {
         listDanhMuc.add(new DanhMuc(R.drawable.ic_gao, "Gạo"));
         listDanhMuc.add(new DanhMuc(R.drawable.ic_more, "Thêm"));
 
-        adapterMoi = new SanPhamMoiAdapter(getContext(), listMoi);
-        danhMucAdapter = new DanhMucAdapter(getContext(), listDanhMuc);
-
-        rvNoiBat.setAdapter(adapterNoiBat);
-        rvSanPhamMoi.setAdapter(adapterMoi);
-        rvDanhMuc.setAdapter(danhMucAdapter);
-
         // ===== ADAPTER =====
 
         adapterNoiBat = new SanPhamAdapter(getContext(), listNoiBat);

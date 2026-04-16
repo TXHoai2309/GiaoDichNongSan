@@ -32,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frameLayout), (v, insets) -> {
+            int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+            v.setPadding(0, top, 0, 0);
+            return insets;
+        });
     }
     private void loadFragment(Fragment fragment){
         getSupportFragmentManager()
@@ -39,4 +44,5 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.frameLayout, fragment)
                 .commit();
     }
+
 }
