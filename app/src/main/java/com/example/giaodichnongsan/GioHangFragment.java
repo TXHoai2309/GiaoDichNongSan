@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class GioHangFragment extends Fragment {
 
     RecyclerView rvGioHang;
@@ -44,9 +46,21 @@ public class GioHangFragment extends Fragment {
 
         // nút mua
         btnMua.setOnClickListener(v -> {
-            Toast.makeText(getContext(),
-                    "Đặt hàng thành công!",
-                    Toast.LENGTH_SHORT).show();
+
+            ArrayList<GioHangItem> listMua = getDanhSachDaChon();
+
+            if (listMua.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng chọn sản phẩm", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ThanhToanFragment fragment = ThanhToanFragment.newInstance(listMua);
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         cbAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -65,5 +79,17 @@ public class GioHangFragment extends Fragment {
     private void capNhatTongTien() {
         int tong = GioHangManager.getTongTien();
         tvTongTien.setText(tong + "đ");
+    }
+    private ArrayList<GioHangItem> getDanhSachDaChon() {
+
+        ArrayList<GioHangItem> list = new ArrayList<>();
+
+        for (GioHangItem item : GioHangManager.gioHang) {
+            if (item.isChecked()) {
+                list.add(item);
+            }
+        }
+
+        return list;
     }
 }
