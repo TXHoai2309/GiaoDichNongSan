@@ -258,41 +258,6 @@
             android:layout_height="1dp"
             android:background="#E2D8D1" />
 
-        <!-- Voucher -->
-        <LinearLayout
-            android:id="@+id/itemVoucher"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="#FFF8F4"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:contentDescription="Voucher của tôi"
-                android:src="@android:drawable/ic_menu_save"
-                app:tint="#7A6F67" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
-                android:text="Voucher của tôi"
-                android:textColor="#4A423D"
-                android:textSize="18sp" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:contentDescription="Đi tới"
-                android:src="@android:drawable/ic_media_next"
-                app:tint="#8A7F77" />
-        </LinearLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
