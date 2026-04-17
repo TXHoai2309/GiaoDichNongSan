@@ -9,16 +9,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,24 +50,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-//                  ĐÂY LÀ PHẦN ĐỂ TEST ADMIN
-//package com.example.giaodichnongsan;
-//
-//import android.os.Bundle;
-//
-//import androidx.appcompat.app.AppCompatActivity;
-//
-//public class MainActivity extends AppCompatActivity {
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.frameLayout, new AdminFragment())
-//                    .commit();
-//        }
-//    }
-//}
