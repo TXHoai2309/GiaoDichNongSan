@@ -30,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(new TaiKhoanFragment());
                 return true;
             }
+            else if (item.getItemId() == R.id.nav_giohang) {
+                loadFragment(new GioHangFragment());
+                return true;
+            }
             return false;
         });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frameLayout), (v, insets) -> {
