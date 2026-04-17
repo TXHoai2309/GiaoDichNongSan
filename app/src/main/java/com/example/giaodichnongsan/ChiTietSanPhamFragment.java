@@ -1,11 +1,11 @@
 package com.example.giaodichnongsan;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
 
 import androidx.fragment.app.Fragment;
 
@@ -13,6 +13,9 @@ public class ChiTietSanPhamFragment extends Fragment {
 
     ImageView imgSP;
     TextView tvTen, tvGia, tvDanhGia, tvMoTa, tvNguonGoc, tvShop;
+    Button btnGioHang;
+
+    SanPham sp; // 🔥 biến global
 
     public ChiTietSanPhamFragment() {}
 
@@ -30,7 +33,7 @@ public class ChiTietSanPhamFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_chitiet_sanpham, container, false);
 
-        // ánh xạ
+        // ===== ÁNH XẠ =====
         imgSP = view.findViewById(R.id.imgSP);
         tvTen = view.findViewById(R.id.tvTen);
         tvGia = view.findViewById(R.id.tvGia);
@@ -38,70 +41,120 @@ public class ChiTietSanPhamFragment extends Fragment {
         tvMoTa = view.findViewById(R.id.tvMoTa);
         tvNguonGoc = view.findViewById(R.id.tvNguonGoc);
         tvShop = view.findViewById(R.id.tvShop);
+        btnGioHang = view.findViewById(R.id.btnGioHang);
 
-        // nhận dữ liệu
-        if (getArguments() != null) {
-            SanPham sp = (SanPham) getArguments().getSerializable("sanpham");
-
-            if (sp != null) {
-                imgSP.setImageResource(sp.getHinh());
-                tvTen.setText(sp.getTen());
-                tvGia.setText(sp.getGia() + "đ/kg");
-                tvDanhGia.setText("⭐ " + sp.getDanhGia() + " | " + sp.getDaBan() + " đã bán");
-
-                tvMoTa.setText(sp.getMoTa() != null ? sp.getMoTa() : "Chưa có mô tả");
-                tvNguonGoc.setText(sp.getNguonGoc() != null ? sp.getNguonGoc() : "Đang cập nhật");
-                tvShop.setText(sp.getTenShop() != null ? sp.getTenShop() : "Đang cập nhật");
-            }
-        }
-        SanPham sp = null;
-
+        // ===== LẤY DỮ LIỆU 1 LẦN DUY NHẤT =====
         if (getArguments() != null) {
             sp = (SanPham) getArguments().getSerializable("sanpham");
-
-            if (sp != null) {
-                imgSP.setImageResource(sp.getHinh());
-                tvTen.setText(sp.getTen());
-                tvGia.setText(sp.getGia() + "đ/kg");
-                tvDanhGia.setText("⭐ " + sp.getDanhGia() + " | " + sp.getDaBan() + " đã bán");
-
-                tvMoTa.setText(sp.getMoTa() != null ? sp.getMoTa() : "Chưa có mô tả");
-                tvNguonGoc.setText(sp.getNguonGoc() != null ? sp.getNguonGoc() : "Đang cập nhật");
-                tvShop.setText(sp.getTenShop() != null ? sp.getTenShop() : "Đang cập nhật");
-            }
         }
 
-// 🔥 CLICK SHOP
         if (sp != null) {
-            SanPham finalSp = sp;
-
-            tvShop.setOnClickListener(v -> {
-
-                Shop shop = new Shop(
-                        1,
-                        finalSp.getTenShop(),
-                        R.drawable.ic_shop,
-                        4.8f,
-                        256,
-                        1200,
-                        "2 năm",
-                        "Hà Nội",
-                        "0987 654 321",
-                        "Chuyên cung cấp nông sản sạch"
-                );
-
-                ChiTietShopFragment fragment = ChiTietShopFragment.newInstance(shop);
-
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frameLayout, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            });
+            bindData();
+            setupShopClick();
+            setupAddToCart();
         }
 
         return view;
     }
 
+    // ===== HIỂN THỊ DATA =====
+    private void bindData() {
+        imgSP.setImageResource(sp.getHinh());
+        tvTen.setText(sp.getTen());
+        tvGia.setText(sp.getGia() + "đ/kg");
+        tvDanhGia.setText("⭐ " + sp.getDanhGia() + " | " + sp.getDaBan() + " đã bán");
 
+        tvMoTa.setText(sp.getMoTa() != null ? sp.getMoTa() : "Chưa có mô tả");
+        tvNguonGoc.setText(sp.getNguonGoc() != null ? sp.getNguonGoc() : "Đang cập nhật");
+        tvShop.setText(sp.getTenShop() != null ? sp.getTenShop() : "Đang cập nhật");
+    }
+
+    // ===== CLICK SHOP =====
+    private void setupShopClick() {
+        tvShop.setOnClickListener(v -> {
+
+            Shop shop = new Shop(
+                    1,
+                    sp.getTenShop(),
+                    R.drawable.ic_shop,
+                    4.8f,
+                    256,
+                    1200,
+                    "2 năm",
+                    "Hà Nội",
+                    "0987 654 321",
+                    "Chuyên cung cấp nông sản sạch"
+            );
+
+            ChiTietShopFragment fragment = ChiTietShopFragment.newInstance(shop);
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+    }
+
+    // ===== THÊM VÀO GIỎ =====
+    private void setupAddToCart() {
+
+        btnGioHang.setOnClickListener(v -> {
+
+            View dialogView = LayoutInflater.from(getContext())
+                    .inflate(R.layout.dialog_soluong, null);
+
+            ImageView img = dialogView.findViewById(R.id.imgSP);
+            TextView tvTenSP = dialogView.findViewById(R.id.tvTen);
+            TextView tvGiaSP = dialogView.findViewById(R.id.tvGia);
+            TextView tvTong = dialogView.findViewById(R.id.tvTongGia);
+
+            TextView tvSoLuong = dialogView.findViewById(R.id.tvSoLuong);
+            Button btnPlus = dialogView.findViewById(R.id.btnPlus);
+            Button btnMinus = dialogView.findViewById(R.id.btnMinus);
+
+            // ===== SET DATA =====
+            img.setImageResource(sp.getHinh());
+            tvTenSP.setText(sp.getTen());
+            tvGiaSP.setText(sp.getGia() + "đ");
+
+            final int[] soLuong = {1};
+            int gia = sp.getGia();
+
+            tvTong.setText("Tổng: " + gia + "đ");
+
+            // +
+            btnPlus.setOnClickListener(v1 -> {
+                soLuong[0]++;
+                tvSoLuong.setText(String.valueOf(soLuong[0]));
+
+                int tong = gia * soLuong[0];
+                tvTong.setText("Tổng: " + tong + "đ");
+            });
+
+            // -
+            btnMinus.setOnClickListener(v1 -> {
+                if (soLuong[0] > 1) {
+                    soLuong[0]--;
+                    tvSoLuong.setText(String.valueOf(soLuong[0]));
+
+                    int tong = gia * soLuong[0];
+                    tvTong.setText("Tổng: " + tong + "đ");
+                }
+            });
+
+            new AlertDialog.Builder(getContext())
+                    .setView(dialogView)
+                    .setPositiveButton("Thêm vào giỏ", (dialog, which) -> {
+
+                        GioHangManager.themSanPham(sp, soLuong[0], sp.getTenShop());
+
+                        Toast.makeText(getContext(),
+                                "Đã thêm " + soLuong[0] + " sản phẩm",
+                                Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
+        });
+    }
 }
