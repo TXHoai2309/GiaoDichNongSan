@@ -26,6 +26,10 @@ public class ThanhToanFragment extends Fragment {
     // Data
     private ArrayList<GioHangItem> listMua;
     private ThanhToanAdapter adapter;
+    private String tenNguoiNhan = "Nguyễn Văn A";
+    private String soDienThoai = "0987654321";
+    private String diaChi = "123 Đường ABC, TP.HCM";
+    private String ghiChu = "";
 
     // trạng thái
     private String phuongThucThanhToan = "COD";
@@ -144,20 +148,19 @@ public class ThanhToanFragment extends Fragment {
     }
 
     // ================= DIALOG =================
+
     private void showDialogCapNhatThongTin() {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.dialog_thongtin);
 
-// 🔥 FIX SIZE DIALOG
+        // FULL WIDTH
         if (dialog.getWindow() != null) {
             dialog.getWindow().setLayout(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
-
-        dialog.show();
-        dialog.setContentView(R.layout.dialog_thongtin);
 
         EditText edtTen = dialog.findViewById(R.id.edtTen);
         EditText edtSDT = dialog.findViewById(R.id.edtSDT);
@@ -165,25 +168,38 @@ public class ThanhToanFragment extends Fragment {
         EditText edtGhiChu = dialog.findViewById(R.id.edtGhiChu);
         Button btnLuu = dialog.findViewById(R.id.btnLuu);
 
+        // 🔥 FILL DỮ LIỆU CŨ
+        edtTen.setText(tenNguoiNhan);
+        edtSDT.setText(soDienThoai);
+        edtDiaChi.setText(diaChi);
+        edtGhiChu.setText(ghiChu);
+
         btnLuu.setOnClickListener(v -> {
 
             String ten = edtTen.getText().toString().trim();
             String sdt = edtSDT.getText().toString().trim();
-            String diachi = edtDiaChi.getText().toString().trim();
-            String ghichu = edtGhiChu.getText().toString().trim();
+            String dc = edtDiaChi.getText().toString().trim();
+            String note = edtGhiChu.getText().toString().trim();
 
-            if (TextUtils.isEmpty(ten) || TextUtils.isEmpty(sdt) || TextUtils.isEmpty(diachi)) {
+            if (ten.isEmpty() || sdt.isEmpty() || dc.isEmpty()) {
                 Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            tvTenNguoiNhan.setText(ten + " (" + sdt + ")");
-            tvDiaChi.setText(diachi);
+            // 🔥 LƯU LẠI
+            tenNguoiNhan = ten;
+            soDienThoai = sdt;
+            diaChi = dc;
+            ghiChu = note;
 
-            if (TextUtils.isEmpty(ghichu)) {
+            // 🔥 UPDATE UI
+            tvTenNguoiNhan.setText(ten + " (" + sdt + ")");
+            tvDiaChi.setText(dc);
+
+            if (note.isEmpty()) {
                 tvGhiChu.setText("Ghi chú: Không có");
             } else {
-                tvGhiChu.setText("Ghi chú: " + ghichu);
+                tvGhiChu.setText("Ghi chú: " + note);
             }
 
             dialog.dismiss();
