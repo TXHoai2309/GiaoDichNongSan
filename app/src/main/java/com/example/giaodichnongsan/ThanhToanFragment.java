@@ -1,15 +1,16 @@
 package com.example.giaodichnongsan;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,32 +18,27 @@ import java.util.ArrayList;
 
 public class ThanhToanFragment extends Fragment {
 
-    // UI
+    // ===== VIEW =====
     private RecyclerView rvThanhToan;
-    private TextView tvTienHang, tvTong, tvPhiShip;
-    private TextView tvTenNguoiNhan, tvDiaChi, tvGhiChu, tvDanhSachSP, tvTenThanhToan, tvMoTaThanhToan, tvMoTaThanhToanChiTiet;;
-    private LinearLayout layoutThongTin, layoutThanhToan;
+    private TextView tvTongTien;
     private Button btnDatHang;
 
-    // Data
-    private ArrayList<GioHangItem> listMua;
+    // ===== ADAPTER =====
     private ThanhToanAdapter adapter;
-    private String tenNguoiNhan = "Nguyễn Văn A";
-    private String soDienThoai = "0987654321";
-    private String diaChi = "123 Đường ABC, TP.HCM";
-    private String ghiChu = "";
 
-    // trạng thái
-    private String phuongThucThanhToan = "COD";
+    // ===== VIEWMODEL =====
+    private GioHangViewModel gioHangViewModel;
+    private DonHangViewModel donHangViewModel;
 
-    // Giá trị
-    private int phiShip = 30000;
-    private int tienHang = 0;
+    // ===== DATA =====
+    private ArrayList<GioHangItem> listMua;
+
+    public ThanhToanFragment() {}
 
     public static ThanhToanFragment newInstance(ArrayList<GioHangItem> list) {
         ThanhToanFragment fragment = new ThanhToanFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("data", list);
+        bundle.putSerializable("list", list);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -54,39 +50,26 @@ public class ThanhToanFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_thanhtoan, container, false);
 
         initView(view);
-        getData();
+        initData();
+        initViewModel();
         setupRecyclerView();
-        setupListeners();
-        updateUI();
+        setupUI();
+        setupEvent();
 
         return view;
     }
 
-    // ================= INIT =================
+    // ===== INIT VIEW =====
     private void initView(View view) {
         rvThanhToan = view.findViewById(R.id.rvThanhToan);
-        tvTienHang = view.findViewById(R.id.tvTienHang);
-        tvTong = view.findViewById(R.id.tvTong);
-        tvPhiShip = view.findViewById(R.id.tvPhiShip);
-
-        tvTenNguoiNhan = view.findViewById(R.id.tvTenNguoiNhan);
-        tvDiaChi = view.findViewById(R.id.tvDiaChi);
-        tvGhiChu = view.findViewById(R.id.tvGhiChu);
-        tvDanhSachSP = view.findViewById(R.id.tvDanhSachSP);
-
-        layoutThanhToan = view.findViewById(R.id.layoutThanhToan);
-        tvTenThanhToan = view.findViewById(R.id.tvTenThanhToan);
-        tvMoTaThanhToan = view.findViewById(R.id.tvMoTaThanhToan);
-        tvMoTaThanhToanChiTiet = view.findViewById(R.id.tvMoTaThanhToanChiTiet);
-
-        layoutThongTin = view.findViewById(R.id.layoutThongTin);
+        tvTongTien = view.findViewById(R.id.tvTong); // ⚠️ nhớ đúng ID XML
         btnDatHang = view.findViewById(R.id.btnDatHang);
     }
 
-    // ================= DATA =================
-    private void getData() {
+    // ===== INIT DATA =====
+    private void initData() {
         if (getArguments() != null) {
-            listMua = (ArrayList<GioHangItem>) getArguments().getSerializable("data");
+            listMua = (ArrayList<GioHangItem>) getArguments().getSerializable("list");
         }
 
         if (listMua == null) {
@@ -94,172 +77,61 @@ public class ThanhToanFragment extends Fragment {
         }
     }
 
-    // ================= RECYCLER =================
+    // ===== INIT VIEWMODEL =====
+    private void initViewModel() {
+        gioHangViewModel = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
+        donHangViewModel = new ViewModelProvider(requireActivity()).get(DonHangViewModel.class); // 🔥 FIX CRASH
+    }
+
+    // ===== SETUP RECYCLER =====
     private void setupRecyclerView() {
         rvThanhToan.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ThanhToanAdapter(listMua);
         rvThanhToan.setAdapter(adapter);
-        layoutThanhToan.setOnClickListener(v -> showChonThanhToan());
-
     }
 
-    // ================= LISTENER =================
-    private void setupListeners() {
+    // ===== UI =====
+    private void setupUI() {
+        int tongTien = tinhTongTien(listMua);
+        tvTongTien.setText("Tổng tiền: " + tongTien + "đ");
+    }
+
+    // ===== EVENT =====
+    private void setupEvent() {
 
         btnDatHang.setOnClickListener(v -> {
 
-            // 🔥 TẠO ĐƠN HÀNG
-            if (listMua.size() > 0) {
-
-                GioHangItem item = listMua.get(0); // demo lấy 1 sp
-
-                DonHang don = new DonHang(
-                        item.getSanPham().getTen(),
-                        item.getSoLuong(),
-                        tienHang + phiShip,
-                        DonHang.DANG_GIAO
-                );
-
-                // 🔥 LƯU
-                DonHangManager.themDon(don);
-            }
-
-            // chuyển màn
-            Intent intent = new Intent(requireContext(), DatHangThanhCongActivity.class);
-            startActivity(intent);
-        });
-        layoutThongTin.setOnClickListener(v -> showDialogCapNhatThongTin());
-    }
-
-    // ================= UPDATE UI =================
-    private void updateUI() {
-        tinhTien();
-        hienThiDanhSachSanPham();
-    }
-
-    // ================= TÍNH TIỀN =================
-    private void tinhTien() {
-        tienHang = 0;
-
-        for (GioHangItem item : listMua) {
-            tienHang += item.getSanPham().getGia() * item.getSoLuong();
-        }
-
-        int tong = tienHang + phiShip;
-
-        tvTienHang.setText("Tiền hàng: " + String.format("%,dđ", tienHang));
-        tvTong.setText("Tổng thanh toán: " + String.format("%,dđ", tong));
-        tvPhiShip.setText(String.format("%,dđ", phiShip));
-    }
-
-    // ================= HIỂN THỊ SP =================
-    private void hienThiDanhSachSanPham() {
-        StringBuilder builder = new StringBuilder();
-
-        for (GioHangItem item : listMua) {
-            builder.append(item.getSanPham().getTen())
-                    .append(" x")
-                    .append(item.getSoLuong())
-                    .append("\n");
-        }
-
-        tvDanhSachSP.setText(builder.toString());
-    }
-
-    // ================= DIALOG =================
-
-    private void showDialogCapNhatThongTin() {
-        Dialog dialog = new Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_thongtin);
-
-        // FULL WIDTH
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
-
-        EditText edtTen = dialog.findViewById(R.id.edtTen);
-        edtTen.requestFocus();
-        dialog.getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-        );
-        EditText edtSDT = dialog.findViewById(R.id.edtSDT);
-        EditText edtDiaChi = dialog.findViewById(R.id.edtDiaChi);
-        EditText edtGhiChu = dialog.findViewById(R.id.edtGhiChu);
-        Button btnLuu = dialog.findViewById(R.id.btnLuu);
-
-        // 🔥 FILL DỮ LIỆU CŨ
-        edtTen.setText(tenNguoiNhan);
-        edtSDT.setText(soDienThoai);
-        edtDiaChi.setText(diaChi);
-        edtGhiChu.setText(ghiChu);
-
-        btnLuu.setOnClickListener(v -> {
-            String ten = edtTen.getText().toString().trim();
-            String sdt = edtSDT.getText().toString().trim();
-            String dc = edtDiaChi.getText().toString().trim();
-            String note = edtGhiChu.getText().toString().trim();
-
-            if (ten.isEmpty() || sdt.isEmpty() || dc.isEmpty()) {
-                Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            if (listMua.isEmpty()) {
+                Toast.makeText(getContext(), "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // 🔥 LƯU LẠI
-            tenNguoiNhan = ten;
-            soDienThoai = sdt;
-            diaChi = dc;
-            ghiChu = note;
+            int tongTien = tinhTongTien(listMua);
 
-            // 🔥 UPDATE UI
-            tvTenNguoiNhan.setText(ten + " (" + sdt + ")");
-            tvDiaChi.setText(dc);
+            // 🔥 LƯU ĐƠN HÀNG
+            donHangViewModel.addDonHang(new ArrayList<>(listMua), tongTien);
 
-            if (note.isEmpty()) {
-                tvGhiChu.setText("Ghi chú: Không có");
-            } else {
-                tvGhiChu.setText("Ghi chú: " + note);
-            }
+            // 🔥 XÓA GIỎ HÀNG
+            gioHangViewModel.clearCart();
 
-            dialog.dismiss();
+            Toast.makeText(getContext(), "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+
+            // 👉 CHUYỂN MÀN
+            Intent intent = new Intent(getActivity(), DatHangThanhCongActivity.class);
+            startActivity(intent);
+
+            requireActivity().finish();
         });
-
-        dialog.show();
     }
-    private void showChonThanhToan() {
-        String[] options = {
-                "Thanh toán khi nhận hàng (COD)",
-                "Chuyển khoản ngân hàng",
-                "Ví điện tử (Momo/ZaloPay)"
-        };
 
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Chọn phương thức thanh toán")
-                .setItems(options, (dialog, which) -> {
+    // ===== TÍNH TIỀN =====
+    private int tinhTongTien(ArrayList<GioHangItem> list) {
+        int total = 0;
 
-                    if (which == 0) {
-                        phuongThucThanhToan = "COD";
-                        tvTenThanhToan.setText("Thanh toán khi nhận hàng");
-                        tvMoTaThanhToan.setText("COD");
-                        tvMoTaThanhToanChiTiet.setText("COD");
+        for (GioHangItem item : list) {
+            total += item.getSanPham().getGia() * item.getSoLuong();
+        }
 
-                    } else if (which == 1) {
-                        phuongThucThanhToan = "BANK";
-                        tvTenThanhToan.setText("Chuyển khoản ngân hàng");
-                        tvMoTaThanhToan.setText("BANK");
-                        tvMoTaThanhToanChiTiet.setText("BANK");
-
-                    } else {
-                        phuongThucThanhToan = "WALLET";
-                        tvTenThanhToan.setText("Ví điện tử");
-                        tvMoTaThanhToan.setText("MOMO");
-                        tvMoTaThanhToanChiTiet.setText("MOMO");
-                    }
-
-                })
-                .show();
+        return total;
     }
 }

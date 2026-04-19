@@ -2,16 +2,24 @@ package com.example.giaodichnongsan;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.*;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
 public class DonHangFragment extends Fragment {
 
-    RecyclerView rvDonHang;
-    DonHangAdapter adapter;
-    ArrayList<DonHang> list;
+    private RecyclerView recyclerView;
+    private DonHangAdapter adapter;
+    private DonHangViewModel viewModel;
+
+    public DonHangFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -19,18 +27,23 @@ public class DonHangFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_donhang, container, false);
 
-        rvDonHang = view.findViewById(R.id.rvDonHang);
-        rvDonHang.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView = view.findViewById(R.id.rvDonHang);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        list = DonHangManager.getDanhSach();
-        rvDonHang.setAdapter(adapter);
+        viewModel = new ViewModelProvider(requireActivity()).get(DonHangViewModel.class);
 
-        adapter = new DonHangAdapter(list, don -> {
-            Intent intent = new Intent(getContext(), ChiTietDonHangActivity.class);
-            intent.putExtra("don", don);
+        adapter = new DonHangAdapter(new ArrayList<>(), donHang -> {
+            Intent intent = new Intent(getActivity(), ChiTietDonHangActivity.class);
+            intent.putExtra("don", donHang);
             startActivity(intent);
         });
-        rvDonHang.setAdapter(adapter);
+
+        recyclerView.setAdapter(adapter);
+
+        // observe dữ liệu
+        viewModel.getDonHangList().observe(getViewLifecycleOwner(), list -> {
+            adapter.setData(list);
+        });
 
         return view;
     }

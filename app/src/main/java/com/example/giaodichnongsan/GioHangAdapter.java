@@ -11,15 +11,21 @@ import java.util.ArrayList;
 
 public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.ViewHolder> {
 
-    ArrayList<GioHangItem> list;
-    OnCartChangeListener listener; // ✅ ĐÚNG CHỖ
+    private ArrayList<GioHangItem> list;
+    private OnItemClickListener listener;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public GioHangAdapter(ArrayList<GioHangItem> list, OnItemClickListener listener) {
+        this.list = list;
+        this.listener = listener;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView img;
         TextView tvTen, tvGia, tvSoLuong, tvTong, tvShop;
         TextView btnPlus, btnMinus, btnXoa;
         CheckBox cbChon;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -54,53 +60,48 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.ViewHold
         holder.tvTen.setText(sp.getTen());
         holder.tvGia.setText(sp.getGia() + "đ");
         holder.tvSoLuong.setText(String.valueOf(item.getSoLuong()));
-        holder.tvShop.setText(item.getTenShop());
+        holder.tvShop.setText(sp.getTenShop()); // 🔥 lấy từ SanPham
         holder.cbChon.setChecked(item.isChecked());
-
 
         int tong = sp.getGia() * item.getSoLuong();
         holder.tvTong.setText("Tổng: " + tong + "đ");
 
-        // ===== PLUS =====
-        holder.btnPlus.setOnClickListener(v -> {
-            item.setSoLuong(item.getSoLuong() + 1);
-            notifyItemChanged(position);
+        // ===== CLICK EVENTS =====
 
-            if (listener != null) listener.onCartChanged(); // 🔥 thêm
+        holder.btnPlus.setOnClickListener(v -> {
+            if (listener != null) listener.onIncrease(item);
         });
 
         holder.btnMinus.setOnClickListener(v -> {
-            if (item.getSoLuong() > 1) {
-                item.setSoLuong(item.getSoLuong() - 1);
-                notifyItemChanged(position);
-
-                if (listener != null) listener.onCartChanged(); // 🔥 thêm
-            }
+            if (listener != null) listener.onDecrease(item);
         });
-        // ===== XOÁ =====
-        holder.btnXoa.setOnClickListener(v -> {
-            list.remove(position);
-            notifyDataSetChanged();
 
-            if (listener != null) listener.onCartChanged(); // 🔥 thêm
+        holder.btnXoa.setOnClickListener(v -> {
+            if (listener != null) listener.onRemove(item);
         });
 
         holder.cbChon.setOnCheckedChangeListener((buttonView, isChecked) -> {
             item.setChecked(isChecked);
-
-            if (listener != null) listener.onCartChanged();
+            if (listener != null) listener.onCheckChanged();
         });
-    }
-    public GioHangAdapter(ArrayList<GioHangItem> list, OnCartChangeListener listener) {
-        this.list = list;
-        this.listener = listener;
-    }
-    public interface OnCartChangeListener {
-        void onCartChanged();
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    // ===== UPDATE DATA =====
+    public void setData(ArrayList<GioHangItem> newList) {
+        this.list = newList;
+        notifyDataSetChanged();
+    }
+
+    // ===== CALLBACK =====
+    public interface OnItemClickListener {
+        void onIncrease(GioHangItem item);
+        void onDecrease(GioHangItem item);
+        void onRemove(GioHangItem item);
+        void onCheckChanged();
     }
 }
