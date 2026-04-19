@@ -2,6 +2,7 @@ package com.example.giaodichnongsan;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.*;
@@ -106,9 +107,27 @@ public class ThanhToanFragment extends Fragment {
     private void setupListeners() {
 
         btnDatHang.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
-        });
 
+            // 🔥 TẠO ĐƠN HÀNG
+            if (listMua.size() > 0) {
+
+                GioHangItem item = listMua.get(0); // demo lấy 1 sp
+
+                DonHang don = new DonHang(
+                        item.getSanPham().getTen(),
+                        item.getSoLuong(),
+                        tienHang + phiShip,
+                        DonHang.DANG_GIAO
+                );
+
+                // 🔥 LƯU
+                DonHangManager.themDon(don);
+            }
+
+            // chuyển màn
+            Intent intent = new Intent(requireContext(), DatHangThanhCongActivity.class);
+            startActivity(intent);
+        });
         layoutThongTin.setOnClickListener(v -> showDialogCapNhatThongTin());
     }
 
@@ -163,6 +182,10 @@ public class ThanhToanFragment extends Fragment {
         }
 
         EditText edtTen = dialog.findViewById(R.id.edtTen);
+        edtTen.requestFocus();
+        dialog.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
+        );
         EditText edtSDT = dialog.findViewById(R.id.edtSDT);
         EditText edtDiaChi = dialog.findViewById(R.id.edtDiaChi);
         EditText edtGhiChu = dialog.findViewById(R.id.edtGhiChu);
@@ -175,7 +198,6 @@ public class ThanhToanFragment extends Fragment {
         edtGhiChu.setText(ghiChu);
 
         btnLuu.setOnClickListener(v -> {
-
             String ten = edtTen.getText().toString().trim();
             String sdt = edtSDT.getText().toString().trim();
             String dc = edtDiaChi.getText().toString().trim();

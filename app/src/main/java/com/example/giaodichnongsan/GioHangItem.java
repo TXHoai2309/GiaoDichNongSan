@@ -1,6 +1,8 @@
 package com.example.giaodichnongsan;
 
-public class GioHangItem {
+import java.io.Serializable;
+
+public class GioHangItem implements Serializable {
 
     private SanPham sanPham;
     private int soLuong;
