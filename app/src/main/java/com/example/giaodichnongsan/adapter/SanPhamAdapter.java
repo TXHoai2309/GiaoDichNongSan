@@ -59,7 +59,8 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
             if (context instanceof AppCompatActivity) {
                 AppCompatActivity activity = (AppCompatActivity) context;
 
-                ChiTietSanPhamFragment fragment = ChiTietSanPhamFragment.newInstance(sp);
+                ChiTietSanPhamFragment fragment =
+                        ChiTietSanPhamFragment.newInstance(sp.getId());
 
                 activity.getSupportFragmentManager()
                         .beginTransaction()

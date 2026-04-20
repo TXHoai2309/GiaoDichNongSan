@@ -18,12 +18,19 @@ import java.util.ArrayList;
 
 public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.ViewHolder> {
 
-    Context context;
-    ArrayList<SanPham> list;
+    private Context context;
+    private ArrayList<SanPham> list;
 
     public SanPhamMoiAdapter(Context context, ArrayList<SanPham> list) {
         this.context = context;
         this.list = list;
+    }
+
+    // 🔥 THÊM METHOD NÀY (QUAN TRỌNG)
+    public void setData(ArrayList<SanPham> newList) {
+        this.list.clear();
+        this.list.addAll(newList);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,12 +62,12 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.Vi
         holder.gia.setText(String.format("%,dđ/kg", sp.getGia()));
         holder.daBan.setText(sp.getDaBan() + " đã bán");
 
-        // 🔥 THÊM ĐOẠN NÀY
         holder.itemView.setOnClickListener(v -> {
             if (context instanceof AppCompatActivity) {
                 AppCompatActivity activity = (AppCompatActivity) context;
 
-                ChiTietSanPhamFragment fragment = ChiTietSanPhamFragment.newInstance(sp);
+                ChiTietSanPhamFragment fragment =
+                        ChiTietSanPhamFragment.newInstance(sp.getId());
 
                 activity.getSupportFragmentManager()
                         .beginTransaction()
@@ -73,6 +80,6 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list != null ? list.size() : 0;
     }
 }

@@ -5,31 +5,31 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.giaodichnongsan.model.SanPham;
-import com.example.giaodichnongsan.data.repository.SanPhamRepository;
+import com.example.giaodichnongsan.data.repository.TrangChuRepository;
 
 import java.util.ArrayList;
 
 public class SanPhamViewModel extends ViewModel {
 
-    private MutableLiveData<ArrayList<SanPham>> listNoiBat;
-    private MutableLiveData<ArrayList<SanPham>> listMoi;
+    // ===== DATA =====
+    private MutableLiveData<ArrayList<SanPham>> listNoiBat = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<SanPham>> listMoi = new MutableLiveData<>();
 
-    private SanPhamRepository repository;
+    // ===== REPOSITORY =====
+    private TrangChuRepository repository;
 
     public SanPhamViewModel() {
-        repository = new SanPhamRepository();
-
-        listNoiBat = new MutableLiveData<>();
-        listMoi = new MutableLiveData<>();
-
+        repository = new TrangChuRepository();
         loadData();
     }
 
-    private void loadData() {
-        listNoiBat.setValue(repository.getSanPhamNoiBat());
-        listMoi.setValue(repository.getSanPhamMoi());
+    // ===== LOAD DATA =====
+    public void loadData() {
+        listNoiBat.setValue(new ArrayList<>(repository.getSanPhamNoiBat()));
+        listMoi.setValue(new ArrayList<>(repository.getSanPhamMoi()));
     }
 
+    // ===== GETTER =====
     public LiveData<ArrayList<SanPham>> getSanPhamNoiBat() {
         return listNoiBat;
     }

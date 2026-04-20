@@ -7,15 +7,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,24 +18,35 @@ import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.adapter.SanPhamMoiAdapter;
 import com.example.giaodichnongsan.model.SanPham;
 import com.example.giaodichnongsan.model.Shop;
+import com.example.giaodichnongsan.viewmodel.ChiTietShopViewModel;
 
 import java.util.ArrayList;
 
 public class ChiTietShopFragment extends Fragment {
 
-    SanPhamMoiAdapter adapterMoi;
-    ImageView imgShop;
-    TextView tvTenShop, tvDanhGia, tvSanPham, tvFollower, tvThamGia, tvDiaChi, tvMoTa, tvPhone;
-    Button btnFollow, btnChat;
-    ArrayList<SanPham> listMoi;
+    // ===== VIEW =====
+    private ImageView imgShop, btnMenu;
+    private TextView tvTenShop, tvDanhGia, tvSanPham, tvFollower,
+            tvThamGia, tvDiaChi, tvMoTa, tvPhone;
+    private Button btnFollow, btnChat;
+    private RecyclerView rvSanPhamShop;
 
-    RecyclerView rvSanPhamShop;
+    // ===== DATA =====
+    private int shopId;
+    private Shop shop;
+    private ArrayList<SanPham> listSanPham;
+    private SanPhamMoiAdapter adapter;
 
-    ImageView btnMenu;
-    public static ChiTietShopFragment newInstance(Shop shop) {
+    // ===== VIEWMODEL =====
+    private ChiTietShopViewModel viewModel;
+
+    public ChiTietShopFragment() {}
+
+    // ===== NEW INSTANCE =====
+    public static ChiTietShopFragment newInstance(int shopId) {
         ChiTietShopFragment fragment = new ChiTietShopFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("shop", shop);
+        bundle.putInt("shopId", shopId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -51,7 +57,18 @@ public class ChiTietShopFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_chi_tiet_shop, container, false);
 
-        // ánh xạ
+        initView(view);
+        initData();
+        initViewModel();
+        setupRecyclerView();
+        setupEvents();
+        observeData();
+
+        return view;
+    }
+
+    // ===== INIT VIEW =====
+    private void initView(View view) {
         imgShop = view.findViewById(R.id.imgShop);
         tvTenShop = view.findViewById(R.id.tvTenShop);
         tvDanhGia = view.findViewById(R.id.tvDanhGia);
@@ -64,174 +81,154 @@ public class ChiTietShopFragment extends Fragment {
 
         btnFollow = view.findViewById(R.id.btnFollow);
         btnChat = view.findViewById(R.id.btnChat);
+        btnMenu = view.findViewById(R.id.btnMenu);
 
         rvSanPhamShop = view.findViewById(R.id.rvSanPhamShop);
+    }
 
-        btnMenu = view.findViewById(R.id.btnMenu);
-        rvSanPhamShop.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                outRect.set(8, 8, 8, 8);
-            }
-        });
-
-
-        // nhận dữ liệu
+    // ===== INIT DATA =====
+    private void initData() {
         if (getArguments() != null) {
-            Shop shop = (Shop) getArguments().getSerializable("shop");
+            shopId = getArguments().getInt("shopId", 0);
+        }
+    }
 
-            if (shop != null) {
-                imgShop.setImageResource(shop.getAvatar());
-                tvTenShop.setText(shop.getTenShop());
-                tvDanhGia.setText("⭐ " + shop.getDanhGia());
-                tvSanPham.setText(shop.getSoSanPham() + "\nSản phẩm");
-                tvFollower.setText(shop.getNguoiTheoDoi() + "\nTheo dõi");
-                tvThamGia.setText(shop.getThoiGianThamGia() + "\nTham gia");
-                tvDiaChi.setText("📍 " + shop.getDiaChi());
-                tvMoTa.setText(shop.getMoTa());
-                tvPhone.setText("📞 " + shop.getSoDienThoai());
-            }
+    // ===== INIT VIEWMODEL =====
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(ChiTietShopViewModel.class);
+    }
+
+    // ===== OBSERVE =====
+    private void observeData() {
+
+        if (shopId == 0) {
+            Toast.makeText(getContext(), "Lỗi: không có shopId", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // ===== BUTTON =====
-
-        btnFollow.setOnClickListener(v -> {
-            btnFollow.setText("Đã theo dõi");
+        viewModel.getShop().observe(getViewLifecycleOwner(), s -> {
+            if (s != null) {
+                shop = s;
+                bindShop();
+            }
         });
 
-        btnChat.setOnClickListener(v -> {
-            // demo thôi
-            tvMoTa.setText("👉 Chat với shop (demo)");
+        viewModel.getSanPhamShop().observe(getViewLifecycleOwner(), list -> {
+            if (list != null) {
+                listSanPham = new ArrayList<>(list);
+                adapter.setData(listSanPham);
+            }
         });
 
-        // ===== TẠO DATA =====
-        listMoi = new ArrayList<>();
+        viewModel.loadShop(shopId);
+    }
 
-        listMoi.add(new SanPham(
-                4,
-                R.drawable.ic_ca_rot,
-                "Cà rốt",
-                18000,
-                75,
-                "Cà rốt tươi",
-                "Đà Lạt",
-                4.3f,
-                "Shop A"
-        ));
+    // ===== BIND SHOP =====
+    private void bindShop() {
+        if (shop == null) return;
 
-        listMoi.add(new SanPham(
-                5,
-                R.drawable.ic_dau_ha_lan,
-                "Đậu hà lan",
-                30000,
-                60,
-                "Đậu sạch",
-                "Sapa",
-                4.6f,
-                "Shop A"
-        ));
+        imgShop.setImageResource(shop.getAvatar());
+        tvTenShop.setText(shop.getTenShop());
+        tvDanhGia.setText("⭐ " + shop.getDanhGia());
+        tvSanPham.setText(shop.getSoSanPham() + "\nSản phẩm");
+        tvFollower.setText(shop.getNguoiTheoDoi() + "\nTheo dõi");
+        tvThamGia.setText(shop.getThoiGianThamGia() + "\nTham gia");
+        tvDiaChi.setText("📍 " + shop.getDiaChi());
+        tvMoTa.setText(shop.getMoTa());
+        tvPhone.setText("📞 " + shop.getSoDienThoai());
+    }
 
-        listMoi.add(new SanPham(
-                6,
-                R.drawable.ic_khoai_tay,
-                "Khoai tây",
-                22000,
-                150,
-                "Khoai ngon",
-                "Đà Lạt",
-                4.8f,
-                "Shop A"
-        ));
+    // ===== RECYCLER =====
+    private void setupRecyclerView() {
 
-        btnMenu.setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(getContext(), v);
-            popup.inflate(R.menu.menu_shop);
+        adapter = new SanPhamMoiAdapter(getContext(), new ArrayList<>());
 
-            popup.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.menu_share) {
-
-                    String tenShop = tvTenShop.getText().toString();
-
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-
-                    String noiDung = "🌿 Khám phá shop nông sản này: " + tenShop +
-                            "\n👉 Chất lượng cao - Giá tốt!" +
-                            "\n📲 Tải app ngay để xem thêm!";
-
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, noiDung);
-
-                    startActivity(Intent.createChooser(shareIntent, "Chia sẻ shop qua"));
-
-                    return true;
-                }
-                else if (item.getItemId() == R.id.menu_report) {
-
-                    String[] lyDo = {
-                            "Lừa đảo",
-                            "Hàng kém chất lượng",
-                            "Spam / Quảng cáo",
-                            "Khác"
-                    };
-
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Chọn lý do báo cáo");
-
-                    builder.setItems(lyDo, (dialog, which) -> {
-
-                        String selected = lyDo[which];
-
-                        Toast.makeText(getContext(),
-                                "Đã báo cáo: " + selected,
-                                Toast.LENGTH_SHORT).show();
-                    });
-
-                    builder.setNegativeButton("Hủy", null);
-
-                    builder.show();
-
-                    return true;
-                }
-                else if (item.getItemId() == R.id.menu_rate) {
-
-                    View dialogView = LayoutInflater.from(getContext())
-                            .inflate(R.layout.dialog_danhgia, null);
-
-                    RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
-                    EditText edtNhanXet = dialogView.findViewById(R.id.edtNhanXet);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setView(dialogView);
-
-                    builder.setPositiveButton("Gửi", (dialog, which) -> {
-                        float soSao = ratingBar.getRating();
-                        String nhanXet = edtNhanXet.getText().toString();
-
-                        Toast.makeText(getContext(),
-                                "Bạn đã đánh giá: " + soSao + "⭐\n" + nhanXet,
-                                Toast.LENGTH_LONG).show();
-                    });
-
-                    builder.setNegativeButton("Hủy", null);
-
-                    builder.show();
-
-                    return true;
-                }
-                return false;
-            });
-
-            popup.show();
-        });
-
-// ===== ADAPTER =====
-        adapterMoi = new SanPhamMoiAdapter(getContext(), listMoi);
-
-// ===== RECYCLER =====
         rvSanPhamShop.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        rvSanPhamShop.setAdapter(adapterMoi);
-        return view;
+        rvSanPhamShop.setAdapter(adapter);
 
+        if (rvSanPhamShop.getItemDecorationCount() == 0) {
+            rvSanPhamShop.addItemDecoration(new RecyclerView.ItemDecoration() {
+                @Override
+                public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                    outRect.set(8, 8, 8, 8);
+                }
+            });
+        }
+    }
+
+    // ===== EVENTS =====
+    private void setupEvents() {
+
+        btnFollow.setOnClickListener(v -> btnFollow.setText("Đã theo dõi"));
+
+        btnChat.setOnClickListener(v ->
+                tvMoTa.setText("👉 Chat với shop (demo)")
+        );
+
+        btnMenu.setOnClickListener(v -> showMenu());
+    }
+
+    // ===== MENU =====
+    private void showMenu() {
+
+        PopupMenu popup = new PopupMenu(getContext(), btnMenu);
+        popup.inflate(R.menu.menu_shop);
+
+        popup.setOnMenuItemClickListener(item -> {
+
+            if (item.getItemId() == R.id.menu_share) {
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+
+                intent.putExtra(Intent.EXTRA_TEXT,
+                        "🌿 Shop: " + tvTenShop.getText());
+
+                startActivity(Intent.createChooser(intent, "Chia sẻ"));
+                return true;
+            }
+
+            else if (item.getItemId() == R.id.menu_report) {
+
+                String[] lyDo = {"Lừa đảo", "Kém chất lượng", "Spam", "Khác"};
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Báo cáo shop")
+                        .setItems(lyDo, (d, i) ->
+                                Toast.makeText(getContext(),
+                                        "Đã báo cáo: " + lyDo[i],
+                                        Toast.LENGTH_SHORT).show()
+                        )
+                        .setNegativeButton("Hủy", null)
+                        .show();
+
+                return true;
+            }
+
+            else if (item.getItemId() == R.id.menu_rate) {
+
+                View dialog = LayoutInflater.from(getContext())
+                        .inflate(R.layout.dialog_danhgia, null);
+
+                RatingBar ratingBar = dialog.findViewById(R.id.ratingBar);
+                EditText edt = dialog.findViewById(R.id.edtNhanXet);
+
+                new AlertDialog.Builder(getContext())
+                        .setView(dialog)
+                        .setPositiveButton("Gửi", (d, i) -> {
+                            Toast.makeText(getContext(),
+                                    "Đánh giá: " + ratingBar.getRating(),
+                                    Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
+
+                return true;
+            }
+
+            return false;
+        });
+
+        popup.show();
     }
 }

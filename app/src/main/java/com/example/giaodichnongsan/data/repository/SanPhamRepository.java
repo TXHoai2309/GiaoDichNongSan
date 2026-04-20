@@ -3,15 +3,19 @@ package com.example.giaodichnongsan.data.repository;
 import com.example.giaodichnongsan.data.fake.FakeDataSanPham;
 import com.example.giaodichnongsan.model.SanPham;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class SanPhamRepository {
 
-    public ArrayList<SanPham> getSanPhamNoiBat() {
-        return FakeDataSanPham.getSanPhamNoiBat();
-    }
+    public SanPham getSanPhamById(int id) {
 
-    public ArrayList<SanPham> getSanPhamMoi() {
-        return FakeDataSanPham.getSanPhamMoi();
+        List<SanPham> list = FakeDataSanPham.getAll(); // hoặc gộp list nếu bạn đang tách
+
+        for (SanPham sp : list) {
+            if (sp.getId() == id) {
+                return sp;
+            }
+        }
+        return null;
     }
 }

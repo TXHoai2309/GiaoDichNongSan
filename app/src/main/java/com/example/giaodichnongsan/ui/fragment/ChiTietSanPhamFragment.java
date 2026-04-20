@@ -13,26 +13,33 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.model.GioHangItem;
 import com.example.giaodichnongsan.model.SanPham;
-import com.example.giaodichnongsan.model.Shop;
+import com.example.giaodichnongsan.viewmodel.ChiTietSanPhamViewModel;
 import com.example.giaodichnongsan.viewmodel.GioHangViewModel;
 
 import java.util.ArrayList;
 
 public class ChiTietSanPhamFragment extends Fragment {
 
+    // ===== VIEW =====
     private ImageView imgSP;
     private TextView tvTen, tvGia, tvDanhGia, tvMoTa, tvNguonGoc, tvShop;
     private Button btnGioHang, btnMua;
 
+    // ===== DATA =====
     private SanPham sp;
-    private GioHangViewModel viewModel;
+    private int productId;
+
+    // ===== VIEWMODEL =====
+    private ChiTietSanPhamViewModel spViewModel;
+    private GioHangViewModel gioHangViewModel;
 
     public ChiTietSanPhamFragment() {}
 
-    public static ChiTietSanPhamFragment newInstance(SanPham sp) {
+    // ===== NEW INSTANCE =====
+    public static ChiTietSanPhamFragment newInstance(int productId) {
         ChiTietSanPhamFragment fragment = new ChiTietSanPhamFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("sanpham", sp);
+        bundle.putInt("productId", productId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -46,17 +53,13 @@ public class ChiTietSanPhamFragment extends Fragment {
         initView(view);
         initData();
         initViewModel();
-
-        if (sp != null) {
-            bindData();
-            setupEvents();
-        }
+        setupEvents();   // 👈 setup trước
+        observeData();   // 👈 load data sau
 
         return view;
     }
 
-    // ===== INIT =====
-
+    // ===== INIT VIEW =====
     private void initView(View view) {
         imgSP = view.findViewById(R.id.imgSP);
         tvTen = view.findViewById(R.id.tvTen);
@@ -69,19 +72,46 @@ public class ChiTietSanPhamFragment extends Fragment {
         btnMua = view.findViewById(R.id.btnMua);
     }
 
+    // ===== INIT DATA =====
     private void initData() {
         if (getArguments() != null) {
-            sp = (SanPham) getArguments().getSerializable("sanpham");
+            productId = getArguments().getInt("productId", 0);
         }
     }
 
+    // ===== INIT VIEWMODEL =====
     private void initViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
+        spViewModel = new ViewModelProvider(this).get(ChiTietSanPhamViewModel.class);
+        gioHangViewModel = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
     }
 
-    // ===== HIỂN THỊ =====
+    // ===== OBSERVE DATA =====
+    private void observeData() {
 
+        if (productId == 0) {
+            Toast.makeText(getContext(), "Lỗi: không có ID sản phẩm", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        spViewModel.getSanPham().observe(getViewLifecycleOwner(), sanPham -> {
+
+            if (sanPham == null) {
+                Toast.makeText(getContext(), "Không tìm thấy sản phẩm", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            sp = sanPham;
+            bindData();
+        });
+
+        spViewModel.loadSanPham(productId);
+    }
+
+    // ===== BIND DATA =====
     private void bindData() {
+
+        if (sp == null) return;
+
         imgSP.setImageResource(sp.getHinh());
         tvTen.setText(sp.getTen());
         tvGia.setText(sp.getGia() + "đ/kg");
@@ -93,33 +123,26 @@ public class ChiTietSanPhamFragment extends Fragment {
     }
 
     // ===== EVENTS =====
-
     private void setupEvents() {
 
-        tvShop.setOnClickListener(v -> openShop());
+        tvShop.setOnClickListener(v -> {
+            if (sp != null) openShop();
+        });
 
-        btnGioHang.setOnClickListener(v -> showQuantityDialog(false));
+        btnGioHang.setOnClickListener(v -> {
+            if (sp != null) showQuantityDialog(false);
+        });
 
-        btnMua.setOnClickListener(v -> showQuantityDialog(true));
+        btnMua.setOnClickListener(v -> {
+            if (sp != null) showQuantityDialog(true);
+        });
     }
 
-    // ===== SHOP =====
-
+    // ===== OPEN SHOP =====
     private void openShop() {
-        Shop shop = new Shop(
-                1,
-                sp.getTenShop(),
-                R.drawable.ic_shop,
-                4.8f,
-                256,
-                1200,
-                "2 năm",
-                "Hà Nội",
-                "0987 654 321",
-                "Chuyên cung cấp nông sản sạch"
-        );
 
-        ChiTietShopFragment fragment = ChiTietShopFragment.newInstance(shop);
+        ChiTietShopFragment fragment =
+                ChiTietShopFragment.newInstance(sp.getShopId());
 
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -128,8 +151,7 @@ public class ChiTietSanPhamFragment extends Fragment {
                 .commit();
     }
 
-    // ===== DIALOG CHUNG =====
-
+    // ===== DIALOG =====
     private void showQuantityDialog(boolean isBuyNow) {
 
         View dialogView = LayoutInflater.from(getContext())
@@ -139,8 +161,8 @@ public class ChiTietSanPhamFragment extends Fragment {
         TextView tvTenSP = dialogView.findViewById(R.id.tvTen);
         TextView tvGiaSP = dialogView.findViewById(R.id.tvGia);
         TextView tvTong = dialogView.findViewById(R.id.tvTongGia);
-
         TextView tvSoLuong = dialogView.findViewById(R.id.tvSoLuong);
+
         Button btnPlus = dialogView.findViewById(R.id.btnPlus);
         Button btnMinus = dialogView.findViewById(R.id.btnMinus);
 
@@ -183,10 +205,10 @@ public class ChiTietSanPhamFragment extends Fragment {
     }
 
     // ===== ACTION =====
-
     private void handleAddToCart(int soLuong) {
+
         for (int i = 0; i < soLuong; i++) {
-            viewModel.addToCart(sp);
+            gioHangViewModel.addToCart(sp);
         }
 
         Toast.makeText(getContext(),

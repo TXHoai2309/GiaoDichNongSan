@@ -6,7 +6,7 @@ public class SanPham implements Serializable {
 
     // ====== THÔNG TIN CƠ BẢN ======
     private int id;
-    private int hinh;
+    private int hinh; // giữ nguyên để test UI
     private String ten;
     private int gia;
     private int daBan;
@@ -15,11 +15,17 @@ public class SanPham implements Serializable {
     private String moTa;
     private String nguonGoc;
     private float danhGia;
-    private String tenShop; // 🔥 THÊM DÒNG NÀY
+
+    // ====== SHOP ======
+    private String tenShop;
+    private int shopId; // 🔥 THÊM CỰC QUAN TRỌNG
+
+    // ====== CONSTRUCTOR RỖNG (BẮT BUỘC CHO API/FIREBASE) ======
+    public SanPham() {}
 
     // ====== CONSTRUCTOR ĐẦY ĐỦ ======
     public SanPham(int id, int hinh, String ten, int gia, int daBan,
-                   String moTa, String nguonGoc, float danhGia, String tenShop) {
+                   String moTa, String nguonGoc, float danhGia, String tenShop, int shopId) {
         this.id = id;
         this.hinh = hinh;
         this.ten = ten;
@@ -29,6 +35,7 @@ public class SanPham implements Serializable {
         this.nguonGoc = nguonGoc;
         this.danhGia = danhGia;
         this.tenShop = tenShop;
+        this.shopId = shopId;
     }
 
     // ====== CONSTRUCTOR CHO LIST ======
@@ -50,10 +57,17 @@ public class SanPham implements Serializable {
     public String getNguonGoc() { return nguonGoc; }
     public float getDanhGia() { return danhGia; }
     public String getTenShop() { return tenShop; }
+    public int getShopId() { return shopId; }
 
     // ====== SETTER ======
+    public void setId(int id) { this.id = id; }
+    public void setHinh(int hinh) { this.hinh = hinh; }
+    public void setTen(String ten) { this.ten = ten; }
+    public void setGia(int gia) { this.gia = gia; }
+    public void setDaBan(int daBan) { this.daBan = daBan; }
     public void setMoTa(String moTa) { this.moTa = moTa; }
     public void setNguonGoc(String nguonGoc) { this.nguonGoc = nguonGoc; }
     public void setDanhGia(float danhGia) { this.danhGia = danhGia; }
     public void setTenShop(String tenShop) { this.tenShop = tenShop; }
+    public void setShopId(int shopId) { this.shopId = shopId; }
 }
