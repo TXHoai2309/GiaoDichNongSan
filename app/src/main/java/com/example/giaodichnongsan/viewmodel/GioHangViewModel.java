@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.giaodichnongsan.data.repository.GioHangRepository;
 import com.example.giaodichnongsan.model.GioHangItem;
 import com.example.giaodichnongsan.model.SanPham;
 
@@ -12,103 +11,136 @@ import java.util.ArrayList;
 
 public class GioHangViewModel extends ViewModel {
 
-    private MutableLiveData<ArrayList<GioHangItem>> gioHangList;
-    private MutableLiveData<Integer> totalPrice;
+    // ===== DATA =====
+    private final MutableLiveData<ArrayList<GioHangItem>> gioHangList = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<Integer> tongTien = new MutableLiveData<>(0);
+    private final MutableLiveData<Boolean> isAllSelected = new MutableLiveData<>(false);
 
-    private GioHangRepository repository;
-
-    public GioHangViewModel() {
-        repository = new GioHangRepository();
-
-        gioHangList = new MutableLiveData<>();
-        totalPrice = new MutableLiveData<>();
-
-        loadData();
-    }
-
-    // ===== LOAD DATA BAN ĐẦU =====
-    private void loadData() {
-        gioHangList.setValue(repository.getGioHang());
-        totalPrice.setValue(repository.getTotalPrice());
-    }
-
-    // ===== GET DATA =====
+    // ===== GETTER =====
     public LiveData<ArrayList<GioHangItem>> getGioHangList() {
         return gioHangList;
     }
 
-    public LiveData<Integer> getTotalPrice() {
-        return totalPrice;
+    public LiveData<Integer> getTongTien() {
+        return tongTien;
+    }
+
+    public LiveData<Boolean> getIsAllSelected() {
+        return isAllSelected;
     }
 
     // ===== THÊM SẢN PHẨM =====
-    public void addToCart(SanPham sanPham) {
-        repository.addToCart(sanPham);
-        refreshData();
-    }
+    public void addToCart(SanPham sp) {
+        ArrayList<GioHangItem> list = gioHangList.getValue();
+        if (list == null) list = new ArrayList<>();
 
-    // ===== XOÁ =====
-    public void removeItem(GioHangItem item) {
-        repository.removeItem(item);
-        refreshData();
+        // kiểm tra đã tồn tại chưa
+        for (GioHangItem item : list) {
+            if (item.getSanPham().getId() == sp.getId()) {
+                item.setSoLuong(item.getSoLuong() + 1);
+                updateState();
+                gioHangList.setValue(list);
+                return;
+            }
+        }
+
+        list.add(new GioHangItem(sp, 1));
+        gioHangList.setValue(list);
+        updateState();
     }
 
     // ===== TĂNG =====
     public void increaseQuantity(GioHangItem item) {
-        repository.increaseQuantity(item);
-        refreshData();
+        item.setSoLuong(item.getSoLuong() + 1);
+        gioHangList.setValue(gioHangList.getValue());
+        updateState();
     }
 
     // ===== GIẢM =====
     public void decreaseQuantity(GioHangItem item) {
-        repository.decreaseQuantity(item);
-        refreshData();
+        if (item.getSoLuong() > 1) {
+            item.setSoLuong(item.getSoLuong() - 1);
+            gioHangList.setValue(gioHangList.getValue());
+            updateState();
+        }
     }
 
-    // ===== CLEAR =====
+    // ===== XOÁ =====
+    public void removeItem(GioHangItem item) {
+        ArrayList<GioHangItem> list = gioHangList.getValue();
+        if (list != null) {
+            list.remove(item);
+            gioHangList.setValue(list);
+            updateState();
+        }
+    }
+
+    // ===== CHỌN TẤT CẢ =====
+    public void selectAll(boolean isChecked) {
+        ArrayList<GioHangItem> list = gioHangList.getValue();
+        if (list != null) {
+            for (GioHangItem item : list) {
+                item.setSelected(isChecked);
+            }
+            gioHangList.setValue(list);
+            updateState();
+        }
+    }
+
+    // ===== UPDATE KHI CHECK =====
+    public void updateSelection() {
+        updateState();
+    }
     public void clearCart() {
-        repository.clearCart();
-        refreshData();
+        gioHangList.setValue(new ArrayList<>());
+        updateState();
     }
 
-    // ===== REFRESH UI =====
-    private void refreshData() {
-        gioHangList.setValue(repository.getGioHang());
-        totalPrice.setValue(repository.getTotalPrice());
-    }
+    // ===== LẤY ITEM ĐÃ CHỌN =====
     public ArrayList<GioHangItem> getSelectedItems() {
-        ArrayList<GioHangItem> selected = new ArrayList<>();
+        ArrayList<GioHangItem> result = new ArrayList<>();
+        ArrayList<GioHangItem> list = gioHangList.getValue();
 
-        if (gioHangList.getValue() != null) {
-            for (GioHangItem item : gioHangList.getValue()) {
-                if (item.isChecked()) {
-                    selected.add(item);
+        if (list != null) {
+            for (GioHangItem item : list) {
+                if (item.isSelected()) {
+                    result.add(item);
                 }
             }
         }
-
-        return selected;
+        return result;
     }
-    public int getSelectedTotalPrice() {
-        int total = 0;
 
-        if (gioHangList.getValue() != null) {
-            for (GioHangItem item : gioHangList.getValue()) {
-                if (item.isChecked()) {
-                    total += item.getSanPham().getGia() * item.getSoLuong();
+    // ===== TÍNH TỔNG =====
+    private int calculateTotal() {
+        int total = 0;
+        ArrayList<GioHangItem> list = gioHangList.getValue();
+
+        if (list != null) {
+            for (GioHangItem item : list) {
+                if (item.isSelected()) {
+                    total += item.getSoLuong() * item.getSanPham().getGia();
                 }
             }
         }
-
         return total;
     }
-    public void selectAll(boolean isChecked) {
-        if (gioHangList.getValue() != null) {
-            for (GioHangItem item : gioHangList.getValue()) {
-                item.setChecked(isChecked);
-            }
-            gioHangList.setValue(gioHangList.getValue()); // trigger update UI
+
+    // ===== CHECK ALL =====
+    private boolean checkAllSelected() {
+        ArrayList<GioHangItem> list = gioHangList.getValue();
+
+        if (list == null || list.isEmpty()) return false;
+
+        for (GioHangItem item : list) {
+            if (!item.isSelected()) return false;
         }
+        return true;
     }
 
+    // ===== UPDATE STATE (🔥 QUAN TRỌNG NHẤT) =====
+    private void updateState() {
+        tongTien.setValue(calculateTotal());
+        isAllSelected.setValue(checkAllSelected());
+    }
 }

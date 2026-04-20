@@ -4,10 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -44,10 +41,10 @@ public class GioHangFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_giohang, container, false);
 
         initView(view);
-        setupViewModel();
+        initViewModel();
         setupRecyclerView();
-        observeData();
-        setupEvent();
+        setupObserver();
+        setupEvents();
 
         return view;
     }
@@ -60,35 +57,43 @@ public class GioHangFragment extends Fragment {
         cbSelectAll = view.findViewById(R.id.cbAll);
     }
 
-    // ===== VIEWMODEL =====
-    private void setupViewModel() {
+    // ===== INIT VIEWMODEL =====
+    private void initViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
     }
 
     // ===== RECYCLER =====
     private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new GioHangAdapter(new ArrayList<>(), listener);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
     }
 
-    // ===== OBSERVE =====
-    private void observeData() {
+    // ===== OBSERVER =====
+    private void setupObserver() {
+
+        // cập nhật list
         viewModel.getGioHangList().observe(getViewLifecycleOwner(), list -> {
             adapter.setData(list);
-            updateTongTien(); // 🔥 realtime update
+        });
+
+        // cập nhật tổng tiền (🔥 chuẩn MVVM)
+        viewModel.getTongTien().observe(getViewLifecycleOwner(), total -> {
+            tvTongTien.setText("Tổng tiền: " + total + "đ");
+        });
+
+        // trạng thái select all (optional)
+        viewModel.getIsAllSelected().observe(getViewLifecycleOwner(), isAll -> {
+            if (cbSelectAll.isChecked() != isAll) {
+                cbSelectAll.setChecked(isAll);
+            }
         });
     }
 
-    // ===== UPDATE TIỀN =====
-    private void updateTongTien() {
-        tvTongTien.setText("Tổng tiền: " + viewModel.getSelectedTotalPrice() + "đ");
-    }
+    // ===== EVENTS =====
+    private void setupEvents() {
 
-    // ===== EVENT =====
-    private void setupEvent() {
-
-        // ===== MUA HÀNG =====
+        // mua hàng
         btnMua.setOnClickListener(v -> {
 
             ArrayList<GioHangItem> selectedList = viewModel.getSelectedItems();
@@ -98,7 +103,8 @@ public class GioHangFragment extends Fragment {
                 return;
             }
 
-            ThanhToanFragment fragment = ThanhToanFragment.newInstance(new ArrayList<>(selectedList));
+            ThanhToanFragment fragment =
+                    ThanhToanFragment.newInstance(new ArrayList<>(selectedList));
 
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -107,37 +113,33 @@ public class GioHangFragment extends Fragment {
                     .commit();
         });
 
-        // ===== CHỌN TẤT CẢ =====
+        // chọn tất cả
         cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
             viewModel.selectAll(isChecked);
-            updateTongTien();
         });
     }
 
-    // ===== CALLBACK ADAPTER =====
+    // ===== CALLBACK =====
     private final GioHangAdapter.OnItemClickListener listener = new GioHangAdapter.OnItemClickListener() {
 
         @Override
         public void onIncrease(GioHangItem item) {
             viewModel.increaseQuantity(item);
-            updateTongTien();
         }
 
         @Override
         public void onDecrease(GioHangItem item) {
             viewModel.decreaseQuantity(item);
-            updateTongTien();
         }
 
         @Override
         public void onRemove(GioHangItem item) {
             viewModel.removeItem(item);
-            updateTongTien();
         }
 
         @Override
         public void onCheckChanged() {
-            updateTongTien(); // 🔥 cực quan trọng
+            viewModel.updateSelection(); // 🔥 tính lại total trong VM
         }
     };
 }

@@ -65,7 +65,14 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.ViewHold
         holder.tvGia.setText(sp.getGia() + "đ");
         holder.tvSoLuong.setText(String.valueOf(item.getSoLuong()));
         holder.tvShop.setText(sp.getTenShop()); // 🔥 lấy từ SanPham
-        holder.cbChon.setChecked(item.isChecked());
+        holder.cbChon.setOnCheckedChangeListener(null); // tránh bug
+
+        holder.cbChon.setChecked(item.isSelected());
+
+        holder.cbChon.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            item.setSelected(isChecked);
+            listener.onCheckChanged(); // callback về Fragment → ViewModel
+        });
 
         int tong = sp.getGia() * item.getSoLuong();
         holder.tvTong.setText("Tổng: " + tong + "đ");
@@ -85,7 +92,7 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.ViewHold
         });
 
         holder.cbChon.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            item.setChecked(isChecked);
+            item.setSelected(isChecked);
             if (listener != null) listener.onCheckChanged();
         });
     }

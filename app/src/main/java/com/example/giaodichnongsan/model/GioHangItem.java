@@ -6,13 +6,15 @@ public class GioHangItem implements Serializable {
 
     private SanPham sanPham;
     private int soLuong;
-    private boolean isChecked = true;
+    private boolean selected; // 🔥 THÊM DÒNG NÀY
 
     public GioHangItem(SanPham sanPham, int soLuong) {
         this.sanPham = sanPham;
         this.soLuong = soLuong;
+        this.selected = false; // mặc định chưa chọn
     }
 
+    // ===== GETTER =====
     public SanPham getSanPham() {
         return sanPham;
     }
@@ -21,15 +23,16 @@ public class GioHangItem implements Serializable {
         return soLuong;
     }
 
+    public boolean isSelected() { // 🔥 THÊM
+        return selected;
+    }
+
+    // ===== SETTER =====
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
 
-    public boolean isChecked() {
-        return isChecked;
-    }
-
-    public void setChecked(boolean checked) {
-        isChecked = checked;
+    public void setSelected(boolean selected) { // 🔥 THÊM
+        this.selected = selected;
     }
 }
