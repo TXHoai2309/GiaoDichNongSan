@@ -14,7 +14,8 @@ public class TaiKhoanFragment extends Fragment {
 
     ImageView btnBack;
     LinearLayout itemThongTinCaNhan, itemDoiMatKhau, itemDangKyBanHang,
-            itemVoucher, itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser;
+            itemVoucher, itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser,
+            itemQuanLyCuaHang;
 
     public TaiKhoanFragment() {}
 
@@ -24,18 +25,28 @@ public class TaiKhoanFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_taikhoan, container, false);
 
-        // ánh xạ
         btnBack = view.findViewById(R.id.btnBack);
         layoutUser = view.findViewById(R.id.layoutUser);
         itemThongTinCaNhan = view.findViewById(R.id.itemThongTinCaNhan);
         itemDoiMatKhau = view.findViewById(R.id.itemDoiMatKhau);
         itemDangKyBanHang = view.findViewById(R.id.itemDangKyBanHang);
-        itemVoucher = view.findViewById(R.id.itemVoucher);
         itemGioiThieu = view.findViewById(R.id.itemGioiThieu);
         itemDieuKhoan = view.findViewById(R.id.itemDieuKhoan);
         itemTroGiup = view.findViewById(R.id.itemTroGiup);
+        itemQuanLyCuaHang = view.findViewById(R.id.itemQuanLyCuaHang);
 
-        // ===== CLICK =====
+
+        boolean isSeller = requireActivity()
+                .getSharedPreferences("USER", requireActivity().MODE_PRIVATE)
+                .getBoolean("isSeller", false);
+
+        if (isSeller) {
+            itemDangKyBanHang.setVisibility(View.GONE);
+            itemQuanLyCuaHang.setVisibility(View.VISIBLE);
+        } else {
+            itemDangKyBanHang.setVisibility(View.VISIBLE);
+            itemQuanLyCuaHang.setVisibility(View.GONE);
+        }
 
         btnBack.setOnClickListener(v ->
                 requireActivity().getSupportFragmentManager().popBackStack()
@@ -44,8 +55,16 @@ public class TaiKhoanFragment extends Fragment {
         layoutUser.setOnClickListener(v ->
                 Toast.makeText(getContext(), "Mở hồ sơ cá nhân", Toast.LENGTH_SHORT).show());
 
-        itemThongTinCaNhan.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Thông tin cá nhân", Toast.LENGTH_SHORT).show());
+        itemThongTinCaNhan.setOnClickListener(v -> {
+
+            AdminFragment fragment = new AdminFragment();
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         itemDoiMatKhau.setOnClickListener(v ->
                 Toast.makeText(getContext(), "Đổi mật khẩu", Toast.LENGTH_SHORT).show());
@@ -54,12 +73,19 @@ public class TaiKhoanFragment extends Fragment {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frameLayout, new DangKiBanHangFragment())
-                    .addToBackStack(null) // 👈 QUAN TRỌNG
+                    .addToBackStack(null)
                     .commit();
         });
 
-        itemVoucher.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Voucher của tôi", Toast.LENGTH_SHORT).show());
+        itemQuanLyCuaHang.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, new QuanLyCuaHangFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+
 
         itemGioiThieu.setOnClickListener(v ->
                 Toast.makeText(getContext(), "Giới thiệu", Toast.LENGTH_SHORT).show());

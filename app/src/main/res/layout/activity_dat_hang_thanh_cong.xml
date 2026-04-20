@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="#F5F5F5"
+    android:padding="24dp">
+
+    <!-- ICON -->
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_success"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- TITLE -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đặt hàng thành công!"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
+    <!-- MÔ TẢ -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đơn hàng của bạn đã được ghi nhận"
+        android:textColor="#666"
+        android:layout_marginBottom="30dp"/>
+
+    <!-- BUTTON -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnVeTrangChu"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="Về trang chủ"
+        android:textColor="#FFFFFF"
+        android:textAllCaps="false"
+        android:layout_marginTop="16dp"
+        app:backgroundTint="#4CAF50"/>
+
+</LinearLayout>

@@ -16,9 +16,6 @@
             android:name=".DangKy"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".NhapLaiMatKhau"
             android:exported="false" />
         <activity
@@ -28,8 +25,18 @@
             android:name=".QuenMatKhau"
             android:exported="false" />
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DatHangThanhCongActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ChiTietDonHangActivity"
+            android:exported="false"/>
+        <activity
             android:name=".DangNhap"
-            android:exported="true">
+            android:exported="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -27,8 +27,6 @@ public class DangKiBanHangFragment extends Fragment {
         btnMenu = view.findViewById(R.id.btnMenuDangKyBanHang);
         btnGuiYeuCau = view.findViewById(R.id.btnGuiYeuCau);
 
-        // ===== CLICK =====
-
         btnBack.setOnClickListener(v ->
                 requireActivity().getSupportFragmentManager().popBackStack()
         );
@@ -37,9 +35,17 @@ public class DangKiBanHangFragment extends Fragment {
                 Toast.makeText(getContext(), "Menu", Toast.LENGTH_SHORT).show()
         );
 
-        btnGuiYeuCau.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Gửi yêu cầu thành công", Toast.LENGTH_SHORT).show()
-        );
+        btnGuiYeuCau.setOnClickListener(v -> {
+            requireActivity()
+                    .getSharedPreferences("USER", requireActivity().MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isSeller", true)
+                    .apply();
+
+            Toast.makeText(getContext(), "Gửi yêu cầu thành công", Toast.LENGTH_SHORT).show();
+
+            requireActivity().getSupportFragmentManager().popBackStack();
+        });
 
         return view;
     }

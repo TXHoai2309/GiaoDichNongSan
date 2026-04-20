@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Shop implements Serializable {
 
-    private int id; // 🔥 ID SHOP (QUAN TRỌNG)
+    private int shopId; // 🔥 ID SHOP (QUAN TRỌNG)
     private String tenShop;
     private int avatar;
     private float danhGia;
@@ -15,11 +15,11 @@ public class Shop implements Serializable {
     private String soDienThoai;
     private String moTa;
 
-    public Shop(int id, String tenShop, int avatar, float danhGia, int soSanPham,
+    public Shop(int shopId, String tenShop, int avatar, float danhGia, int soSanPham,
                 int nguoiTheoDoi, String thoiGianThamGia,
                 String diaChi, String soDienThoai, String moTa) {
 
-        this.id = id;
+        this.shopId = shopId;
         this.tenShop = tenShop;
         this.avatar = avatar;
         this.danhGia = danhGia;
@@ -32,7 +32,7 @@ public class Shop implements Serializable {
     }
 
     // ===== GETTER =====
-    public int getId() { return id; }
+    public int getId() { return shopId; }
     public String getTenShop() { return tenShop; }
     public int getAvatar() { return avatar; }
     public float getDanhGia() { return danhGia; }
