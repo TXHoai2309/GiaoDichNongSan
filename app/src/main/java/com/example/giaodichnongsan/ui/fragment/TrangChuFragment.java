@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,9 +16,9 @@ import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.adapter.DanhMucAdapter;
 import com.example.giaodichnongsan.adapter.SanPhamAdapter;
 import com.example.giaodichnongsan.adapter.SanPhamMoiAdapter;
-import com.example.giaodichnongsan.data.fake.FakeDataSanPham;
 import com.example.giaodichnongsan.model.DanhMuc;
 import com.example.giaodichnongsan.model.SanPham;
+import com.example.giaodichnongsan.viewmodel.TrangChuViewModel;
 
 import java.util.ArrayList;
 
@@ -26,18 +27,15 @@ public class TrangChuFragment extends Fragment {
     // ===== VIEW =====
     private RecyclerView rvNoiBat, rvSanPhamMoi, rvDanhMuc;
 
-    // ===== DATA =====
-    private ArrayList<SanPham> listNoiBat, listMoi;
-    private ArrayList<DanhMuc> listDanhMuc;
-
     // ===== ADAPTER =====
     private SanPhamAdapter adapterNoiBat;
     private SanPhamMoiAdapter adapterMoi;
     private DanhMucAdapter danhMucAdapter;
 
-    public TrangChuFragment() {
-        // Required empty constructor
-    }
+    // ===== VIEWMODEL =====
+    private TrangChuViewModel viewModel;
+
+    public TrangChuFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,20 +45,18 @@ public class TrangChuFragment extends Fragment {
 
         initView(view);
         setupRecyclerView();
-        loadData();
-        setupAdapter();
+        setupViewModel();
+        setupObserver();
 
         return view;
     }
 
-    // ===== ÁNH XẠ VIEW =====
     private void initView(View view) {
         rvNoiBat = view.findViewById(R.id.rvNoiBat);
         rvSanPhamMoi = view.findViewById(R.id.rvSanPhamMoi);
         rvDanhMuc = view.findViewById(R.id.rvDanhMuc);
     }
 
-    // ===== SETUP LAYOUT =====
     private void setupRecyclerView() {
 
         rvNoiBat.setLayoutManager(
@@ -73,7 +69,6 @@ public class TrangChuFragment extends Fragment {
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
         );
 
-        // tránh bị add spacing nhiều lần
         if (rvSanPhamMoi.getItemDecorationCount() == 0) {
             rvSanPhamMoi.addItemDecoration(new RecyclerView.ItemDecoration() {
                 @Override
@@ -84,22 +79,30 @@ public class TrangChuFragment extends Fragment {
         }
     }
 
-    // ===== LOAD DATA (FAKE) =====
-    private void loadData() {
-        listNoiBat = FakeDataSanPham.getSanPhamNoiBat();
-        listMoi = FakeDataSanPham.getSanPhamMoi();
-        listDanhMuc = FakeDataSanPham.getDanhMuc();
+    // ===== KẾT NỐI VIEWMODEL =====
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(TrangChuViewModel.class);
     }
 
-    // ===== SETUP ADAPTER =====
-    private void setupAdapter() {
+    // ===== OBSERVE DATA =====
+    private void setupObserver() {
 
-        adapterNoiBat = new SanPhamAdapter(getContext(), listNoiBat);
-        adapterMoi = new SanPhamMoiAdapter(getContext(), listMoi);
-        danhMucAdapter = new DanhMucAdapter(getContext(), listDanhMuc);
+        viewModel.getSanPhamNoiBat().observe(getViewLifecycleOwner(), list -> {
+            adapterNoiBat = new SanPhamAdapter(getContext(), new ArrayList<>(list));
+            rvNoiBat.setAdapter(adapterNoiBat);
+        });
 
-        rvNoiBat.setAdapter(adapterNoiBat);
-        rvSanPhamMoi.setAdapter(adapterMoi);
-        rvDanhMuc.setAdapter(danhMucAdapter);
+        viewModel.getSanPhamMoi().observe(getViewLifecycleOwner(), list -> {
+            adapterMoi = new SanPhamMoiAdapter(getContext(), new ArrayList<>(list));
+            rvSanPhamMoi.setAdapter(adapterMoi);
+        });
+
+        viewModel.getDanhMuc().observe(getViewLifecycleOwner(), list -> {
+            danhMucAdapter = new DanhMucAdapter(getContext(), new ArrayList<>(list));
+            rvDanhMuc.setAdapter(danhMucAdapter);
+        });
+
+        // gọi load data
+        viewModel.loadData();
     }
 }
