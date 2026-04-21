@@ -95,8 +95,13 @@ public class TaiKhoanFragment extends Fragment {
         itemDieuKhoan.setOnClickListener(v ->
                 Toast.makeText(getContext(), "Điều khoản", Toast.LENGTH_SHORT).show());
 
-        itemTroGiup.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Trợ giúp", Toast.LENGTH_SHORT).show());
+        itemTroGiup.setOnClickListener(v -> {
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, new HelpCenterFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         return view;
     }
