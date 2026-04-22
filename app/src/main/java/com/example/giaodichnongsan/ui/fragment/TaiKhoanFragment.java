@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.giaodichnongsan.R;
+import com.example.giaodichnongsan.ui.activity.MainActivity;
 
 public class TaiKhoanFragment extends Fragment {
 
@@ -22,7 +23,7 @@ public class TaiKhoanFragment extends Fragment {
     LinearLayout itemThongTinCaNhan, itemDoiMatKhau, itemDangKyBanHang,
             itemVoucher, itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser,
             itemQuanLyCuaHang;
-    Switch switchCamUng;
+    Switch switchCamUng, switchDoSang;
     SharedPreferences prefs;
 
     public TaiKhoanFragment() {}
@@ -126,10 +127,24 @@ public class TaiKhoanFragment extends Fragment {
 
             // 🔥 cập nhật sensor ngay lập tức
             if (getActivity() instanceof com.example.giaodichnongsan.ui.activity.MainActivity) {
-                ((com.example.giaodichnongsan.ui.activity.MainActivity) getActivity()).updateShakeState();
+                ((com.example.giaodichnongsan.ui.activity.MainActivity) getActivity()).updateSensorsState();
             }
         });
 
+        switchDoSang = view.findViewById(R.id.switchDoSang);
+
+        boolean isLightEnabled = prefs.getBoolean("light_enabled", true);
+        switchDoSang.setChecked(isLightEnabled);
+
+        switchDoSang.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("light_enabled", isChecked).apply();
+
+            Toast.makeText(getContext(),
+                    isChecked ? "Đã bật ánh sáng tự động" : "Đã tắt ánh sáng",
+                    Toast.LENGTH_SHORT).show();
+
+            ((MainActivity) requireActivity()).updateSensorsState();
+        });
         return view;
     }
     @Override
@@ -137,6 +152,9 @@ public class TaiKhoanFragment extends Fragment {
         super.onResume();
 
         boolean isShakeEnabled = prefs.getBoolean("shake_enabled", true);
+        boolean isLightEnabled = prefs.getBoolean("light_enabled", true);
+
         switchCamUng.setChecked(isShakeEnabled);
+        switchDoSang.setChecked(isLightEnabled);
     }
 }
