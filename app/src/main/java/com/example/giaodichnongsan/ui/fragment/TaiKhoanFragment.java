@@ -1,11 +1,15 @@
 package com.example.giaodichnongsan.ui.fragment;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -18,6 +22,8 @@ public class TaiKhoanFragment extends Fragment {
     LinearLayout itemThongTinCaNhan, itemDoiMatKhau, itemDangKyBanHang,
             itemVoucher, itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser,
             itemQuanLyCuaHang;
+    Switch switchCamUng;
+    SharedPreferences prefs;
 
     public TaiKhoanFragment() {}
 
@@ -103,6 +109,34 @@ public class TaiKhoanFragment extends Fragment {
                     .commit();
         });
 
+        // sensor rung lắc
+        switchCamUng = view.findViewById(R.id.switchCamUng);
+
+        prefs = requireActivity().getSharedPreferences("settings", MODE_PRIVATE);
+
+        boolean isShakeEnabled = prefs.getBoolean("shake_enabled", true);
+        switchCamUng.setChecked(isShakeEnabled);
+
+        switchCamUng.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("shake_enabled", isChecked).apply();
+
+            Toast.makeText(getContext(),
+                    isChecked ? "Đã bật rung lắc" : "Đã tắt rung lắc",
+                    Toast.LENGTH_SHORT).show();
+
+            // 🔥 cập nhật sensor ngay lập tức
+            if (getActivity() instanceof com.example.giaodichnongsan.ui.activity.MainActivity) {
+                ((com.example.giaodichnongsan.ui.activity.MainActivity) getActivity()).updateShakeState();
+            }
+        });
+
         return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        boolean isShakeEnabled = prefs.getBoolean("shake_enabled", true);
+        switchCamUng.setChecked(isShakeEnabled);
     }
 }
