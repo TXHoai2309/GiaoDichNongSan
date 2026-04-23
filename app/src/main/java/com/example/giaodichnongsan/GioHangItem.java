@@ -1,24 +1,18 @@
 package com.example.giaodichnongsan;
 
-public class GioHangItem {
+import java.io.Serializable;
+
+public class GioHangItem implements Serializable {
 
     private SanPham sanPham;
     private int soLuong;
-    private String tenShop; // 🔥 thêm shop
-    private boolean isChecked = true; // mặc định chọn
+    private boolean isChecked = true;
 
-    public GioHangItem(SanPham sanPham, int soLuong, String tenShop) {
+    public GioHangItem(SanPham sanPham, int soLuong) {
         this.sanPham = sanPham;
         this.soLuong = soLuong;
-        this.tenShop = tenShop;
-    }
-    public boolean isChecked() {
-        return isChecked;
     }
 
-    public void setChecked(boolean checked) {
-        isChecked = checked;
-    }
     public SanPham getSanPham() {
         return sanPham;
     }
@@ -31,11 +25,11 @@ public class GioHangItem {
         this.soLuong = soLuong;
     }
 
-    public String getTenShop() {
-        return tenShop;
+    public boolean isChecked() {
+        return isChecked;
     }
 
-    public void setTenShop(String tenShop) {
-        this.tenShop = tenShop;
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

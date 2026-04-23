@@ -28,6 +28,12 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".DatHangThanhCongActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ChiTietDonHangActivity"
+            android:exported="false"/>
+        <activity
             android:name=".DangNhap"
             android:exported="true" >
 
