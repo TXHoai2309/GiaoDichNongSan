@@ -18,6 +18,7 @@ import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.adapter.SanPhamMoiAdapter;
 import com.example.giaodichnongsan.model.SanPham;
 import com.example.giaodichnongsan.model.Shop;
+import com.example.giaodichnongsan.utils.AuthHelper;
 import com.example.giaodichnongsan.viewmodel.ChiTietShopViewModel;
 
 import java.util.ArrayList;
@@ -159,10 +160,16 @@ public class ChiTietShopFragment extends Fragment {
     // ===== EVENTS =====
     private void setupEvents() {
 
-        btnFollow.setOnClickListener(v -> btnFollow.setText("Đã theo dõi"));
+        btnFollow.setOnClickListener(v -> {
+            AuthHelper.requireLogin(getContext(), () -> {
+                btnFollow.setText("Đã theo dõi");
+            });
+        });
 
         btnChat.setOnClickListener(v ->
-                tvMoTa.setText("👉 Chat với shop (demo)")
+                AuthHelper.requireLogin(getContext(), () -> {
+                    tvMoTa.setText("👉 Chat với shop (demo)");
+                })
         );
 
         btnMenu.setOnClickListener(v -> showMenu());

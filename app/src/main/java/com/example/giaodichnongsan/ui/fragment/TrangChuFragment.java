@@ -98,11 +98,13 @@ public class TrangChuFragment extends Fragment {
         });
 
         viewModel.getDanhMuc().observe(getViewLifecycleOwner(), list -> {
-            danhMucAdapter = new DanhMucAdapter(getContext(), new ArrayList<>(list));
+            // 🔥 truyền thêm listener vào adapter
+            danhMucAdapter = new DanhMucAdapter(getContext(), new ArrayList<>(list), danhMuc -> {
+                viewModel.filterByDanhMuc(danhMuc.getId());
+            });
             rvDanhMuc.setAdapter(danhMucAdapter);
         });
 
-        // gọi load data
         viewModel.loadData();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.giaodichnongsan.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -69,10 +70,10 @@ public class DangNhap extends AppCompatActivity {
             return;
         }
 
-        // ===== FAKE LOGIN (TẠM) =====
-        showToast("Đăng nhập thành công");
+        // Thay chỗ fake login thành công
+        SharedPreferences prefs = getSharedPreferences("USER", MODE_PRIVATE);
+        prefs.edit().putBoolean("isLoggedIn", true).apply();
 
-        // 👉 chuyển màn
         startActivity(new Intent(this, MainActivity.class));
         finish();
 

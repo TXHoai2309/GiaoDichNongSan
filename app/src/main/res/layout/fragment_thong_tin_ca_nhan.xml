@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- HEADER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_account"
+                android:layout_marginEnd="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thông tin cá nhân"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- ẢNH ĐẠI DIỆN -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_accountto"
+                android:background="@drawable/bg_border"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvDoiAnh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đổi ảnh đại diện"
+                android:textColor="#56B6C6"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+        <!-- HỌ TÊN -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Họ tên"
+            android:textSize="13sp"
+            android:textColor="#888"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/edtHoTen"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_edittext"
+            android:paddingStart="12dp"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- SỐ ĐIỆN THOẠI -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại"
+            android:textSize="13sp"
+            android:textColor="#888"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/edtSoDienThoai"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_edittext"
+            android:paddingStart="12dp"
+            android:inputType="phone"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- EMAIL (chỉ đọc) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textSize="13sp"
+            android:textColor="#888"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_edittext"
+            android:paddingStart="12dp"
+            android:enabled="false"
+            android:alpha="0.6"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- ĐỊA CHỈ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Địa chỉ giao hàng"
+            android:textSize="13sp"
+            android:textColor="#888"
+            android:layout_marginBottom="4dp"/>
+        <EditText
+            android:id="@+id/edtDiaChi"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_edittext"
+            android:paddingStart="12dp"
+            android:inputType="textPostalAddress"
+            android:layout_marginBottom="24dp"/>
+        <!-- NGÀY THAM GIA (chỉ đọc) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tham gia từ"
+            android:textSize="13sp"
+            android:textColor="#888"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tvNgayTao"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_edittext"
+            android:paddingStart="12dp"
+            android:gravity="center_vertical"
+            android:alpha="0.6"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- NÚT LƯU -->
+        <Button
+            android:id="@+id/btnLuu"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Lưu thông tin"
+            android:background="@drawable/bg_button"/>
+
+    </LinearLayout>
+</ScrollView>

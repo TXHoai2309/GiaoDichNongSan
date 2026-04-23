@@ -143,4 +143,21 @@ public class GioHangViewModel extends ViewModel {
         tongTien.setValue(calculateTotal());
         isAllSelected.setValue(checkAllSelected());
     }
+    public void addToCartWithQuantity(SanPham sp, int soLuong) {
+        ArrayList<GioHangItem> list = gioHangList.getValue();
+        if (list == null) list = new ArrayList<>();
+
+        for (GioHangItem item : list) {
+            if (item.getSanPham().getId() == sp.getId()) {
+                item.setSoLuong(item.getSoLuong() + soLuong);
+                gioHangList.setValue(list);
+                updateState();
+                return;
+            }
+        }
+
+        list.add(new GioHangItem(sp, soLuong));
+        gioHangList.setValue(list);
+        updateState();
+    }
 }

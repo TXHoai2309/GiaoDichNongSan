@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.ui.activity.MainActivity;
+import com.example.giaodichnongsan.utils.AuthHelper;
 
 public class TaiKhoanFragment extends Fragment {
 
@@ -65,39 +66,46 @@ public class TaiKhoanFragment extends Fragment {
                 Toast.makeText(getContext(), "Mở hồ sơ cá nhân", Toast.LENGTH_SHORT).show());
 
         itemThongTinCaNhan.setOnClickListener(v -> {
-
-            AdminFragment fragment = new AdminFragment();
-
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.frameLayout, fragment)
+                    .replace(R.id.frameLayout, new ThongTinCaNhanFragment())
                     .addToBackStack(null)
                     .commit();
         });
 
         itemDoiMatKhau.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Đổi mật khẩu", Toast.LENGTH_SHORT).show());
+                AuthHelper.requireLogin(getContext(), () -> {
+                    Toast.makeText(getContext(), "Đổi mật khẩu", Toast.LENGTH_SHORT).show();
+                })
+        );
 
         itemDangKyBanHang.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frameLayout, new DangKiBanHangFragment())
-                    .addToBackStack(null)
-                    .commit();
+            AuthHelper.requireLogin(getContext(), () -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, new DangKiBanHangFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
         });
 
         itemQuanLyCuaHang.setOnClickListener(v -> {
+            AuthHelper.requireLogin(getContext(), () -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, new QuanLyCuaHangFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        });
+
+        itemGioiThieu.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.frameLayout, new QuanLyCuaHangFragment())
+                    .replace(R.id.frameLayout, new AdminFragment())
                     .addToBackStack(null)
                     .commit();
         });
-
-
-
-        itemGioiThieu.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Giới thiệu", Toast.LENGTH_SHORT).show());
 
         itemDieuKhoan.setOnClickListener(v ->
                 Toast.makeText(getContext(), "Điều khoản", Toast.LENGTH_SHORT).show());
@@ -109,7 +117,6 @@ public class TaiKhoanFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
-
         // sensor rung lắc
         switchCamUng = view.findViewById(R.id.switchCamUng);
 

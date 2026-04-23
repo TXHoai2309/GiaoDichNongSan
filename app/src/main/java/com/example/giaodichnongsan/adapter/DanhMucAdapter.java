@@ -16,41 +16,70 @@ import java.util.ArrayList;
 
 public class DanhMucAdapter extends RecyclerView.Adapter<DanhMucAdapter.ViewHolder> {
 
-    Context context;
-    ArrayList<DanhMuc> list;
+    private Context context;
+    private ArrayList<DanhMuc> list;
+    private int selectedPosition = -1; // -1 = chưa chọn cái nào
+    private OnDanhMucClickListener listener;
 
-    public DanhMucAdapter(Context context, ArrayList<DanhMuc> list) {
-        this.context = context;
-        this.list = list;
+    public interface OnDanhMucClickListener {
+        void onClick(DanhMuc danhMuc);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView img;
+    public DanhMucAdapter(Context context, ArrayList<DanhMuc> list, OnDanhMucClickListener listener) {
+        this.context = context;
+        this.list = list;
+        this.listener = listener;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView icon;
         TextView ten;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            img = itemView.findViewById(R.id.imgDanhMuc);
-            ten = itemView.findViewById(R.id.tvDanhMuc);
+            icon = itemView.findViewById(R.id.imgDanhMuc);
+            ten  = itemView.findViewById(R.id.tvDanhMuc);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_danhmuc, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_danhmuc, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         DanhMuc dm = list.get(position);
-        holder.img.setImageResource(dm.getHinh());
+        holder.icon.setImageResource(dm.getIcon());
         holder.ten.setText(dm.getTen());
+
+        // Highlight item đang chọn
+        if (position == selectedPosition) {
+            holder.itemView.setAlpha(1.0f);
+            holder.ten.setTypeface(null, android.graphics.Typeface.BOLD);
+        } else {
+            holder.itemView.setAlpha(selectedPosition == -1 ? 1.0f : 0.5f);
+            holder.ten.setTypeface(null, android.graphics.Typeface.NORMAL);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            int prev = selectedPosition;
+
+            if (selectedPosition == position) {
+                // Click lại cái đang chọn → bỏ chọn (reset)
+                selectedPosition = -1;
+            } else {
+                selectedPosition = position;
+            }
+
+            notifyItemChanged(prev);
+            notifyItemChanged(selectedPosition);
+
+            if (listener != null) listener.onClick(dm);
+        });
     }
 
     @Override
-    public int getItemCount() {
-        return list.size();
-    }
+    public int getItemCount() { return list.size(); }
 }

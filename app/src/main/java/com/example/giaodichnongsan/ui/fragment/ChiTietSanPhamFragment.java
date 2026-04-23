@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.model.GioHangItem;
 import com.example.giaodichnongsan.model.SanPham;
+import com.example.giaodichnongsan.utils.AuthHelper;
 import com.example.giaodichnongsan.viewmodel.ChiTietSanPhamViewModel;
 import com.example.giaodichnongsan.viewmodel.GioHangViewModel;
 
@@ -130,11 +131,15 @@ public class ChiTietSanPhamFragment extends Fragment {
         });
 
         btnGioHang.setOnClickListener(v -> {
-            if (sp != null) showQuantityDialog(false);
+            AuthHelper.requireLogin(getContext(), () -> {
+                if (sp != null) showQuantityDialog(false);
+            });
         });
 
         btnMua.setOnClickListener(v -> {
-            if (sp != null) showQuantityDialog(true);
+            AuthHelper.requireLogin(getContext(), () -> {
+                if (sp != null) showQuantityDialog(true);
+            });
         });
     }
 
@@ -206,16 +211,11 @@ public class ChiTietSanPhamFragment extends Fragment {
 
     // ===== ACTION =====
     private void handleAddToCart(int soLuong) {
-
-        for (int i = 0; i < soLuong; i++) {
-            gioHangViewModel.addToCart(sp);
-        }
-
+        gioHangViewModel.addToCartWithQuantity(sp, soLuong);
         Toast.makeText(getContext(),
                 "Đã thêm " + soLuong + " sản phẩm",
                 Toast.LENGTH_SHORT).show();
     }
-
     private void handleBuyNow(int soLuong) {
 
         ArrayList<GioHangItem> listMua = new ArrayList<>();

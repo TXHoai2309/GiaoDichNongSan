@@ -6,7 +6,7 @@ public class SanPham implements Serializable {
 
     // ====== THÔNG TIN CƠ BẢN ======
     private int id;
-    private int hinh; // giữ nguyên để test UI
+    private int hinh;
     private String ten;
     private int gia;
     private int daBan;
@@ -15,17 +15,19 @@ public class SanPham implements Serializable {
     private String moTa;
     private String nguonGoc;
     private float danhGia;
+    private String danhMuc; // 🔥 THÊM MỚI
 
     // ====== SHOP ======
     private String tenShop;
-    private int shopId; // 🔥 THÊM CỰC QUAN TRỌNG
+    private int shopId;
 
-    // ====== CONSTRUCTOR RỖNG (BẮT BUỘC CHO API/FIREBASE) ======
+    // ====== CONSTRUCTOR RỖNG ======
     public SanPham() {}
 
     // ====== CONSTRUCTOR ĐẦY ĐỦ ======
     public SanPham(int id, int hinh, String ten, int gia, int daBan,
-                   String moTa, String nguonGoc, float danhGia, String tenShop, int shopId) {
+                   String moTa, String nguonGoc, float danhGia,
+                   String danhMuc, String tenShop, int shopId) {
         this.id = id;
         this.hinh = hinh;
         this.ten = ten;
@@ -34,11 +36,12 @@ public class SanPham implements Serializable {
         this.moTa = moTa;
         this.nguonGoc = nguonGoc;
         this.danhGia = danhGia;
+        this.danhMuc = danhMuc;
         this.tenShop = tenShop;
         this.shopId = shopId;
     }
 
-    // ====== CONSTRUCTOR CHO LIST ======
+    // ====== CONSTRUCTOR CHO LIST (giữ nguyên) ======
     public SanPham(int id, int hinh, String ten, int gia, int daBan) {
         this.id = id;
         this.hinh = hinh;
@@ -56,6 +59,7 @@ public class SanPham implements Serializable {
     public String getMoTa() { return moTa; }
     public String getNguonGoc() { return nguonGoc; }
     public float getDanhGia() { return danhGia; }
+    public String getDanhMuc() { return danhMuc; } // 🔥 THÊM MỚI
     public String getTenShop() { return tenShop; }
     public int getShopId() { return shopId; }
 
@@ -68,6 +72,7 @@ public class SanPham implements Serializable {
     public void setMoTa(String moTa) { this.moTa = moTa; }
     public void setNguonGoc(String nguonGoc) { this.nguonGoc = nguonGoc; }
     public void setDanhGia(float danhGia) { this.danhGia = danhGia; }
+    public void setDanhMuc(String danhMuc) { this.danhMuc = danhMuc; } // 🔥 THÊM MỚI
     public void setTenShop(String tenShop) { this.tenShop = tenShop; }
     public void setShopId(int shopId) { this.shopId = shopId; }
 }

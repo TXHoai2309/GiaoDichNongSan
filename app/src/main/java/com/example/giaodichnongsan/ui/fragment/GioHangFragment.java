@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.adapter.GioHangAdapter;
 import com.example.giaodichnongsan.model.GioHangItem;
+import com.example.giaodichnongsan.utils.AuthHelper;
 import com.example.giaodichnongsan.viewmodel.GioHangViewModel;
 
 import java.util.ArrayList;
@@ -95,22 +96,19 @@ public class GioHangFragment extends Fragment {
 
         // mua hàng
         btnMua.setOnClickListener(v -> {
-
-            ArrayList<GioHangItem> selectedList = viewModel.getSelectedItems();
-
-            if (selectedList == null || selectedList.isEmpty()) {
-                Toast.makeText(getContext(), "Chưa chọn sản phẩm", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            ThanhToanFragment fragment =
-                    ThanhToanFragment.newInstance(new ArrayList<>(selectedList));
-
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frameLayout, fragment)
-                    .addToBackStack(null)
-                    .commit();
+            AuthHelper.requireLogin(getContext(), () -> {
+                ArrayList<GioHangItem> selectedList = viewModel.getSelectedItems();
+                if (selectedList == null || selectedList.isEmpty()) {
+                    Toast.makeText(getContext(), "Chưa chọn sản phẩm", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                ThanhToanFragment fragment = ThanhToanFragment.newInstance(new ArrayList<>(selectedList));
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
         });
 
         // chọn tất cả
