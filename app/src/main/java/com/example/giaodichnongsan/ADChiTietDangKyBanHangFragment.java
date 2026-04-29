@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-public class ChiTietDangKyBanHangFragment extends Fragment {
+public class ADChiTietDangKyBanHangFragment extends Fragment {
 
     private static final String KEY_HO_TEN = "ho_ten";
     private static final String KEY_SO_DIEN_THOAI = "so_dien_thoai";
@@ -23,11 +23,11 @@ public class ChiTietDangKyBanHangFragment extends Fragment {
     private ImageView btnBack, btnMenu;
     private TextView tvHoTen, tvSoDienThoai;
 
-    public ChiTietDangKyBanHangFragment() {
+    public ADChiTietDangKyBanHangFragment() {
     }
 
-    public static ChiTietDangKyBanHangFragment newInstance(String hoTen, String soDienThoai) {
-        ChiTietDangKyBanHangFragment fragment = new ChiTietDangKyBanHangFragment();
+    public static ADChiTietDangKyBanHangFragment newInstance(String hoTen, String soDienThoai) {
+        ADChiTietDangKyBanHangFragment fragment = new ADChiTietDangKyBanHangFragment();
         Bundle args = new Bundle();
         args.putString(KEY_HO_TEN, hoTen);
         args.putString(KEY_SO_DIEN_THOAI, soDienThoai);
@@ -48,7 +48,7 @@ public class ChiTietDangKyBanHangFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chi_tiet_quan_ly_dky_ban_hang, container, false);
+        View view = inflater.inflate(R.layout.ad_fragment_chi_tiet_quan_ly_dky_ban_hang, container, false);
 
         anhXa(view);
         hienThiDuLieu();

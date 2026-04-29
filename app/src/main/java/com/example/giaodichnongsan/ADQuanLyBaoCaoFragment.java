@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-public class QuanLyBaoCaoFragment extends Fragment {
+public class ADQuanLyBaoCaoFragment extends Fragment {
 
     private ImageView btnBack, btnMenu;
     private EditText edtSearchReport;
@@ -22,13 +22,13 @@ public class QuanLyBaoCaoFragment extends Fragment {
     private LinearLayout layoutBaoCaoSanPham, layoutBaoCaoCuaHang;
     private View shop1, shop2;
 
-    public QuanLyBaoCaoFragment() {
+    public ADQuanLyBaoCaoFragment() {
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.quan_ly_bao_cao_fragment, container, false);
+        View view = inflater.inflate(R.layout.ad_quan_ly_bao_cao_fragment, container, false);
 
         anhXa(view);
         suKien();

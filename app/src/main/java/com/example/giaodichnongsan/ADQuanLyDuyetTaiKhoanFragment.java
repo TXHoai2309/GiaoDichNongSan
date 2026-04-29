@@ -10,13 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-public class QuanLyDuyetTaiKhoanFragment extends Fragment {
+public class ADQuanLyDuyetTaiKhoanFragment extends Fragment {
 
     private ImageView btnBack;
     private EditText edtSearchDuyetTaiKhoan;
@@ -24,13 +22,13 @@ public class QuanLyDuyetTaiKhoanFragment extends Fragment {
     private RelativeLayout itemTaiKhoanA, itemTaiKhoanB, itemTaiKhoanC;
     private Button btnXemInfoA, btnXemInfoB, btnXemInfoC;
 
-    public QuanLyDuyetTaiKhoanFragment() {
+    public ADQuanLyDuyetTaiKhoanFragment() {
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_quan_ly_duyet_tai_khoan, container, false);
+        View view = inflater.inflate(R.layout.ad_fragment_quan_ly_duyet_tai_khoan, container, false);
 
         anhXa(view);
         suKien();
@@ -91,8 +89,8 @@ public class QuanLyDuyetTaiKhoanFragment extends Fragment {
         }
     }
     private void moChiTiet(String hoTen, String soDienThoai) {
-        ChiTietDangKyBanHangFragment fragment =
-                ChiTietDangKyBanHangFragment.newInstance(hoTen, soDienThoai);
+        ADChiTietDangKyBanHangFragment fragment =
+                ADChiTietDangKyBanHangFragment.newInstance(hoTen, soDienThoai);
 
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.frameLayout, fragment)

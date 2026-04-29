@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F1EC">
@@ -8,102 +9,239 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="28dp">
+        android:paddingStart="28dp"
+        android:paddingTop="36dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="24dp">
 
-        <!-- TITLE -->
         <TextView
+            android:id="@+id/tvTitleDangKy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Đăng Ký"
-            android:textSize="28sp"
-            android:textStyle="bold"
             android:textColor="#4A423D"
-            android:layout_gravity="center"/>
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
-        <!-- IMAGE -->
         <ImageView
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:id="@+id/imgRegister"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:contentDescription="Ảnh đăng ký"
+            android:scaleType="fitCenter"
             android:src="@drawable/login_img"/>
 
-        <!-- HỌ TÊN -->
-        <EditText
-            android:id="@+id/edtHoTen"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="25dp"
-            android:hint="Họ và tên"
+            android:layout_height="56dp"
+            android:layout_marginTop="28dp"
             android:background="#FFF8F4"
-            android:padding="15dp"/>
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <!-- SĐT -->
-        <EditText
-            android:id="@+id/edtSoDienThoai"
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="name icon"
+                android:src="@android:drawable/ic_menu_myplaces"
+                app:tint="#7A6F67" />
+
+            <EditText
+                android:id="@+id/edtHoTen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@android:color/transparent"
+                android:hint="Họ và tên"
+                android:inputType="textPersonName"
+                android:textColor="#4A423D"
+                android:textColorHint="#7A6F67"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="15dp"
-            android:hint="Số điện thoại"
-            android:inputType="phone"
-            android:background="#FFF8F4"
-            android:padding="15dp"/>
+            android:layout_height="1dp"
+            android:background="#CDB8A7" />
 
-        <!-- EMAIL -->
-        <EditText
-            android:id="@+id/edtEmail"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="15dp"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
+            android:layout_height="56dp"
+            android:layout_marginTop="14dp"
             android:background="#FFF8F4"
-            android:padding="15dp"/>
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <!-- PASSWORD -->
-        <EditText
-            android:id="@+id/edtMatKhau"
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="phone icon"
+                android:src="@android:drawable/ic_menu_call"
+                app:tint="#7A6F67" />
+
+            <EditText
+                android:id="@+id/edtSoDienThoai"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@android:color/transparent"
+                android:hint="Số điện thoại"
+                android:inputType="phone"
+                android:textColor="#4A423D"
+                android:textColorHint="#7A6F67"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="15dp"
-            android:hint="Mật khẩu"
-            android:inputType="textPassword"
-            android:background="#FFF8F4"
-            android:padding="15dp"/>
+            android:layout_height="1dp"
+            android:background="#CDB8A7" />
 
-        <!-- CONFIRM -->
-        <EditText
-            android:id="@+id/edtNhapLai"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="15dp"
-            android:hint="Nhập lại mật khẩu"
-            android:inputType="textPassword"
+            android:layout_height="56dp"
+            android:layout_marginTop="14dp"
             android:background="#FFF8F4"
-            android:padding="15dp"/>
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <!-- BUTTON -->
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="email icon"
+                android:src="@android:drawable/ic_dialog_email"
+                app:tint="#7A6F67" />
+
+            <EditText
+                android:id="@+id/edtEmailDangKy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@android:color/transparent"
+                android:hint="Địa chỉ email"
+                android:inputType="textEmailAddress"
+                android:textColor="#4A423D"
+                android:textColorHint="#7A6F67"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CDB8A7" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="14dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="password icon"
+                android:src="@android:drawable/ic_lock_lock"
+                app:tint="#7A6F67" />
+
+            <EditText
+                android:id="@+id/edtMatKhauDangKy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@android:color/transparent"
+                android:hint="Mật khẩu"
+                android:inputType="textPassword"
+                android:textColor="#4A423D"
+                android:textColorHint="#7A6F67"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CDB8A7" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="14dp"
+            android:background="#FFF8F4"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="confirm password icon"
+                android:src="@android:drawable/ic_lock_lock"
+                app:tint="#7A6F67" />
+
+            <EditText
+                android:id="@+id/edtNhapLaiMatKhau"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@android:color/transparent"
+                android:hint="Nhập lại mật khẩu"
+                android:inputType="textPassword"
+                android:textColor="#4A423D"
+                android:textColorHint="#7A6F67"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#CDB8A7" />
+
         <Button
             android:id="@+id/btnDangKy"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="25dp"
-            android:text="Đăng ký"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#68A25A"
+            android:text="Đăng Ký"
             android:textAllCaps="false"
-            android:backgroundTint="#68A25A"/>
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <!-- LOGIN -->
+        <TextView
+            android:id="@+id/tvChinhSach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Bằng cách đăng ký, bạn đồng ý với\nĐiều khoản &amp; Chính sách của chúng tôi."
+            android:textAlignment="center"
+            android:textColor="#4A423D"
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tvDangNhap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="18dp"
             android:text="Đã có tài khoản? Đăng nhập"
             android:textColor="#4A423D"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"/>
+            android:textSize="16sp" />
 
     </LinearLayout>
-
 </ScrollView>

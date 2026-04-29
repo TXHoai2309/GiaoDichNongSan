@@ -16,13 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuanLyNguoiDungFragment extends Fragment {
+public class ADQuanLyNguoiDungFragment extends Fragment {
 
     private ImageView btnBack;
     private EditText edtSearch;
@@ -32,13 +31,13 @@ public class QuanLyNguoiDungFragment extends Fragment {
     private final List<NguoiDung> danhSachNguoiDung = new ArrayList<>();
     private final List<NguoiDung> danhSachDangHienThi = new ArrayList<>();
 
-    public QuanLyNguoiDungFragment() {
+    public ADQuanLyNguoiDungFragment() {
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.quan_ly_nguoi_dung_fragment, container, false);
+        View view = inflater.inflate(R.layout.ad_quan_ly_nguoi_dung_fragment, container, false);
 
         anhXa(view);
         taoDuLieuMau();

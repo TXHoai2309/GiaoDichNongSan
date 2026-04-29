@@ -8,18 +8,16 @@ import android.view.ViewGroup;
 import android.widget.*;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 
 public class ChiTietSanPhamFragment extends Fragment {
 
-    private ImageView imgSP;
-    private TextView tvTen, tvGia, tvDanhGia, tvMoTa, tvNguonGoc, tvShop;
-    private Button btnGioHang, btnMua;
+    ImageView imgSP;
+    TextView tvTen, tvGia, tvDanhGia, tvMoTa, tvNguonGoc, tvShop;
+    Button btnGioHang, btnMua;
 
-    private SanPham sp;
-    private GioHangViewModel viewModel;
+    SanPham sp; // 🔥 biến global
 
     public ChiTietSanPhamFragment() {}
 
@@ -37,21 +35,7 @@ public class ChiTietSanPhamFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_chitiet_sanpham, container, false);
 
-        initView(view);
-        initData();
-        initViewModel();
-
-        if (sp != null) {
-            bindData();
-            setupEvents();
-        }
-
-        return view;
-    }
-
-    // ===== INIT =====
-
-    private void initView(View view) {
+        // ===== ÁNH XẠ =====
         imgSP = view.findViewById(R.id.imgSP);
         tvTen = view.findViewById(R.id.tvTen);
         tvGia = view.findViewById(R.id.tvGia);
@@ -61,20 +45,23 @@ public class ChiTietSanPhamFragment extends Fragment {
         tvShop = view.findViewById(R.id.tvShop);
         btnGioHang = view.findViewById(R.id.btnGioHang);
         btnMua = view.findViewById(R.id.btnMua);
-    }
 
-    private void initData() {
+        // ===== LẤY DỮ LIỆU 1 LẦN DUY NHẤT =====
         if (getArguments() != null) {
             sp = (SanPham) getArguments().getSerializable("sanpham");
         }
+
+        if (sp != null) {
+            bindData();
+            setupShopClick();
+            setupAddToCart();
+            setupMuaNgay();
+        }
+
+        return view;
     }
 
-    private void initViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
-    }
-
-    // ===== HIỂN THỊ =====
-
+    // ===== HIỂN THỊ DATA =====
     private void bindData() {
         imgSP.setImageResource(sp.getHinh());
         tvTen.setText(sp.getTen());
@@ -86,119 +73,158 @@ public class ChiTietSanPhamFragment extends Fragment {
         tvShop.setText(sp.getTenShop() != null ? sp.getTenShop() : "Đang cập nhật");
     }
 
-    // ===== EVENTS =====
+    // ===== CLICK SHOP =====
+    private void setupShopClick() {
+        tvShop.setOnClickListener(v -> {
 
-    private void setupEvents() {
+            Shop shop = new Shop(
+                    1,
+                    sp.getTenShop(),
+                    R.drawable.ic_shop,
+                    4.8f,
+                    256,
+                    1200,
+                    "2 năm",
+                    "Hà Nội",
+                    "0987 654 321",
+                    "Chuyên cung cấp nông sản sạch"
+            );
 
-        tvShop.setOnClickListener(v -> openShop());
+            ChiTietShopFragment fragment = ChiTietShopFragment.newInstance(shop);
 
-        btnGioHang.setOnClickListener(v -> showQuantityDialog(false));
-
-        btnMua.setOnClickListener(v -> showQuantityDialog(true));
-    }
-
-    // ===== SHOP =====
-
-    private void openShop() {
-        Shop shop = new Shop(
-                1,
-                sp.getTenShop(),
-                R.drawable.ic_shop,
-                4.8f,
-                256,
-                1200,
-                "2 năm",
-                "Hà Nội",
-                "0987 654 321",
-                "Chuyên cung cấp nông sản sạch"
-        );
-
-        ChiTietShopFragment fragment = ChiTietShopFragment.newInstance(shop);
-
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.frameLayout, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    // ===== DIALOG CHUNG =====
-
-    private void showQuantityDialog(boolean isBuyNow) {
-
-        View dialogView = LayoutInflater.from(getContext())
-                .inflate(R.layout.dialog_soluong, null);
-
-        ImageView img = dialogView.findViewById(R.id.imgSP);
-        TextView tvTenSP = dialogView.findViewById(R.id.tvTen);
-        TextView tvGiaSP = dialogView.findViewById(R.id.tvGia);
-        TextView tvTong = dialogView.findViewById(R.id.tvTongGia);
-
-        TextView tvSoLuong = dialogView.findViewById(R.id.tvSoLuong);
-        Button btnPlus = dialogView.findViewById(R.id.btnPlus);
-        Button btnMinus = dialogView.findViewById(R.id.btnMinus);
-
-        img.setImageResource(sp.getHinh());
-        tvTenSP.setText(sp.getTen());
-        tvGiaSP.setText(sp.getGia() + "đ");
-
-        final int[] soLuong = {1};
-        int gia = sp.getGia();
-
-        tvTong.setText("Tổng: " + gia + "đ");
-
-        btnPlus.setOnClickListener(v -> {
-            soLuong[0]++;
-            tvSoLuong.setText(String.valueOf(soLuong[0]));
-            tvTong.setText("Tổng: " + (gia * soLuong[0]) + "đ");
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, fragment)
+                    .addToBackStack(null)
+                    .commit();
         });
+    }
 
-        btnMinus.setOnClickListener(v -> {
-            if (soLuong[0] > 1) {
-                soLuong[0]--;
+    // ===== THÊM VÀO GIỎ =====
+    private void setupAddToCart() {
+
+        btnGioHang.setOnClickListener(v -> {
+
+            View dialogView = LayoutInflater.from(getContext())
+                    .inflate(R.layout.dialog_soluong, null);
+
+            ImageView img = dialogView.findViewById(R.id.imgSP);
+            TextView tvTenSP = dialogView.findViewById(R.id.tvTen);
+            TextView tvGiaSP = dialogView.findViewById(R.id.tvGia);
+            TextView tvTong = dialogView.findViewById(R.id.tvTongGia);
+
+            TextView tvSoLuong = dialogView.findViewById(R.id.tvSoLuong);
+            Button btnPlus = dialogView.findViewById(R.id.btnPlus);
+            Button btnMinus = dialogView.findViewById(R.id.btnMinus);
+
+            // ===== SET DATA =====
+            img.setImageResource(sp.getHinh());
+            tvTenSP.setText(sp.getTen());
+            tvGiaSP.setText(sp.getGia() + "đ");
+
+            final int[] soLuong = {1};
+            int gia = sp.getGia();
+
+            tvTong.setText("Tổng: " + gia + "đ");
+
+            // +
+            btnPlus.setOnClickListener(v1 -> {
+                soLuong[0]++;
                 tvSoLuong.setText(String.valueOf(soLuong[0]));
-                tvTong.setText("Tổng: " + (gia * soLuong[0]) + "đ");
-            }
+
+                int tong = gia * soLuong[0];
+                tvTong.setText("Tổng: " + tong + "đ");
+            });
+
+            // -
+            btnMinus.setOnClickListener(v1 -> {
+                if (soLuong[0] > 1) {
+                    soLuong[0]--;
+                    tvSoLuong.setText(String.valueOf(soLuong[0]));
+
+                    int tong = gia * soLuong[0];
+                    tvTong.setText("Tổng: " + tong + "đ");
+                }
+            });
+
+            new AlertDialog.Builder(getContext())
+                    .setView(dialogView)
+                    .setPositiveButton("Thêm vào giỏ", (dialog, which) -> {
+
+                        GioHangManager.themSanPham(sp, soLuong[0], sp.getTenShop());
+
+                        Toast.makeText(getContext(),
+                                "Đã thêm " + soLuong[0] + " sản phẩm",
+                                Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
         });
-
-        new AlertDialog.Builder(getContext())
-                .setView(dialogView)
-                .setPositiveButton(isBuyNow ? "Mua ngay" : "Thêm vào giỏ", (dialog, which) -> {
-
-                    if (isBuyNow) {
-                        handleBuyNow(soLuong[0]);
-                    } else {
-                        handleAddToCart(soLuong[0]);
-                    }
-
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
     }
+    private void setupMuaNgay() {
 
-    // ===== ACTION =====
+        btnMua.setOnClickListener(v -> {
 
-    private void handleAddToCart(int soLuong) {
-        for (int i = 0; i < soLuong; i++) {
-            viewModel.addToCart(sp);
-        }
+            View dialogView = LayoutInflater.from(getContext())
+                    .inflate(R.layout.dialog_soluong, null);
 
-        Toast.makeText(getContext(),
-                "Đã thêm " + soLuong + " sản phẩm",
-                Toast.LENGTH_SHORT).show();
-    }
+            ImageView img = dialogView.findViewById(R.id.imgSP);
+            TextView tvTenSP = dialogView.findViewById(R.id.tvTen);
+            TextView tvGiaSP = dialogView.findViewById(R.id.tvGia);
+            TextView tvTong = dialogView.findViewById(R.id.tvTongGia);
 
-    private void handleBuyNow(int soLuong) {
+            TextView tvSoLuong = dialogView.findViewById(R.id.tvSoLuong);
+            Button btnPlus = dialogView.findViewById(R.id.btnPlus);
+            Button btnMinus = dialogView.findViewById(R.id.btnMinus);
 
-        ArrayList<GioHangItem> listMua = new ArrayList<>();
-        listMua.add(new GioHangItem(sp, soLuong));
+            // ===== SET DATA =====
+            img.setImageResource(sp.getHinh());
+            tvTenSP.setText(sp.getTen());
+            tvGiaSP.setText(sp.getGia() + "đ");
 
-        ThanhToanFragment fragment = ThanhToanFragment.newInstance(listMua);
+            final int[] soLuong = {1};
+            int gia = sp.getGia();
 
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.frameLayout, fragment)
-                .addToBackStack(null)
-                .commit();
+            tvTong.setText("Tổng: " + gia + "đ");
+
+            // +
+            btnPlus.setOnClickListener(v1 -> {
+                soLuong[0]++;
+                tvSoLuong.setText(String.valueOf(soLuong[0]));
+
+                int tong = gia * soLuong[0];
+                tvTong.setText("Tổng: " + tong + "đ");
+            });
+
+            // -
+            btnMinus.setOnClickListener(v1 -> {
+                if (soLuong[0] > 1) {
+                    soLuong[0]--;
+                    tvSoLuong.setText(String.valueOf(soLuong[0]));
+
+                    int tong = gia * soLuong[0];
+                    tvTong.setText("Tổng: " + tong + "đ");
+                }
+            });
+
+            new AlertDialog.Builder(getContext())
+                    .setView(dialogView)
+                    .setPositiveButton("Mua ngay", (dialog, which) -> {
+
+                        // 🔥 TẠO LIST 1 SẢN PHẨM
+                        ArrayList<GioHangItem> listMua = new ArrayList<>();
+                        listMua.add(new GioHangItem(sp, soLuong[0], sp.getTenShop()));
+
+                        ThanhToanFragment fragment = ThanhToanFragment.newInstance(listMua);
+
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.frameLayout, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
+        });
     }
 }

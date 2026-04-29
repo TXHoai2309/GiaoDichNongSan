@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,17 +17,11 @@ import java.util.ArrayList;
 
 public class GioHangFragment extends Fragment {
 
-    // ===== VIEW =====
-    private RecyclerView recyclerView;
-    private TextView tvTongTien;
-    private Button btnMua;
-    private CheckBox cbSelectAll;
+    RecyclerView rvGioHang;
+    TextView tvTongTien;
+    Button btnMua;
 
-    // ===== ADAPTER =====
-    private GioHangAdapter adapter;
-
-    // ===== VIEWMODEL =====
-    private GioHangViewModel viewModel;
+    GioHangAdapter adapter;
 
     public GioHangFragment() {}
 
@@ -38,62 +31,30 @@ public class GioHangFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_giohang, container, false);
 
-        initView(view);
-        setupViewModel();
-        setupRecyclerView();
-        observeData();
-        setupEvent();
-
-        return view;
-    }
-
-    // ===== INIT VIEW =====
-    private void initView(View view) {
-        recyclerView = view.findViewById(R.id.rvGioHang);
+        rvGioHang = view.findViewById(R.id.rvGioHang);
         tvTongTien = view.findViewById(R.id.tvTongTien);
         btnMua = view.findViewById(R.id.btnMua);
-        cbSelectAll = view.findViewById(R.id.cbAll);
-    }
+        CheckBox cbAll = view.findViewById(R.id.cbAll);
 
-    // ===== VIEWMODEL =====
-    private void setupViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
-    }
+        // RecyclerView
+        rvGioHang.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new GioHangAdapter(GioHangManager.gioHang, this::capNhatTongTien);
+        rvGioHang.setAdapter(adapter);
 
-    // ===== RECYCLER =====
-    private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new GioHangAdapter(new ArrayList<>(), listener);
-        recyclerView.setAdapter(adapter);
-    }
+        // cập nhật tổng tiền
+        capNhatTongTien();
 
-    // ===== OBSERVE =====
-    private void observeData() {
-        viewModel.getGioHangList().observe(getViewLifecycleOwner(), list -> {
-            adapter.setData(list);
-            updateTongTien(); // 🔥 realtime update
-        });
-    }
-
-    // ===== UPDATE TIỀN =====
-    private void updateTongTien() {
-        tvTongTien.setText("Tổng tiền: " + viewModel.getSelectedTotalPrice() + "đ");
-    }
-
-    // ===== EVENT =====
-    private void setupEvent() {
-
-        // ===== MUA HÀNG =====
+        // nút mua
         btnMua.setOnClickListener(v -> {
 
-            ArrayList<GioHangItem> selectedList = viewModel.getSelectedItems();
+            ArrayList<GioHangItem> listMua = getDanhSachDaChon();
 
-            if (selectedList == null || selectedList.isEmpty()) {
-                Toast.makeText(getContext(), "Chưa chọn sản phẩm", Toast.LENGTH_SHORT).show();
+            if (listMua.isEmpty()) {
+                Toast.makeText(getContext(), "Vui lòng chọn sản phẩm", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            ThanhToanFragment fragment = ThanhToanFragment.newInstance(new ArrayList<>(selectedList));
+            ThanhToanFragment fragment = ThanhToanFragment.newInstance(listMua);
 
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -102,37 +63,33 @@ public class GioHangFragment extends Fragment {
                     .commit();
         });
 
-        // ===== CHỌN TẤT CẢ =====
-        cbSelectAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            viewModel.selectAll(isChecked);
-            updateTongTien();
+        cbAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            for (GioHangItem item : GioHangManager.gioHang) {
+                item.setChecked(isChecked);
+            }
+
+            adapter.notifyDataSetChanged();
+            capNhatTongTien();
         });
+        return view;
     }
 
-    // ===== CALLBACK ADAPTER =====
-    private final GioHangAdapter.OnItemClickListener listener = new GioHangAdapter.OnItemClickListener() {
+    // ===== TÍNH TỔNG =====
+    private void capNhatTongTien() {
+        int tong = GioHangManager.getTongTien();
+        tvTongTien.setText(tong + "đ");
+    }
+    private ArrayList<GioHangItem> getDanhSachDaChon() {
 
-        @Override
-        public void onIncrease(GioHangItem item) {
-            viewModel.increaseQuantity(item);
-            updateTongTien();
+        ArrayList<GioHangItem> list = new ArrayList<>();
+
+        for (GioHangItem item : GioHangManager.gioHang) {
+            if (item.isChecked()) {
+                list.add(item);
+            }
         }
 
-        @Override
-        public void onDecrease(GioHangItem item) {
-            viewModel.decreaseQuantity(item);
-            updateTongTien();
-        }
-
-        @Override
-        public void onRemove(GioHangItem item) {
-            viewModel.removeItem(item);
-            updateTongTien();
-        }
-
-        @Override
-        public void onCheckChanged() {
-            updateTongTien(); // 🔥 cực quan trọng
-        }
-    };
+        return list;
+    }
 }

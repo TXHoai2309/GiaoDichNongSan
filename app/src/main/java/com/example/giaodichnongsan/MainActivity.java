@@ -34,10 +34,6 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(new GioHangFragment());
                 return true;
             }
-            else if (item.getItemId() == R.id.nav_order) {
-                loadFragment(new DonHangFragment());
-                return true;
-            }
             return false;
         });
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frameLayout), (v, insets) -> {

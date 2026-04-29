@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class AdminFragment extends Fragment {
@@ -76,7 +75,7 @@ public class AdminFragment extends Fragment {
                         switch (which) {
                             case 0:
                                 getParentFragmentManager().beginTransaction()
-                                        .replace(R.id.frameLayout, new QuanLyNguoiDungFragment())
+                                        .replace(R.id.frameLayout, new ADQuanLyNguoiDungFragment())
                                         .addToBackStack(null)
                                         .commit();
                                 break;
@@ -90,14 +89,14 @@ public class AdminFragment extends Fragment {
 
                             case 2:
                                 getParentFragmentManager().beginTransaction()
-                                        .replace(R.id.frameLayout, new QuanLyDuyetTaiKhoanFragment())
+                                        .replace(R.id.frameLayout, new ADQuanLyDuyetTaiKhoanFragment())
                                         .addToBackStack(null)
                                         .commit();
                                 break;
 
                             case 3:
                                 getParentFragmentManager().beginTransaction()
-                                        .replace(R.id.frameLayout, new QuanLyBaoCaoFragment())
+                                        .replace(R.id.frameLayout, new ADQuanLyBaoCaoFragment())
                                         .addToBackStack(null)
                                         .commit();
                                 break;
@@ -108,14 +107,14 @@ public class AdminFragment extends Fragment {
 
         layoutQuanLyNguoiDung.setOnClickListener(v ->
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout, new QuanLyNguoiDungFragment())
+                        .replace(R.id.frameLayout, new ADQuanLyNguoiDungFragment())
                         .addToBackStack(null)
                         .commit()
         );
 
         layoutDuyetTaiKhoan.setOnClickListener(v ->
                 getParentFragmentManager().beginTransaction()
-                            .replace(R.id.frameLayout, new QuanLyDuyetTaiKhoanFragment())
+                            .replace(R.id.frameLayout, new ADQuanLyDuyetTaiKhoanFragment())
                         .addToBackStack(null)
                         .commit()
         );
@@ -129,7 +128,7 @@ public class AdminFragment extends Fragment {
 
         layoutBaoCaoViPham.setOnClickListener(v ->
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout, new QuanLyBaoCaoFragment())
+                        .replace(R.id.frameLayout, new ADQuanLyBaoCaoFragment())
                         .addToBackStack(null)
                         .commit()
         );
@@ -140,7 +139,7 @@ public class AdminFragment extends Fragment {
 
         tvXemTatCaTaiKhoan.setOnClickListener(v ->
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frameLayout, new QuanLyDuyetTaiKhoanFragment())
+                        .replace(R.id.frameLayout, new ADQuanLyDuyetTaiKhoanFragment())
                         .addToBackStack(null)
                         .commit()
         );
