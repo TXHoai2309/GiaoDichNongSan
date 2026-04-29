@@ -15,14 +15,13 @@ import androidx.fragment.app.Fragment;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.ui.activity.DangKy;
 import com.example.giaodichnongsan.ui.activity.DangNhap;
-import com.example.giaodichnongsan.ui.activity.MainActivity;
 import com.example.giaodichnongsan.utils.AuthHelper;
 
 public class TaiKhoanFragment extends Fragment {
 
     ImageView btnBack;
     LinearLayout itemThongTinCaNhan, itemDoiMatKhau, itemDangKyBanHang,
-            itemVoucher, itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser,
+            itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser,
             itemQuanLyCuaHang;
 
     TextView tvUserName, tvPhone, tvDangNhapTaiKhoan, tvDangKyTaiKhoan;
@@ -30,7 +29,6 @@ public class TaiKhoanFragment extends Fragment {
     Switch switchCamUng, switchDoSang;
     SharedPreferences prefs;
 
-    // 🔥 THÊM
     Button btnLogoutUser;
 
     public TaiKhoanFragment() {}
@@ -41,6 +39,7 @@ public class TaiKhoanFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_taikhoan, container, false);
 
+        // ===== ÁNH XẠ =====
         btnBack = view.findViewById(R.id.btnBack);
         layoutUser = view.findViewById(R.id.layoutUser);
 
@@ -49,7 +48,6 @@ public class TaiKhoanFragment extends Fragment {
         tvDangNhapTaiKhoan = view.findViewById(R.id.tvDangNhapTaiKhoan);
         tvDangKyTaiKhoan = view.findViewById(R.id.tvDangKyTaiKhoan);
 
-        // 🔥 ÁNH XẠ
         btnLogoutUser = view.findViewById(R.id.btnLogoutUser);
 
         itemThongTinCaNhan = view.findViewById(R.id.itemThongTinCaNhan);
@@ -65,10 +63,12 @@ public class TaiKhoanFragment extends Fragment {
         capNhatTrangThaiDangNhap();
         capNhatTrangThaiSeller();
 
+        // ===== BACK =====
         btnBack.setOnClickListener(v ->
                 requireActivity().getSupportFragmentManager().popBackStack()
         );
 
+        // ===== LOGIN / REGISTER =====
         tvDangNhapTaiKhoan.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), DangNhap.class))
         );
@@ -77,7 +77,61 @@ public class TaiKhoanFragment extends Fragment {
                 startActivity(new Intent(requireContext(), DangKy.class))
         );
 
-        // 🔥 LOGOUT USER
+        // ===== CLICK CÁC ITEM (🔥 FIX LỖI CHÍNH) =====
+
+        itemThongTinCaNhan.setOnClickListener(v -> {
+            AuthHelper.requireLogin(getContext(), () -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, new ThongTinCaNhanFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        });
+
+        itemDoiMatKhau.setOnClickListener(v ->
+                AuthHelper.requireLogin(getContext(), () ->
+                        Toast.makeText(getContext(), "Đổi mật khẩu", Toast.LENGTH_SHORT).show()
+                )
+        );
+
+        itemDangKyBanHang.setOnClickListener(v -> {
+            AuthHelper.requireLogin(getContext(), () -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, new DangKiBanHangFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        });
+
+        itemQuanLyCuaHang.setOnClickListener(v -> {
+            AuthHelper.requireLogin(getContext(), () -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, new QuanLyCuaHangFragment())
+                        .addToBackStack(null)
+                        .commit();
+            });
+        });
+
+        itemGioiThieu.setOnClickListener(v ->
+                Toast.makeText(getContext(), "Ứng dụng giao dịch nông sản", Toast.LENGTH_SHORT).show()
+        );
+
+        itemDieuKhoan.setOnClickListener(v ->
+                Toast.makeText(getContext(), "Điều khoản & chính sách", Toast.LENGTH_SHORT).show()
+        );
+
+        itemTroGiup.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, new HelpCenterFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        // ===== LOGOUT =====
         btnLogoutUser.setOnClickListener(v -> {
 
             SharedPreferences prefs = requireActivity()
@@ -87,11 +141,9 @@ public class TaiKhoanFragment extends Fragment {
 
             Toast.makeText(getContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
 
-            // reload lại fragment
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frameLayout, new TaiKhoanFragment())
-                    .commit();
+            // 👉 KHÔNG reload fragment kiểu cũ (bug)
+            startActivity(new Intent(getContext(), DangNhap.class));
+            requireActivity().finish();
         });
 
         return view;
@@ -112,7 +164,7 @@ public class TaiKhoanFragment extends Fragment {
             tvDangNhapTaiKhoan.setVisibility(View.GONE);
             tvDangKyTaiKhoan.setVisibility(View.GONE);
 
-            btnLogoutUser.setVisibility(View.VISIBLE); // 🔥 HIỆN
+            btnLogoutUser.setVisibility(View.VISIBLE);
         } else {
             tvUserName.setText("Khách");
             tvPhone.setText("Bạn chưa đăng nhập");
@@ -120,7 +172,7 @@ public class TaiKhoanFragment extends Fragment {
             tvDangNhapTaiKhoan.setVisibility(View.VISIBLE);
             tvDangKyTaiKhoan.setVisibility(View.VISIBLE);
 
-            btnLogoutUser.setVisibility(View.GONE); // 🔥 ẨN
+            btnLogoutUser.setVisibility(View.GONE);
         }
     }
 
