@@ -2,19 +2,19 @@ package com.example.giaodichnongsan.ui.fragment;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.giaodichnongsan.R;
+import com.example.giaodichnongsan.ui.activity.DangKy;
+import com.example.giaodichnongsan.ui.activity.DangNhap;
 import com.example.giaodichnongsan.ui.activity.MainActivity;
 import com.example.giaodichnongsan.utils.AuthHelper;
 
@@ -24,8 +24,14 @@ public class TaiKhoanFragment extends Fragment {
     LinearLayout itemThongTinCaNhan, itemDoiMatKhau, itemDangKyBanHang,
             itemVoucher, itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser,
             itemQuanLyCuaHang;
+
+    TextView tvUserName, tvPhone, tvDangNhapTaiKhoan, tvDangKyTaiKhoan;
+
     Switch switchCamUng, switchDoSang;
     SharedPreferences prefs;
+
+    // 🔥 THÊM
+    Button btnLogoutUser;
 
     public TaiKhoanFragment() {}
 
@@ -37,6 +43,15 @@ public class TaiKhoanFragment extends Fragment {
 
         btnBack = view.findViewById(R.id.btnBack);
         layoutUser = view.findViewById(R.id.layoutUser);
+
+        tvUserName = view.findViewById(R.id.tvUserName);
+        tvPhone = view.findViewById(R.id.tvPhone);
+        tvDangNhapTaiKhoan = view.findViewById(R.id.tvDangNhapTaiKhoan);
+        tvDangKyTaiKhoan = view.findViewById(R.id.tvDangKyTaiKhoan);
+
+        // 🔥 ÁNH XẠ
+        btnLogoutUser = view.findViewById(R.id.btnLogoutUser);
+
         itemThongTinCaNhan = view.findViewById(R.id.itemThongTinCaNhan);
         itemDoiMatKhau = view.findViewById(R.id.itemDoiMatKhau);
         itemDangKyBanHang = view.findViewById(R.id.itemDangKyBanHang);
@@ -45,9 +60,73 @@ public class TaiKhoanFragment extends Fragment {
         itemTroGiup = view.findViewById(R.id.itemTroGiup);
         itemQuanLyCuaHang = view.findViewById(R.id.itemQuanLyCuaHang);
 
+        prefs = requireActivity().getSharedPreferences("settings", MODE_PRIVATE);
 
+        capNhatTrangThaiDangNhap();
+        capNhatTrangThaiSeller();
+
+        btnBack.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager().popBackStack()
+        );
+
+        tvDangNhapTaiKhoan.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), DangNhap.class))
+        );
+
+        tvDangKyTaiKhoan.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), DangKy.class))
+        );
+
+        // 🔥 LOGOUT USER
+        btnLogoutUser.setOnClickListener(v -> {
+
+            SharedPreferences prefs = requireActivity()
+                    .getSharedPreferences("USER", MODE_PRIVATE);
+
+            prefs.edit().clear().apply();
+
+            Toast.makeText(getContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+
+            // reload lại fragment
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frameLayout, new TaiKhoanFragment())
+                    .commit();
+        });
+
+        return view;
+    }
+
+    private boolean daDangNhap() {
+        return requireActivity()
+                .getSharedPreferences("USER", MODE_PRIVATE)
+                .getBoolean("isLoggedIn", false);
+    }
+
+    private void capNhatTrangThaiDangNhap() {
+
+        if (daDangNhap()) {
+            tvUserName.setText("Người dùng");
+            tvPhone.setText("Đã đăng nhập");
+
+            tvDangNhapTaiKhoan.setVisibility(View.GONE);
+            tvDangKyTaiKhoan.setVisibility(View.GONE);
+
+            btnLogoutUser.setVisibility(View.VISIBLE); // 🔥 HIỆN
+        } else {
+            tvUserName.setText("Khách");
+            tvPhone.setText("Bạn chưa đăng nhập");
+
+            tvDangNhapTaiKhoan.setVisibility(View.VISIBLE);
+            tvDangKyTaiKhoan.setVisibility(View.VISIBLE);
+
+            btnLogoutUser.setVisibility(View.GONE); // 🔥 ẨN
+        }
+    }
+
+    private void capNhatTrangThaiSeller() {
         boolean isSeller = requireActivity()
-                .getSharedPreferences("USER", requireActivity().MODE_PRIVATE)
+                .getSharedPreferences("USER", MODE_PRIVATE)
                 .getBoolean("isSeller", false);
 
         if (isSeller) {
@@ -57,111 +136,12 @@ public class TaiKhoanFragment extends Fragment {
             itemDangKyBanHang.setVisibility(View.VISIBLE);
             itemQuanLyCuaHang.setVisibility(View.GONE);
         }
-
-        btnBack.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager().popBackStack()
-        );
-
-        layoutUser.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Mở hồ sơ cá nhân", Toast.LENGTH_SHORT).show());
-
-        itemThongTinCaNhan.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frameLayout, new ThongTinCaNhanFragment())
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-        itemDoiMatKhau.setOnClickListener(v ->
-                AuthHelper.requireLogin(getContext(), () -> {
-                    Toast.makeText(getContext(), "Đổi mật khẩu", Toast.LENGTH_SHORT).show();
-                })
-        );
-
-        itemDangKyBanHang.setOnClickListener(v -> {
-            AuthHelper.requireLogin(getContext(), () -> {
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frameLayout, new DangKiBanHangFragment())
-                        .addToBackStack(null)
-                        .commit();
-            });
-        });
-
-        itemQuanLyCuaHang.setOnClickListener(v -> {
-            AuthHelper.requireLogin(getContext(), () -> {
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frameLayout, new QuanLyCuaHangFragment())
-                        .addToBackStack(null)
-                        .commit();
-            });
-        });
-
-        itemGioiThieu.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frameLayout, new AdminFragment())
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-        itemDieuKhoan.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Điều khoản", Toast.LENGTH_SHORT).show());
-
-        itemTroGiup.setOnClickListener(v -> {
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frameLayout, new HelpCenterFragment())
-                    .addToBackStack(null)
-                    .commit();
-        });
-        // sensor rung lắc
-        switchCamUng = view.findViewById(R.id.switchCamUng);
-
-        prefs = requireActivity().getSharedPreferences("settings", MODE_PRIVATE);
-
-        boolean isShakeEnabled = prefs.getBoolean("shake_enabled", true);
-        switchCamUng.setChecked(isShakeEnabled);
-
-        switchCamUng.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean("shake_enabled", isChecked).apply();
-
-            Toast.makeText(getContext(),
-                    isChecked ? "Đã bật rung lắc" : "Đã tắt rung lắc",
-                    Toast.LENGTH_SHORT).show();
-
-            // 🔥 cập nhật sensor ngay lập tức
-            if (getActivity() instanceof com.example.giaodichnongsan.ui.activity.MainActivity) {
-                ((com.example.giaodichnongsan.ui.activity.MainActivity) getActivity()).updateSensorsState();
-            }
-        });
-
-        switchDoSang = view.findViewById(R.id.switchDoSang);
-
-        boolean isLightEnabled = prefs.getBoolean("light_enabled", true);
-        switchDoSang.setChecked(isLightEnabled);
-
-        switchDoSang.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean("light_enabled", isChecked).apply();
-
-            Toast.makeText(getContext(),
-                    isChecked ? "Đã bật ánh sáng tự động" : "Đã tắt ánh sáng",
-                    Toast.LENGTH_SHORT).show();
-
-            ((MainActivity) requireActivity()).updateSensorsState();
-        });
-        return view;
     }
+
     @Override
     public void onResume() {
         super.onResume();
-
-        boolean isShakeEnabled = prefs.getBoolean("shake_enabled", true);
-        boolean isLightEnabled = prefs.getBoolean("light_enabled", true);
-
-        switchCamUng.setChecked(isShakeEnabled);
-        switchDoSang.setChecked(isLightEnabled);
+        capNhatTrangThaiDangNhap();
+        capNhatTrangThaiSeller();
     }
 }

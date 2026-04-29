@@ -17,6 +17,9 @@ public class DangNhap extends AppCompatActivity {
     private Button btnDangNhap;
     private TextView tvDangKy, tvQuenMatKhau;
 
+    private static final String ADMIN_EMAIL = "admin@gmail.com";
+    private static final String ADMIN_PASSWORD = "123456";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,31 +32,26 @@ public class DangNhap extends AppCompatActivity {
     private void initView() {
         edtEmail = findViewById(R.id.edtEmail);
         edtMatKhau = findViewById(R.id.edtMatKhau);
-
         btnDangNhap = findViewById(R.id.btnDangNhap);
         tvDangKy = findViewById(R.id.tvDangKy);
         tvQuenMatKhau = findViewById(R.id.tvQuenMatKhau);
     }
 
     private void setupEvent() {
-
         btnDangNhap.setOnClickListener(v -> xuLyDangNhap());
 
-        tvDangKy.setOnClickListener(v -> {
-            startActivity(new Intent(this, DangKy.class));
-        });
+        tvDangKy.setOnClickListener(v ->
+                startActivity(new Intent(this, DangKy.class))
+        );
 
-        tvQuenMatKhau.setOnClickListener(v -> {
-            startActivity(new Intent(this, QuenMatKhau.class));
-        });
+        tvQuenMatKhau.setOnClickListener(v ->
+                startActivity(new Intent(this, QuenMatKhau.class))
+        );
     }
 
     private void xuLyDangNhap() {
-
         String email = edtEmail.getText().toString().trim();
         String pass = edtMatKhau.getText().toString().trim();
-
-        // ===== VALIDATE =====
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)) {
             showToast("Vui lòng nhập đầy đủ");
@@ -70,25 +68,26 @@ public class DangNhap extends AppCompatActivity {
             return;
         }
 
-        // Thay chỗ fake login thành công
-        SharedPreferences prefs = getSharedPreferences("USER", MODE_PRIVATE);
-        prefs.edit().putBoolean("isLoggedIn", true).apply();
+        SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
+
+        if (email.equals(ADMIN_EMAIL) && pass.equals(ADMIN_PASSWORD)) {
+            editor.putBoolean("isLoggedIn", true);
+            editor.putBoolean("isAdmin", true);
+            editor.apply();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("openAdmin", true);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        editor.putBoolean("isLoggedIn", true);
+        editor.putBoolean("isAdmin", false);
+        editor.apply();
 
         startActivity(new Intent(this, MainActivity.class));
         finish();
-
-        // ===== SAU NÀY (FIREBASE) =====
-        /*
-        FirebaseAuth.getInstance()
-            .signInWithEmailAndPassword(email, pass)
-            .addOnSuccessListener(authResult -> {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-            })
-            .addOnFailureListener(e -> {
-                showToast("Sai tài khoản hoặc mật khẩu");
-            });
-        */
     }
 
     private void showToast(String msg) {

@@ -82,6 +82,24 @@
                     android:text="0123 456 789"
                     android:textColor="#6E625B"
                     android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tvDangNhapTaiKhoan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Đăng nhập"
+                    android:textColor="#68A25A"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDangKyTaiKhoan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Đăng ký tài khoản"
+                    android:textColor="#6E625B"
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <ImageView
@@ -436,11 +454,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false" />
+
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="12dp"
             android:background="#F8F1EC" />
+        <Button
+            android:id="@+id/btnLogoutUser"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Đăng xuất"
+            android:layout_margin="16dp"
+            android:backgroundTint="#E53935"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"/>
     </LinearLayout>
+
 </ScrollView>

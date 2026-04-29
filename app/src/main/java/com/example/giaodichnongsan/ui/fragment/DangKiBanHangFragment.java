@@ -1,14 +1,10 @@
 package com.example.giaodichnongsan.ui.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,15 +25,6 @@ public class DangKiBanHangFragment extends Fragment {
     EditText edtTenGianHang, edtMoTaGianHang, edtDiaChiKinhDoanh;
     EditText edtLoaiNongSan, edtNguonGocSanPham;
     EditText edtSoTaiKhoan, edtTenChuTaiKhoan;
-
-    ImageView imgGiayATTP, imgGiayVietGap;
-    Button btnChonAnhATTP, btnChonAnhVietGap;
-
-    Uri uriGiayATTP = null;
-    Uri uriGiayVietGap = null;
-
-    private static final int REQUEST_ATTP = 101;
-    private static final int REQUEST_VIETGAP = 102;
 
     private SellerRegistrationRepository repository;
 
@@ -70,11 +57,6 @@ public class DangKiBanHangFragment extends Fragment {
         edtSoTaiKhoan = view.findViewById(R.id.edtSoTaiKhoan);
         edtTenChuTaiKhoan = view.findViewById(R.id.edtTenChuTaiKhoan);
 
-        imgGiayATTP = view.findViewById(R.id.imgGiayATTP);
-        imgGiayVietGap = view.findViewById(R.id.imgGiayVietGap);
-        btnChonAnhATTP = view.findViewById(R.id.btnChonAnhATTP);
-        btnChonAnhVietGap = view.findViewById(R.id.btnChonAnhVietGap);
-
         btnBack.setOnClickListener(v ->
                 requireActivity().getSupportFragmentManager().popBackStack()
         );
@@ -83,41 +65,9 @@ public class DangKiBanHangFragment extends Fragment {
                 Toast.makeText(requireContext(), "Menu đăng ký bán hàng", Toast.LENGTH_SHORT).show()
         );
 
-        btnChonAnhATTP.setOnClickListener(v -> chonAnh(REQUEST_ATTP));
-        btnChonAnhVietGap.setOnClickListener(v -> chonAnh(REQUEST_VIETGAP));
-
         btnGuiYeuCau.setOnClickListener(v -> guiYeuCauDangKy());
 
         return view;
-    }
-
-    private void chonAnh(int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        try {
-            startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), requestCode);
-        } catch (Exception e) {
-            Toast.makeText(requireContext(), "Không mở được trình chọn ảnh", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-
-            if (requestCode == REQUEST_ATTP) {
-                uriGiayATTP = uri;
-                imgGiayATTP.setImageURI(uri);
-            } else if (requestCode == REQUEST_VIETGAP) {
-                uriGiayVietGap = uri;
-                imgGiayVietGap.setImageURI(uri);
-            }
-        }
     }
 
     private void guiYeuCauDangKy() {
@@ -136,58 +86,38 @@ public class DangKiBanHangFragment extends Fragment {
         String soTaiKhoan = getText(edtSoTaiKhoan);
         String tenChuTaiKhoan = getText(edtTenChuTaiKhoan);
 
+        // VALIDATE
         if (TextUtils.isEmpty(hoTen)) {
             edtHoTen.setError("Vui lòng nhập họ tên");
-            edtHoTen.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(soDienThoai)) {
             edtSoDienThoai.setError("Vui lòng nhập số điện thoại");
-            edtSoDienThoai.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(cccd)) {
-            edtCCCD.setError("Vui lòng nhập số CCCD");
-            edtCCCD.requestFocus();
-            return;
-        }
-
-        if (TextUtils.isEmpty(diaChiCuTru)) {
-            edtDiaChiCuTru.setError("Vui lòng nhập địa chỉ cư trú");
-            edtDiaChiCuTru.requestFocus();
+            edtCCCD.setError("Vui lòng nhập CCCD");
             return;
         }
 
         if (TextUtils.isEmpty(tenGianHang)) {
             edtTenGianHang.setError("Vui lòng nhập tên gian hàng");
-            edtTenGianHang.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(diaChiKinhDoanh)) {
             edtDiaChiKinhDoanh.setError("Vui lòng nhập địa chỉ kinh doanh");
-            edtDiaChiKinhDoanh.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(loaiNongSan)) {
             edtLoaiNongSan.setError("Vui lòng nhập loại nông sản");
-            edtLoaiNongSan.requestFocus();
             return;
         }
 
-        if (uriGiayATTP == null) {
-            Toast.makeText(requireContext(), "Vui lòng chọn ảnh giấy chứng nhận ATTP", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (uriGiayVietGap == null) {
-            Toast.makeText(requireContext(), "Vui lòng chọn ảnh giấy chứng nhận VietGAP", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+        // TẠO REQUEST (KHÔNG DÙNG ẢNH)
         SellerRegistrationRequest request = new SellerRegistrationRequest(
                 hoTen,
                 soDienThoai,
@@ -199,28 +129,30 @@ public class DangKiBanHangFragment extends Fragment {
                 diaChiKinhDoanh,
                 loaiNongSan,
                 nguonGocSanPham,
-                uriGiayATTP.toString(),
-                uriGiayVietGap.toString(),
+                "CHUA_UPLOAD_ANH",
+                "CHUA_UPLOAD_ANH",
                 soTaiKhoan,
                 tenChuTaiKhoan,
                 "CHO_DUYET"
         );
 
-        repository.submitSellerRequest(requireContext(), request);
+        // GỬI FIREBASE
+        repository.submitSellerRequest(request, new SellerRegistrationRepository.OnSubmitListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(requireContext(), "Đã gửi yêu cầu", Toast.LENGTH_SHORT).show();
 
-        requireActivity()
-                .getSharedPreferences("USER", requireActivity().MODE_PRIVATE)
-                .edit()
-                .putBoolean("isSeller", false)
-                .putBoolean("hasSellerRequest", true)
-                .apply();
+                requireActivity().getSupportFragmentManager().popBackStack();
+            }
 
-        Toast.makeText(requireContext(), "Đã gửi yêu cầu, vui lòng chờ duyệt", Toast.LENGTH_SHORT).show();
-
-        requireActivity().getSupportFragmentManager().popBackStack();
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(requireContext(), "Lỗi: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    private String getText(EditText editText) {
-        return editText.getText().toString().trim();
+    private String getText(EditText edt) {
+        return edt.getText().toString().trim();
     }
 }

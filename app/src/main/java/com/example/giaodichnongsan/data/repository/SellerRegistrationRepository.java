@@ -1,40 +1,35 @@
 package com.example.giaodichnongsan.data.repository;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.example.giaodichnongsan.model.SellerRegistrationRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SellerRegistrationRepository {
 
-    public void submitSellerRequest(Context context, SellerRegistrationRequest request) {
-        SharedPreferences.Editor editor = context
-                .getSharedPreferences("SELLER_REGISTER", Context.MODE_PRIVATE)
-                .edit();
+    private final FirebaseFirestore db;
 
-        editor.putString("hoTen", request.getHoTen());
-        editor.putString("soDienThoai", request.getSoDienThoai());
-        editor.putString("email", request.getEmail());
-        editor.putString("cccd", request.getCccd());
-        editor.putString("diaChiCuTru", request.getDiaChiCuTru());
+    public SellerRegistrationRepository() {
+        db = FirebaseFirestore.getInstance();
+    }
 
-        editor.putString("tenGianHang", request.getTenGianHang());
-        editor.putString("moTaGianHang", request.getMoTaGianHang());
-        editor.putString("diaChiKinhDoanh", request.getDiaChiKinhDoanh());
-        editor.putString("loaiNongSan", request.getLoaiNongSan());
-        editor.putString("nguonGocSanPham", request.getNguonGocSanPham());
-        editor.putString("giayChungNhanATTP", request.getGiayChungNhanATTP());
-        editor.putString("giayChungNhanVietGap", request.getGiayChungNhanVietGap());
+    public void submitSellerRequest(SellerRegistrationRequest request,
+                                    OnSubmitListener listener) {
 
-        editor.putString("soTaiKhoan", request.getSoTaiKhoan());
-        editor.putString("tenChuTaiKhoan", request.getTenChuTaiKhoan());
-        editor.putString("trangThai", request.getTrangThai());
+        db.collection("seller_requests")
+                .add(request)
+                .addOnSuccessListener(documentReference -> {
+                    if (listener != null) {
+                        listener.onSuccess();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    if (listener != null) {
+                        listener.onFailure(e.getMessage());
+                    }
+                });
+    }
 
-        editor.apply();
-
-        // Sau này thay phần SharedPreferences này bằng Firebase:
-        // FirebaseFirestore.getInstance()
-        //      .collection("seller_requests")
-        //      .add(request);
+    public interface OnSubmitListener {
+        void onSuccess();
+        void onFailure(String error);
     }
 }
