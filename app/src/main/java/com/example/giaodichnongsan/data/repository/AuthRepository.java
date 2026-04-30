@@ -3,46 +3,82 @@ package com.example.giaodichnongsan.data.repository;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.giaodichnongsan.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AuthRepository {
 
-    private static User currentUser = null;
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // ===== ĐĂNG KÝ =====
-    public MutableLiveData<User> register(String hoTen, String sdt, String email, String pass) {
+    public MutableLiveData<String> register(String hoTen, String sdt, String email, String pass) {
 
-        MutableLiveData<User> result = new MutableLiveData<>();
+        MutableLiveData<String> result = new MutableLiveData<>();
+        // result trả về: null = thành công, String = thông báo lỗi
 
-        // 🔥 FAKE (sau thay Firebase)
-        User user = new User("UID123", hoTen, sdt, email);
-        currentUser = user;
+        auth.createUserWithEmailAndPassword(email, pass)
+                .addOnSuccessListener(authResult -> {
 
-        result.setValue(user);
+                    String uid = authResult.getUser().getUid();
+
+                    // Tạo user object lưu lên Firestore
+                    User user = new User(uid, hoTen, sdt, email);
+
+                    db.collection("users")
+                            .document(uid)
+                            .set(user)
+                            .addOnSuccessListener(v -> result.setValue(null)) // null = ok
+                            .addOnFailureListener(e -> result.setValue("Lỗi lưu thông tin: " + e.getMessage()));
+                })
+                .addOnFailureListener(e -> result.setValue(e.getMessage()));
+
         return result;
     }
 
     // ===== ĐĂNG NHẬP =====
-    public MutableLiveData<User> login(String email, String pass) {
+    public MutableLiveData<String> login(String email, String pass) {
 
-        MutableLiveData<User> result = new MutableLiveData<>();
+        MutableLiveData<String> result = new MutableLiveData<>();
 
-        // 🔥 FAKE
-        if (email.equals("test@gmail.com") && pass.equals("123456")) {
-            User user = new User("UID123", "Test User", "0123456789", email);
-            currentUser = user;
-            result.setValue(user);
-        } else {
-            result.setValue(null);
-        }
+        auth.signInWithEmailAndPassword(email, pass)
+                .addOnSuccessListener(authResult -> result.setValue(null)) // null = ok
+                .addOnFailureListener(e -> result.setValue(e.getMessage()));
 
         return result;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
+    // ===== LẤY USER HIỆN TẠI =====
+    public MutableLiveData<User> getCurrentUserData() {
+
+        MutableLiveData<User> result = new MutableLiveData<>();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+
+        if (firebaseUser == null) {
+            result.setValue(null);
+            return result;
+        }
+
+        db.collection("users")
+                .document(firebaseUser.getUid())
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    User user = snapshot.toObject(User.class);
+                    result.setValue(user);
+                })
+                .addOnFailureListener(e -> result.setValue(null));
+
+        return result;
     }
 
+    // ===== ĐĂNG XUẤT =====
     public void logout() {
-        currentUser = null;
+        auth.signOut();
+    }
+
+    // ===== KIỂM TRA ĐÃ LOGIN CHƯA =====
+    public boolean isLoggedIn() {
+        return auth.getCurrentUser() != null;
     }
 }
