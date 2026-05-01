@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "589256256902",
-    "project_id": "nongsanapp-3162e",
-    "storage_bucket": "nongsanapp-3162e.firebasestorage.app"
+    "project_number": "112506022985",
+    "project_id": "giaodichnongsan-35138",
+    "storage_bucket": "giaodichnongsan-35138.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:589256256902:android:4b7cf37e0c13728bced007",
+        "mobilesdk_app_id": "1:112506022985:android:03b037d20ad7a066902398",
         "android_client_info": {
           "package_name": "com.example.giaodichnongsan"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBQjUnpYn5P0RrQaxNmmd_W3y1f7gcv3lY"
+          "current_key": "AIzaSyAE8OvXYP3i8Vw7oNNR1tjHJ7rbgyBwiKc"
         }
       ],
       "services": {

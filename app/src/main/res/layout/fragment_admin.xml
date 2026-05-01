@@ -629,5 +629,13 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
+        <Button
+            android:id="@+id/btnLogoutAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Đăng xuất admin"
+            android:layout_margin="16dp"
+            android:backgroundTint="#E53935"
+            android:textColor="#FFFFFF"/>
     </LinearLayout>
 </ScrollView>
