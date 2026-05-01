@@ -58,12 +58,11 @@ public class TrangChuFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-
         rvNoiBat.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
         );
 
-        rvSanPhamMoi.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        rvSanPhamMoi.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         rvDanhMuc.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -78,6 +77,7 @@ public class TrangChuFragment extends Fragment {
             });
         }
     }
+
 
     // ===== KẾT NỐI VIEWMODEL =====
     private void setupViewModel() {

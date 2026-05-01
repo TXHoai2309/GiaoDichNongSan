@@ -4,75 +4,46 @@ import java.io.Serializable;
 
 public class SanPham implements Serializable {
 
-    // ====== THÔNG TIN CƠ BẢN ======
-    private int id;
-    private int hinh;
+    private String id;          // document ID từ Firestore
+    private String imageUrl;    // URL ảnh từ Firebase Storage (thay int hinh)
     private String ten;
     private int gia;
     private int daBan;
-
-    // ====== THÔNG TIN CHI TIẾT ======
     private String moTa;
     private String nguonGoc;
     private float danhGia;
-    private String danhMuc; // 🔥 THÊM MỚI
-
-    // ====== SHOP ======
+    private String danhMuc;
     private String tenShop;
-    private int shopId;
+    private String shopId;
+    private boolean noiBat;     // true = hiện ở mục nổi bật
 
-    // ====== CONSTRUCTOR RỖNG ======
-    public SanPham() {}
+    public SanPham() {} // bắt buộc cho Firestore
 
-    // ====== CONSTRUCTOR ĐẦY ĐỦ ======
-    public SanPham(int id, int hinh, String ten, int gia, int daBan,
-                   String moTa, String nguonGoc, float danhGia,
-                   String danhMuc, String tenShop, int shopId) {
-        this.id = id;
-        this.hinh = hinh;
-        this.ten = ten;
-        this.gia = gia;
-        this.daBan = daBan;
-        this.moTa = moTa;
-        this.nguonGoc = nguonGoc;
-        this.danhGia = danhGia;
-        this.danhMuc = danhMuc;
-        this.tenShop = tenShop;
-        this.shopId = shopId;
-    }
-
-    // ====== CONSTRUCTOR CHO LIST (giữ nguyên) ======
-    public SanPham(int id, int hinh, String ten, int gia, int daBan) {
-        this.id = id;
-        this.hinh = hinh;
-        this.ten = ten;
-        this.gia = gia;
-        this.daBan = daBan;
-    }
-
-    // ====== GETTER ======
-    public int getId() { return id; }
-    public int getHinh() { return hinh; }
-    public String getTen() { return ten; }
-    public int getGia() { return gia; }
-    public int getDaBan() { return daBan; }
-    public String getMoTa() { return moTa; }
+    // Getter
+    public String getId()       { return id; }
+    public String getImageUrl() { return imageUrl; }
+    public String getTen()      { return ten; }
+    public int getGia()         { return gia; }
+    public int getDaBan()       { return daBan; }
+    public String getMoTa()     { return moTa; }
     public String getNguonGoc() { return nguonGoc; }
-    public float getDanhGia() { return danhGia; }
-    public String getDanhMuc() { return danhMuc; } // 🔥 THÊM MỚI
-    public String getTenShop() { return tenShop; }
-    public int getShopId() { return shopId; }
+    public float getDanhGia()   { return danhGia; }
+    public String getDanhMuc()  { return danhMuc; }
+    public String getTenShop()  { return tenShop; }
+    public String getShopId()   { return shopId; }
+    public boolean isNoiBat()   { return noiBat; }
 
-    // ====== SETTER ======
-    public void setId(int id) { this.id = id; }
-    public void setHinh(int hinh) { this.hinh = hinh; }
-    public void setTen(String ten) { this.ten = ten; }
-    public void setGia(int gia) { this.gia = gia; }
-    public void setDaBan(int daBan) { this.daBan = daBan; }
-    public void setMoTa(String moTa) { this.moTa = moTa; }
+    // Setter
+    public void setId(String id)             { this.id = id; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setTen(String ten)           { this.ten = ten; }
+    public void setGia(int gia)              { this.gia = gia; }
+    public void setDaBan(int daBan)          { this.daBan = daBan; }
+    public void setMoTa(String moTa)         { this.moTa = moTa; }
     public void setNguonGoc(String nguonGoc) { this.nguonGoc = nguonGoc; }
-    public void setDanhGia(float danhGia) { this.danhGia = danhGia; }
-    public void setDanhMuc(String danhMuc) { this.danhMuc = danhMuc; } // 🔥 THÊM MỚI
-    public void setTenShop(String tenShop) { this.tenShop = tenShop; }
-    public void setShopId(int shopId) { this.shopId = shopId; }
+    public void setDanhGia(float danhGia)    { this.danhGia = danhGia; }
+    public void setDanhMuc(String danhMuc)   { this.danhMuc = danhMuc; }
+    public void setTenShop(String tenShop)   { this.tenShop = tenShop; }
+    public void setShopId(String shopId)     { this.shopId = shopId; }
+    public void setNoiBat(boolean noiBat)    { this.noiBat = noiBat; }
 }

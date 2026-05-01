@@ -1,40 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp"
-    android:background="@drawable/bg_item">
+    android:layout_height="230dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="1dp"
+    app:strokeColor="#E0DDD6"
+    app:strokeWidth="1dp">
 
-    <ImageView
-        android:id="@+id/imgSP"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:scaleType="centerInside"
-        android:padding="6dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tvTen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="14sp"
-        android:layout_marginTop="5dp"/>
+        <ImageView
+            android:id="@+id/imgSP"
+            android:layout_width="match_parent"
+            android:layout_height="118dp"
+            android:background="@drawable/bg_product_image"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_product" />
 
-    <TextView
-        android:id="@+id/tvDaBan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="11sp"
-        android:textColor="#888"/>
+        <TextView
+            android:id="@+id/tvTen"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="#3F3834"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvGia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FF5722"
-        android:textStyle="bold"
-        android:textSize="13sp"
-        android:layout_marginTop="3dp"/>
+        <TextView
+            android:id="@+id/tvDaBan"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#8B8580"
+            android:textSize="11sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvGia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FF5722"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

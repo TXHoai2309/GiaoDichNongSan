@@ -7,6 +7,7 @@ import android.widget.*;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.model.GioHangItem;
 import com.example.giaodichnongsan.model.SanPham;
@@ -60,7 +61,11 @@ public class GioHangAdapter extends RecyclerView.Adapter<GioHangAdapter.ViewHold
         GioHangItem item = list.get(position);
         SanPham sp = item.getSanPham();
 
-        holder.img.setImageResource(sp.getHinh());
+        if (sp.getImageUrl() != null && !sp.getImageUrl().isEmpty()) {
+            Glide.with(holder.img.getContext()).load(sp.getImageUrl()).into(holder.img);
+        } else {
+            holder.img.setImageResource(R.drawable.ic_product);
+        }
         holder.tvTen.setText(sp.getTen());
         holder.tvGia.setText(sp.getGia() + "đ");
         holder.tvSoLuong.setText(String.valueOf(item.getSoLuong()));

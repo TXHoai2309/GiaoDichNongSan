@@ -9,17 +9,31 @@ import java.util.ArrayList;
 public class FakeDataSanPham {
 
     // ===== SẢN PHẨM NỔI BẬT =====
+    // Thay toàn bộ data trong FakeDataSanPham.java
+// Constructor mới không có hinh, dùng imageUrl = ""
+
     public static ArrayList<SanPham> getSanPhamNoiBat() {
         ArrayList<SanPham> list = new ArrayList<>();
 
-        list.add(new SanPham(1, R.drawable.ic_sup_lo, "Súp lơ nhà trồng", 15000, 120,
-                "Súp lơ sạch", "Đà Lạt", 4.5f, "Rau củ", "Shop A", 101));
+        SanPham sp1 = new SanPham();
+        sp1.setId("fake_1");
+        sp1.setTen("Súp lơ nhà trồng");
+        sp1.setGia(15000); sp1.setDaBan(120);
+        sp1.setMoTa("Súp lơ sạch"); sp1.setNguonGoc("Đà Lạt");
+        sp1.setDanhGia(4.5f); sp1.setDanhMuc("Rau củ");
+        sp1.setTenShop("Shop A"); sp1.setShopId("shop_101");
+        sp1.setImageUrl(""); sp1.setNoiBat(true);
+        list.add(sp1);
 
-        list.add(new SanPham(2, R.drawable.ic_ca_chua, "Cà chua tươi", 25000, 98,
-                "Cà chua sạch", "Lâm Đồng", 4.2f, "Rau củ", "Shop B", 102));
-
-        list.add(new SanPham(3, R.drawable.ic_ngo, "Ngô ngọt", 20000, 200,
-                "Ngô sạch", "Hà Nội", 4.7f, "Rau củ", "Shop C", 103));
+        SanPham sp2 = new SanPham();
+        sp2.setId("fake_2");
+        sp2.setTen("Cà chua tươi");
+        sp2.setGia(25000); sp2.setDaBan(98);
+        sp2.setMoTa("Cà chua sạch"); sp2.setNguonGoc("Lâm Đồng");
+        sp2.setDanhGia(4.2f); sp2.setDanhMuc("Rau củ");
+        sp2.setTenShop("Shop B"); sp2.setShopId("shop_102");
+        sp2.setImageUrl(""); sp2.setNoiBat(true);
+        list.add(sp2);
 
         return list;
     }
@@ -27,14 +41,15 @@ public class FakeDataSanPham {
     public static ArrayList<SanPham> getSanPhamMoi() {
         ArrayList<SanPham> list = new ArrayList<>();
 
-        list.add(new SanPham(4, R.drawable.ic_ca_rot, "Cà rốt", 18000, 75,
-                "Cà rốt sạch", "Đà Lạt", 4.3f, "Rau củ", "Shop D", 104));
-
-        list.add(new SanPham(5, R.drawable.ic_dau_ha_lan, "Đậu hà lan", 30000, 60,
-                "Đậu sạch", "Sapa", 4.6f, "Rau củ", "Shop E", 105));
-
-        list.add(new SanPham(6, R.drawable.ic_khoai_tay, "Khoai tây", 22000, 150,
-                "Khoai sạch", "Đà Lạt", 4.8f, "Rau củ", "Shop F", 106));
+        SanPham sp1 = new SanPham();
+        sp1.setId("fake_4");
+        sp1.setTen("Cà rốt");
+        sp1.setGia(18000); sp1.setDaBan(75);
+        sp1.setMoTa("Cà rốt sạch"); sp1.setNguonGoc("Đà Lạt");
+        sp1.setDanhGia(4.3f); sp1.setDanhMuc("Rau củ");
+        sp1.setTenShop("Shop D"); sp1.setShopId("shop_104");
+        sp1.setImageUrl(""); sp1.setNoiBat(false);
+        list.add(sp1);
 
         return list;
     }

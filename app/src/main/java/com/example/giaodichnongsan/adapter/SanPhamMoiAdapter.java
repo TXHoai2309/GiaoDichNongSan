@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.giaodichnongsan.ui.fragment.ChiTietSanPhamFragment;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.model.SanPham;
@@ -57,7 +58,16 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         SanPham sp = list.get(position);
 
-        holder.img.setImageResource(sp.getHinh());
+        if (sp.getImageUrl() != null && !sp.getImageUrl().isEmpty()) {
+            Glide.with(context)
+                    .load(sp.getImageUrl())
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_product)
+                    .error(R.drawable.ic_product)
+                    .into(holder.img);
+        } else {
+            holder.img.setImageResource(R.drawable.ic_product); // ảnh mặc định
+        }
         holder.ten.setText(sp.getTen());
         holder.gia.setText(String.format("%,dđ/kg", sp.getGia()));
         holder.daBan.setText(sp.getDaBan() + " đã bán");

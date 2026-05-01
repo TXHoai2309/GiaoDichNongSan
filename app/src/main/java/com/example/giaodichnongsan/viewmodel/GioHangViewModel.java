@@ -36,7 +36,7 @@ public class GioHangViewModel extends ViewModel {
 
         // kiểm tra đã tồn tại chưa
         for (GioHangItem item : list) {
-            if (item.getSanPham().getId() == sp.getId()) {
+            if (sp.getId().equals(item.getSanPham().getId())) {
                 item.setSoLuong(item.getSoLuong() + 1);
                 updateState();
                 gioHangList.setValue(list);
@@ -148,7 +148,7 @@ public class GioHangViewModel extends ViewModel {
         if (list == null) list = new ArrayList<>();
 
         for (GioHangItem item : list) {
-            if (item.getSanPham().getId() == sp.getId()) {
+            if (sp.getId().equals(item.getSanPham().getId())) {
                 item.setSoLuong(item.getSoLuong() + soLuong);
                 gioHangList.setValue(list);
                 updateState();

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.giaodichnongsan.data.repository.SanPhamRepository;
 import com.example.giaodichnongsan.model.SanPham;
 
+// ChiTietSanPhamViewModel.java — SỬA TOÀN BỘ FILE
+
 public class ChiTietSanPhamViewModel extends ViewModel {
 
     private SanPhamRepository repository;
@@ -16,14 +18,14 @@ public class ChiTietSanPhamViewModel extends ViewModel {
         repository = new SanPhamRepository();
     }
 
-    // ===== GETTER =====
     public LiveData<SanPham> getSanPham() {
         return sanPham;
     }
 
-    // ===== LOAD DATA THEO ID =====
-    public void loadSanPham(int productId) {
-        SanPham result = repository.getSanPhamById(productId);
-        sanPham.setValue(result);
+    // ✅ Đổi int → String
+    public void loadSanPham(String productId) {
+        repository.getSanPhamById(productId).observeForever(sp -> {
+            sanPham.setValue(sp);
+        });
     }
 }

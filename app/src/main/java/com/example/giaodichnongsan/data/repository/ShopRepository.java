@@ -34,7 +34,7 @@ public class ShopRepository {
         List<SanPham> result = new ArrayList<>();
 
         for (SanPham sp : FakeDataSanPham.getAll()) {
-            if (sp.getShopId() == shopId) {
+            if (sp.getShopId().equals(shopId)) {
                 result.add(sp);
             }
         }

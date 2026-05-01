@@ -107,27 +107,22 @@ public class ThanhToanFragment extends Fragment {
     private void setupEvent() {
 
         btnDatHang.setOnClickListener(v -> {
-
             if (listMua.isEmpty()) {
                 Toast.makeText(getContext(), "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             int tongTien = tinhTongTien(listMua);
-
-            // 🔥 LƯU ĐƠN HÀNG
             donHangViewModel.addDonHang(new ArrayList<>(listMua), tongTien);
-
-            // 🔥 XÓA GIỎ HÀNG
             gioHangViewModel.clearCart();
 
-            Toast.makeText(getContext(), "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+            // ✅ Bỏ requireActivity().finish()
+            // Chỉ start activity mới, không finish MainActivity
+            startActivity(new Intent(getActivity(), DatHangThanhCongActivity.class));
 
-            // 👉 CHUYỂN MÀN
-            Intent intent = new Intent(getActivity(), DatHangThanhCongActivity.class);
-            startActivity(intent);
-
-            requireActivity().finish();
+            // Quay về TrangChu
+            requireActivity().getSupportFragmentManager()
+                    .popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         });
     }
 

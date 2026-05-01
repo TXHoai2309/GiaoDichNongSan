@@ -5,13 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.giaodichnongsan.ui.activity.DangNhap;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AuthHelper {
 
     // Kiểm tra đã đăng nhập chưa (dùng SharedPreferences, sau thay bằng FirebaseAuth)
     public static boolean isLoggedIn(Context context) {
-        return context.getSharedPreferences("USER", Context.MODE_PRIVATE)
-                .getBoolean("isLoggedIn", false);
+        return FirebaseAuth.getInstance().getCurrentUser() != null;
     }
 
     // Nếu chưa login → show dialog mời đăng nhập

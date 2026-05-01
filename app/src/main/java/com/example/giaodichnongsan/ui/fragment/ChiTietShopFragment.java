@@ -44,11 +44,11 @@ public class ChiTietShopFragment extends Fragment {
     public ChiTietShopFragment() {}
 
     // ===== NEW INSTANCE =====
-    public static ChiTietShopFragment newInstance(int shopId) {
+    public static ChiTietShopFragment newInstance(String  shopId) {
         ChiTietShopFragment fragment = new ChiTietShopFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("shopId", shopId);
-        fragment.setArguments(bundle);
+        Bundle args = new Bundle();
+        args.putString("shopId", shopId);
+        fragment.setArguments(args);
         return fragment;
     }
 

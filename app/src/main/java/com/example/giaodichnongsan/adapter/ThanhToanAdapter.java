@@ -8,8 +8,10 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.model.GioHangItem;
+import com.example.giaodichnongsan.model.SanPham;
 
 import java.util.ArrayList;
 
@@ -51,7 +53,12 @@ public class ThanhToanAdapter extends RecyclerView.Adapter<ThanhToanAdapter.View
         holder.tvGia.setText(item.getSanPham().getGia() + "đ");
         holder.tvSoLuong.setText("x" + item.getSoLuong());
 
-        holder.img.setImageResource(item.getSanPham().getHinh());
+        SanPham sp = item.getSanPham();
+        if (sp.getImageUrl() != null && !sp.getImageUrl().isEmpty()) {
+            Glide.with(holder.img.getContext()).load(sp.getImageUrl()).into(holder.img);
+        } else {
+            holder.img.setImageResource(R.drawable.ic_product);
+        }
     }
 
     @Override
