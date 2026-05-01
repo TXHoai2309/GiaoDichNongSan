@@ -42,8 +42,8 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ViewHold
         StringBuilder tenSP = new StringBuilder();
         int tongSoLuong = 0;
 
-        if (dh.getListSanPham() != null) {
-            for (GioHangItem item : dh.getListSanPham()) {
+        if (dh.getDanhSachSP() != null) {
+            for (GioHangItem item : dh.getDanhSachSP()) {
                 tenSP.append(item.getSanPham().getTen())
                         .append(" x")
                         .append(item.getSoLuong())

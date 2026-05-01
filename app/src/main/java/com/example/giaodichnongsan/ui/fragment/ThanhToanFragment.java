@@ -86,8 +86,30 @@ public class ThanhToanFragment extends Fragment {
 
     // ===== INIT VIEWMODEL =====
     private void initViewModel() {
-        gioHangViewModel = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
-        donHangViewModel = new ViewModelProvider(requireActivity()).get(DonHangViewModel.class); // 🔥 FIX CRASH
+        gioHangViewModel  = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
+        donHangViewModel  = new ViewModelProvider(requireActivity()).get(DonHangViewModel.class);
+
+        // Observe kết quả đặt hàng
+        donHangViewModel.getDatHangSuccess().observe(getViewLifecycleOwner(), success -> {
+            if (success == null) return;
+
+            if (success) {
+                // Xóa giỏ hàng
+                gioHangViewModel.clearCart();
+
+                // Chuyển màn thành công
+                startActivity(new Intent(getActivity(), DatHangThanhCongActivity.class));
+
+                // Quay về TrangChu
+                requireActivity().getSupportFragmentManager()
+                        .popBackStack(null,
+                                androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            } else {
+                Toast.makeText(getContext(),
+                        "Đặt hàng thất bại, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                btnDatHang.setEnabled(true);
+            }
+        });
     }
 
     // ===== SETUP RECYCLER =====
@@ -105,24 +127,17 @@ public class ThanhToanFragment extends Fragment {
 
     // ===== EVENT =====
     private void setupEvent() {
-
         btnDatHang.setOnClickListener(v -> {
+
             if (listMua.isEmpty()) {
                 Toast.makeText(getContext(), "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            btnDatHang.setEnabled(false); // tránh bấm 2 lần
+
             int tongTien = tinhTongTien(listMua);
             donHangViewModel.addDonHang(new ArrayList<>(listMua), tongTien);
-            gioHangViewModel.clearCart();
-
-            // ✅ Bỏ requireActivity().finish()
-            // Chỉ start activity mới, không finish MainActivity
-            startActivity(new Intent(getActivity(), DatHangThanhCongActivity.class));
-
-            // Quay về TrangChu
-            requireActivity().getSupportFragmentManager()
-                    .popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
         });
     }
 

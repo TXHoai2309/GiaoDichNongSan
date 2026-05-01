@@ -2,35 +2,43 @@ package com.example.giaodichnongsan.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 public class DonHang implements Serializable {
 
-    private int id;
-    private ArrayList<GioHangItem> listSanPham;
+    public static final String DANG_GIAO = "Đang giao";
+    public static final String DA_GIAO   = "Đã giao";
+    public static final String DA_HUY    = "Đã hủy";
+
+    private String id;          // document ID Firestore
+    private String userId;      // uid của user đặt hàng
+    private ArrayList<GioHangItem> danhSachSP;
     private int tongTien;
     private String trangThai;
     private String ngayDat;
 
-    public static final String DANG_GIAO = "Đang giao";
-    public static final String DA_GIAO = "Đã giao";
-    public static final String DA_HUY = "Đã huỷ";
+    public DonHang() {} // bắt buộc cho Firestore
 
-    public DonHang(int id,
-                   ArrayList<GioHangItem> listSanPham,
-                   int tongTien,
-                   String trangThai,
-                   String ngayDat) {
-
-        this.id = id;
-        this.listSanPham = listSanPham;
-        this.tongTien = tongTien;
-        this.trangThai = trangThai;
-        this.ngayDat = ngayDat;
+    public DonHang(String userId, ArrayList<GioHangItem> danhSachSP,
+                   int tongTien, String trangThai, String ngayDat) {
+        this.userId     = userId;
+        this.danhSachSP = danhSachSP;
+        this.tongTien   = tongTien;
+        this.trangThai  = trangThai;
+        this.ngayDat    = ngayDat;
     }
 
-    public int getId() { return id; }
-    public ArrayList<GioHangItem> getListSanPham() { return listSanPham; }
-    public int getTongTien() { return tongTien; }
-    public String getTrangThai() { return trangThai; }
-    public String getNgayDat() { return ngayDat; }
+    // Getter
+    public String getId()                          { return id; }
+    public String getUserId()                      { return userId; }
+    public ArrayList<GioHangItem> getDanhSachSP()  { return danhSachSP; }
+    public int getTongTien()                       { return tongTien; }
+    public String getTrangThai()                   { return trangThai; }
+    public String getNgayDat()                     { return ngayDat; }
+
+    // Setter
+    public void setId(String id)                              { this.id = id; }
+    public void setUserId(String userId)                      { this.userId = userId; }
+    public void setDanhSachSP(ArrayList<GioHangItem> list)    { this.danhSachSP = list; }
+    public void setTongTien(int tongTien)                     { this.tongTien = tongTien; }
+    public void setTrangThai(String trangThai)                { this.trangThai = trangThai; }
+    public void setNgayDat(String ngayDat)                    { this.ngayDat = ngayDat; }
 }
