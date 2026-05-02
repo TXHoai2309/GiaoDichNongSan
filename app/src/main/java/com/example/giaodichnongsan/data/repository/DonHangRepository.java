@@ -53,8 +53,15 @@ public class DonHangRepository {
         orderRef.set(donHangData)
                 .addOnSuccessListener(unused -> result.setValue(true))
                 .addOnFailureListener(e -> result.setValue(false));
+        orderRef.set(donHangData)
+                .addOnSuccessListener(unused -> {
+                    capNhatDaBan(list); // ← THÊM DÒNG NÀY
+                    result.setValue(true);
+                })
+                .addOnFailureListener(e -> result.setValue(false));
 
         return result;
+
     }
 
     public MutableLiveData<ArrayList<DonHang>> getDonHangByUser() {
@@ -158,5 +165,20 @@ public class DonHangRepository {
                 .addOnFailureListener(e -> result.setValue(false));
 
         return result;
+    }
+    // ===== CẬP NHẬT SỐ LƯỢNG ĐÃ BÁN =====
+    private void capNhatDaBan(ArrayList<GioHangItem> list) {
+        for (GioHangItem item : list) {
+            if (item.getSanPham() == null || item.getSanPham().getId() == null) continue;
+
+            String sanPhamId = item.getSanPham().getId();
+            int soLuongMua = item.getSoLuong();
+
+            // Dùng FieldValue.increment để cộng dồn an toàn (tránh race condition)
+            db.collection("sanpham").document(sanPhamId)
+                    .update("daBan", com.google.firebase.firestore.FieldValue.increment(soLuongMua))
+                    .addOnFailureListener(e ->
+                            android.util.Log.e("DonHangRepo", "Lỗi cập nhật daBan: " + e.getMessage()));
+        }
     }
 }

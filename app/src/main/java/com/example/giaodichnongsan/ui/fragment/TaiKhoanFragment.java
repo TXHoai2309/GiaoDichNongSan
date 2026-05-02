@@ -15,12 +15,16 @@ import androidx.fragment.app.Fragment;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.ui.activity.DangKy;
 import com.example.giaodichnongsan.ui.activity.DangNhap;
+import com.example.giaodichnongsan.ui.activity.DoiMatKhauActivity;
 import com.example.giaodichnongsan.utils.AuthHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TaiKhoanFragment extends Fragment {
 
     ImageView btnBack;
-    LinearLayout itemThongTinCaNhan, itemDoiMatKhau, itemDangKyBanHang,
+    LinearLayout itemDoiMatKhau, itemDangKyBanHang,
             itemGioiThieu, itemDieuKhoan, itemTroGiup, layoutUser,
             itemQuanLyCuaHang;
 
@@ -50,7 +54,6 @@ public class TaiKhoanFragment extends Fragment {
 
         btnLogoutUser = view.findViewById(R.id.btnLogoutUser);
 
-        itemThongTinCaNhan = view.findViewById(R.id.itemThongTinCaNhan);
         itemDoiMatKhau = view.findViewById(R.id.itemDoiMatKhau);
         itemDangKyBanHang = view.findViewById(R.id.itemDangKyBanHang);
         itemGioiThieu = view.findViewById(R.id.itemGioiThieu);
@@ -79,7 +82,7 @@ public class TaiKhoanFragment extends Fragment {
 
         // ===== CLICK CÁC ITEM (🔥 FIX LỖI CHÍNH) =====
 
-        itemThongTinCaNhan.setOnClickListener(v -> {
+        layoutUser.setOnClickListener(v -> {
             AuthHelper.requireLogin(getContext(), () -> {
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
@@ -91,7 +94,7 @@ public class TaiKhoanFragment extends Fragment {
 
         itemDoiMatKhau.setOnClickListener(v ->
                 AuthHelper.requireLogin(getContext(), () ->
-                        Toast.makeText(getContext(), "Đổi mật khẩu", Toast.LENGTH_SHORT).show()
+                        startActivity(new Intent(requireContext(), DoiMatKhauActivity.class))
                 )
         );
 
@@ -160,6 +163,7 @@ public class TaiKhoanFragment extends Fragment {
         if (daDangNhap()) {
             tvUserName.setText("Người dùng");
             tvPhone.setText("Đã đăng nhập");
+            loadTenNguoiDung();
 
             tvDangNhapTaiKhoan.setVisibility(View.GONE);
             tvDangKyTaiKhoan.setVisibility(View.GONE);
@@ -174,6 +178,37 @@ public class TaiKhoanFragment extends Fragment {
 
             btnLogoutUser.setVisibility(View.GONE);
         }
+    }
+
+    private void loadTenNguoiDung() {
+        if (requireActivity()
+                .getSharedPreferences("USER", MODE_PRIVATE)
+                .getBoolean("isAdmin", false)) {
+            tvUserName.setText("Admin");
+            return;
+        }
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) return;
+
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(firebaseUser.getUid())
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!isAdded()) return;
+
+                    String hoTen = snapshot.getString("hoTen");
+                    if (hoTen != null && !hoTen.trim().isEmpty()) {
+                        tvUserName.setText(hoTen.trim());
+                        return;
+                    }
+
+                    String email = firebaseUser.getEmail();
+                    if (email != null && !email.trim().isEmpty()) {
+                        tvUserName.setText(email.split("@")[0]);
+                    }
+                });
     }
 
     private void capNhatTrangThaiSeller() {
