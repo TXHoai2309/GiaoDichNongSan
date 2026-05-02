@@ -16,8 +16,6 @@ import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.adapter.DanhMucAdapter;
 import com.example.giaodichnongsan.adapter.SanPhamAdapter;
 import com.example.giaodichnongsan.adapter.SanPhamMoiAdapter;
-import com.example.giaodichnongsan.model.DanhMuc;
-import com.example.giaodichnongsan.model.SanPham;
 import com.example.giaodichnongsan.viewmodel.TrangChuViewModel;
 
 import java.util.ArrayList;

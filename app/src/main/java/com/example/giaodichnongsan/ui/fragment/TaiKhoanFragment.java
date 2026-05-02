@@ -16,6 +16,7 @@ import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.ui.activity.DangKy;
 import com.example.giaodichnongsan.ui.activity.DangNhap;
 import com.example.giaodichnongsan.ui.activity.DoiMatKhauActivity;
+import com.example.giaodichnongsan.ui.activity.MainActivity;
 import com.example.giaodichnongsan.utils.AuthHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -60,11 +61,14 @@ public class TaiKhoanFragment extends Fragment {
         itemDieuKhoan = view.findViewById(R.id.itemDieuKhoan);
         itemTroGiup = view.findViewById(R.id.itemTroGiup);
         itemQuanLyCuaHang = view.findViewById(R.id.itemQuanLyCuaHang);
+        switchCamUng = view.findViewById(R.id.switchCamUng);
+        switchDoSang = view.findViewById(R.id.switchDoSang);
 
         prefs = requireActivity().getSharedPreferences("settings", MODE_PRIVATE);
 
         capNhatTrangThaiDangNhap();
         capNhatTrangThaiSeller();
+        capNhatTrangThaiSwitch();
 
         // ===== BACK =====
         btnBack.setOnClickListener(v ->
@@ -132,6 +136,16 @@ public class TaiKhoanFragment extends Fragment {
                     .replace(R.id.frameLayout, new HelpCenterFragment())
                     .addToBackStack(null)
                     .commit();
+        });
+
+        switchCamUng.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("shake_enabled", !isChecked).apply();
+            capNhatCamBien();
+        });
+
+        switchDoSang.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("light_enabled", !isChecked).apply();
+            capNhatCamBien();
         });
 
         // ===== LOGOUT =====
@@ -222,6 +236,20 @@ public class TaiKhoanFragment extends Fragment {
         } else {
             itemDangKyBanHang.setVisibility(View.VISIBLE);
             itemQuanLyCuaHang.setVisibility(View.GONE);
+        }
+    }
+
+    private void capNhatTrangThaiSwitch() {
+        boolean shakeEnabled = prefs.getBoolean("shake_enabled", true);
+        boolean lightEnabled = prefs.getBoolean("light_enabled", true);
+
+        switchCamUng.setChecked(!shakeEnabled);
+        switchDoSang.setChecked(!lightEnabled);
+    }
+
+    private void capNhatCamBien() {
+        if (requireActivity() instanceof MainActivity) {
+            ((MainActivity) requireActivity()).updateSensorsState();
         }
     }
 

@@ -64,16 +64,13 @@ public class MainActivity extends AppCompatActivity {
 
         // 🔥 NAVIGATION
         bottomNav.setOnItemSelectedListener(item -> {
-
             SharedPreferences prefsNav = getSharedPreferences("USER", MODE_PRIVATE);
             boolean isAdminNav = prefsNav.getBoolean("isAdmin", false);
-
             // 🔥 ADMIN → KHÓA NAV
             if (isAdminNav) {
                 loadFragment(new AdminFragment());
                 return true;
             }
-
             if (item.getItemId() == R.id.nav_home) {
                 loadFragment(new TrangChuFragment());
                 return true;
@@ -87,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(new DonHangFragment());
                 return true;
             }
-
             return false;
         });
 
         // ===== UI Insets =====
+        // Tạo nội dung để không bị đè
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.frameLayout), (v, insets) -> {
             int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
             v.setPadding(0, top, 0, 0);
@@ -102,15 +99,13 @@ public class MainActivity extends AppCompatActivity {
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         if (sensorManager != null) {
-
+            // khởi tạo senser cảm biến ánh sáng
             lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-
             if (lightSensor == null) {
                 Toast.makeText(this, "Không có cảm biến ánh sáng!", Toast.LENGTH_LONG).show();
             }
-
+            // khởi tạo sensor gia tốc
             accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
             if (accelerometer != null) {
                 shakeDetector = new ShakeDetector(() -> {
                     runOnUiThread(() -> {
@@ -170,9 +165,9 @@ public class MainActivity extends AppCompatActivity {
         stopFakeLightSensor();
     }
 
+    // bật tắt sensor theo switch
     public void updateSensorsState() {
         SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
-
         boolean isShakeEnabled = prefs.getBoolean("shake_enabled", true);
         boolean isLightEnabled = prefs.getBoolean("light_enabled", true);
 
