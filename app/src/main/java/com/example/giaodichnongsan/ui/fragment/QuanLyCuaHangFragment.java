@@ -2,370 +2,374 @@ package com.example.giaodichnongsan.ui.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.giaodichnongsan.R;
-import com.example.giaodichnongsan.data.repository.ShopRepository;
-import com.example.giaodichnongsan.model.Shop;
+import com.example.giaodichnongsan.model.DonHang;
+import com.example.giaodichnongsan.model.GioHangItem;
+import com.example.giaodichnongsan.model.SanPham;
+import com.example.giaodichnongsan.model.SellerRegistrationRequest;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class QuanLyCuaHangFragment extends Fragment {
 
-    ImageView btnBack, btnMenu;
+    private ImageView btnBack, btnMenu;
+    private TextView tvTenShop, tvTrangThaiShop, tvMoTaShop;
+    private TextView tvSoSanPham, tvDonChoXuLy, tvDoanhThu, tvCanhBao;
+    private LinearLayout itemThongTinShop, itemQuanLySanPham, itemQuanLyDonHang;
+    private LinearLayout itemThongKeDoanhThu, itemCaiDatShop, itemTrungTamTroGiup;
 
-    LinearLayout itemTenGianHang, itemQuanLyDonHang1, itemQuanLyKhuyenMai;
-    LinearLayout itemThongTinSanPham, itemQuanLyDonHang2, itemXuLyYeuCau;
-    LinearLayout itemDanhGiaPhanHoi, itemThongKeDoanhThu;
-    LinearLayout itemCaiDatShop, itemTrungTamTroGiup;
-
-    private ShopRepository shopRepository;
-    private Shop currentShop;
-
-    private int currentShopId = 1;
+    private FirebaseFirestore db;
+    private SellerRegistrationRequest shopRequest;
+    private String requestId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_quan_ly_cua_hang, container, false);
 
-        shopRepository = new ShopRepository();
-        currentShop = shopRepository.getShopById(currentShopId);
-
-        btnBack = view.findViewById(R.id.btnBackQuanLyShop);
-        btnMenu = view.findViewById(R.id.btnMenuQuanLyShop);
-
-        itemTenGianHang = view.findViewById(R.id.itemTenGianHang);
-        itemQuanLyDonHang1 = view.findViewById(R.id.itemQuanLyDonHang1);
-        itemQuanLyKhuyenMai = view.findViewById(R.id.itemQuanLyKhuyenMai);
-
-        itemThongTinSanPham = view.findViewById(R.id.itemThongTinSanPham);
-        itemQuanLyDonHang2 = view.findViewById(R.id.itemQuanLyDonHang2);
-        itemXuLyYeuCau = view.findViewById(R.id.itemXuLyYeuCau);
-        itemDanhGiaPhanHoi = view.findViewById(R.id.itemDanhGiaPhanHoi);
-        itemThongKeDoanhThu = view.findViewById(R.id.itemThongKeDoanhThu);
-
-        itemCaiDatShop = view.findViewById(R.id.itemCaiDatShop);
-        itemTrungTamTroGiup = view.findViewById(R.id.itemTrungTamTroGiup);
-
-        btnBack.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager().popBackStack()
-        );
-
-        btnMenu.setOnClickListener(v -> hienMenuTong());
-
-        itemTenGianHang.setOnClickListener(v -> suaTenShop());
-
-        itemThongTinSanPham.setOnClickListener(v -> hienThongTinShop());
-
-        itemQuanLyDonHang1.setOnClickListener(v -> quanLyDonHang());
-        itemQuanLyDonHang2.setOnClickListener(v -> quanLyDonHang());
-
-        itemQuanLyKhuyenMai.setOnClickListener(v -> quanLyKhuyenMai());
-
-        itemXuLyYeuCau.setOnClickListener(v -> xuLyYeuCauDangKy());
-
-        itemDanhGiaPhanHoi.setOnClickListener(v ->
-                hienThongTin("Đánh giá & phản hồi",
-                        "Đánh giá hiện tại: " + currentShop.getDanhGia() +
-                                "\nChức năng: xem đánh giá và phản hồi khách hàng.")
-        );
-
-        itemThongKeDoanhThu.setOnClickListener(v ->
-                hienThongTin("Thống kê & doanh thu",
-                        "Số sản phẩm: " + currentShop.getSoSanPham() +
-                                "\nNgười theo dõi: " + currentShop.getNguoiTheoDoi() +
-                                "\nChức năng: thống kê hoạt động kinh doanh.")
-        );
-
-        itemCaiDatShop.setOnClickListener(v -> caiDatShop());
-
-        itemTrungTamTroGiup.setOnClickListener(v ->
-                hienThongTin("Trung tâm trợ giúp",
-                        "Hỗ trợ người bán trong quá trình quản lý cửa hàng.")
-        );
+        db = FirebaseFirestore.getInstance();
+        initView(view);
+        setupEvent();
+        loadShopDaDuyet();
 
         return view;
     }
 
-    private void hienMenuTong() {
-        String[] options = {
-                "Xem thông tin shop",
-                "Sửa tên shop",
-                "Quản lý đơn hàng",
-                "Quản lý khuyến mãi",
-                "Cài đặt shop"
-        };
+    private void initView(View view) {
+        btnBack = view.findViewById(R.id.btnBackQuanLyShop);
+        btnMenu = view.findViewById(R.id.btnMenuQuanLyShop);
 
+        tvTenShop = view.findViewById(R.id.tvTenShop);
+        tvTrangThaiShop = view.findViewById(R.id.tvTrangThaiShop);
+        tvMoTaShop = view.findViewById(R.id.tvMoTaShop);
+        tvSoSanPham = view.findViewById(R.id.tvSoSanPham);
+        tvDonChoXuLy = view.findViewById(R.id.tvDonChoXuLy);
+        tvDoanhThu = view.findViewById(R.id.tvDoanhThu);
+        tvCanhBao = view.findViewById(R.id.tvCanhBao);
+
+        itemThongTinShop = view.findViewById(R.id.itemThongTinShop);
+        itemQuanLySanPham = view.findViewById(R.id.itemQuanLySanPham);
+        itemQuanLyDonHang = view.findViewById(R.id.itemQuanLyDonHang);
+        itemThongKeDoanhThu = view.findViewById(R.id.itemThongKeDoanhThu);
+        itemCaiDatShop = view.findViewById(R.id.itemCaiDatShop);
+        itemTrungTamTroGiup = view.findViewById(R.id.itemTrungTamTroGiup);
+    }
+
+    private void setupEvent() {
+        btnBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        btnMenu.setOnClickListener(v -> hienMenuTong());
+
+        itemThongTinShop.setOnClickListener(v -> hienThongTinShop());
+        itemQuanLySanPham.setOnClickListener(v -> moQuanLySanPham());
+        itemQuanLyDonHang.setOnClickListener(v -> moQuanLyDonHang());
+        itemThongKeDoanhThu.setOnClickListener(v -> moQuanLyDoanhThu());
+        itemCaiDatShop.setOnClickListener(v -> caiDatShop());
+        itemTrungTamTroGiup.setOnClickListener(v -> hienThongBao("Trung tâm trợ giúp", "Liên hệ quản trị viên để được hỗ trợ người bán."));
+    }
+
+    private void loadShopDaDuyet() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            hienKhongCoShop();
+            return;
+        }
+
+        tvTenShop.setText("Đang tải cửa hàng...");
+        tvTrangThaiShop.setText("Đang kiểm tra");
+
+        db.collection("seller_requests")
+                .whereEqualTo("userId", user.getUid())
+                .whereEqualTo("trangThai", "DA_DUYET")
+                .limit(1)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!isAdded()) return;
+
+                    if (snapshot.isEmpty()) {
+                        loadShopTheoEmail(user.getEmail());
+                        return;
+                    }
+
+                    requestId = snapshot.getDocuments().get(0).getId();
+                    shopRequest = snapshot.getDocuments().get(0).toObject(SellerRegistrationRequest.class);
+                    if (shopRequest != null) shopRequest.setId(requestId);
+                    hienThiShop();
+                })
+                .addOnFailureListener(e -> {
+                    if (!isAdded()) return;
+                    Toast.makeText(requireContext(), "Lỗi tải cửa hàng: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    hienKhongCoShop();
+                });
+    }
+
+    private void loadShopTheoEmail(String email) {
+        if (TextUtils.isEmpty(email)) {
+            hienKhongCoShop();
+            return;
+        }
+
+        db.collection("seller_requests")
+                .whereEqualTo("email", email)
+                .whereEqualTo("trangThai", "DA_DUYET")
+                .limit(1)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!isAdded()) return;
+
+                    if (snapshot.isEmpty()) {
+                        hienKhongCoShop();
+                        return;
+                    }
+
+                    requestId = snapshot.getDocuments().get(0).getId();
+                    shopRequest = snapshot.getDocuments().get(0).toObject(SellerRegistrationRequest.class);
+                    if (shopRequest != null) shopRequest.setId(requestId);
+                    hienThiShop();
+                })
+                .addOnFailureListener(e -> hienKhongCoShop());
+    }
+
+    private void hienThiShop() {
+        if (shopRequest == null) {
+            hienKhongCoShop();
+            return;
+        }
+
+        tvCanhBao.setVisibility(View.GONE);
+        tvTenShop.setText(giaTri(shopRequest.getTenGianHang(), "Cửa hàng của tôi"));
+        tvTrangThaiShop.setText("Đã phê duyệt");
+        tvMoTaShop.setText(giaTri(shopRequest.getMoTaGianHang(), "Chưa có mô tả gian hàng"));
+
+        tvSoSanPham.setText("0\nSản phẩm");
+        tvDonChoXuLy.setText("0\nChờ xử lý");
+        tvDoanhThu.setText("0đ\nDoanh thu");
+        loadSoLuongSanPham();
+        loadThongKeDonHang();
+    }
+
+    private void hienKhongCoShop() {
+        shopRequest = null;
+        tvTenShop.setText("Chưa có cửa hàng");
+        tvTrangThaiShop.setText("Chưa được phê duyệt");
+        tvMoTaShop.setText("Sau khi admin phê duyệt yêu cầu đăng ký bán hàng, thông tin cửa hàng sẽ hiển thị tại đây.");
+        tvCanhBao.setVisibility(View.VISIBLE);
+    }
+
+    private void loadSoLuongSanPham() {
+        if (TextUtils.isEmpty(requestId)) return;
+
+        db.collection("sanpham")
+                .whereEqualTo("shopId", requestId)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!isAdded()) return;
+                    tvSoSanPham.setText(snapshot.size() + "\nSản phẩm");
+                });
+    }
+
+    private void moQuanLySanPham() {
+        if (shopRequest == null || TextUtils.isEmpty(requestId)) {
+            hienThongBao("Quản lý sản phẩm", "Không tìm thấy cửa hàng đã được phê duyệt.");
+            return;
+        }
+
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, QuanLySanPhamFragment.newInstance(requestId, shopRequest.getTenGianHang()))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void moQuanLyDonHang() {
+        if (shopRequest == null || TextUtils.isEmpty(requestId)) {
+            hienThongBao("Quản lý đơn hàng", "Không tìm thấy cửa hàng đã được phê duyệt.");
+            return;
+        }
+
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, QuanLyDonHangFragment.newInstance(requestId, shopRequest.getTenGianHang()))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void moQuanLyDoanhThu() {
+        if (shopRequest == null || TextUtils.isEmpty(requestId)) {
+            hienThongBao("Thống kê doanh thu", "Không tìm thấy cửa hàng đã được phê duyệt.");
+            return;
+        }
+
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, QuanLyDoanhThuFragment.newInstance(requestId, shopRequest.getTenGianHang()))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void loadThongKeDonHang() {
+        if (TextUtils.isEmpty(requestId)) return;
+
+        db.collection("donhang")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!isAdded()) return;
+                    int choXuLy = 0;
+                    int doanhThu = 0;
+
+                    for (com.google.firebase.firestore.DocumentSnapshot doc : snapshot.getDocuments()) {
+                        DonHang donHang = doc.toObject(DonHang.class);
+                        if (donHang == null || donHang.getDanhSachSP() == null) continue;
+
+                        int tienShop = tinhTienShop(donHang);
+                        if (tienShop <= 0) continue;
+
+                        if (DonHang.DANG_GIAO.equals(donHang.getTrangThai())) {
+                            choXuLy++;
+                        } else if (DonHang.DA_GIAO.equals(donHang.getTrangThai())) {
+                            doanhThu += tienShop;
+                        }
+                    }
+
+                    tvDonChoXuLy.setText(choXuLy + "\nChờ xử lý");
+                    tvDoanhThu.setText(formatGia(doanhThu) + "\nDoanh thu");
+                });
+    }
+
+    private int tinhTienShop(DonHang donHang) {
+        int total = 0;
+        if (donHang.getDanhSachSP() == null) return total;
+
+        for (GioHangItem item : donHang.getDanhSachSP()) {
+            if (item == null) continue;
+            SanPham sp = item.getSanPham();
+            if (sp != null && requestId.equals(sp.getShopId())) {
+                total += sp.getGia() * item.getSoLuong();
+            }
+        }
+        return total;
+    }
+
+    private void hienMenuTong() {
+        String[] options = {"Xem thông tin cửa hàng", "Sửa tên cửa hàng", "Sửa mô tả", "Cài đặt cửa hàng"};
         new AlertDialog.Builder(requireContext())
-                .setTitle("Menu quản lý cửa hàng")
+                .setTitle("Quản lý bán hàng")
                 .setItems(options, (dialog, which) -> {
                     if (which == 0) hienThongTinShop();
-                    else if (which == 1) suaTenShop();
-                    else if (which == 2) quanLyDonHang();
-                    else if (which == 3) quanLyKhuyenMai();
-                    else if (which == 4) caiDatShop();
+                    else if (which == 1) suaField("Tên cửa hàng", "tenGianHang", shopRequest != null ? shopRequest.getTenGianHang() : "");
+                    else if (which == 2) suaField("Mô tả cửa hàng", "moTaGianHang", shopRequest != null ? shopRequest.getMoTaGianHang() : "");
+                    else caiDatShop();
                 })
                 .show();
     }
 
     private void hienThongTinShop() {
-        hienThongTin(
-                "Thông tin cửa hàng",
-                "ID shop: " + currentShop.getId() +
-                        "\nTên shop: " + currentShop.getTenShop() +
-                        "\nĐánh giá: " + currentShop.getDanhGia() +
-                        "\nSố sản phẩm: " + currentShop.getSoSanPham() +
-                        "\nNgười theo dõi: " + currentShop.getNguoiTheoDoi() +
-                        "\nThời gian tham gia: " + currentShop.getThoiGianThamGia() +
-                        "\nĐịa chỉ: " + currentShop.getDiaChi() +
-                        "\nSố điện thoại: " + currentShop.getSoDienThoai() +
-                        "\nMô tả: " + currentShop.getMoTa()
-        );
-    }
+        if (shopRequest == null) {
+            hienThongBao("Thông tin cửa hàng", "Không tìm thấy cửa hàng đã được phê duyệt.");
+            return;
+        }
 
-    private void suaTenShop() {
-        EditText input = new EditText(requireContext());
-        input.setHint("Nhập tên shop mới");
-        input.setText(currentShop.getTenShop());
+        String info = "Tên cửa hàng: " + giaTri(shopRequest.getTenGianHang(), "Chưa có")
+                + "\nChủ cửa hàng: " + giaTri(shopRequest.getHoTen(), "Chưa có")
+                + "\nSố điện thoại: " + giaTri(shopRequest.getSoDienThoai(), "Chưa có")
+                + "\nEmail: " + giaTri(shopRequest.getEmail(), "Chưa có")
+                + "\nĐịa chỉ kinh doanh: " + giaTri(shopRequest.getDiaChiKinhDoanh(), "Chưa có")
+                + "\nLoại nông sản: " + giaTri(shopRequest.getLoaiNongSan(), "Chưa có")
+                + "\nNguồn gốc: " + giaTri(shopRequest.getNguonGocSanPham(), "Chưa có")
+                + "\nMô tả: " + giaTri(shopRequest.getMoTaGianHang(), "Chưa có");
 
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Sửa tên shop")
-                .setView(input)
-                .setPositiveButton("Lưu", (dialog, which) -> {
-                    String tenMoi = input.getText().toString().trim();
-
-                    if (tenMoi.isEmpty()) {
-                        Toast.makeText(getContext(), "Tên shop không được để trống", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    currentShop.setTenShop(tenMoi);
-
-                    Toast.makeText(getContext(), "Đã cập nhật tên shop", Toast.LENGTH_SHORT).show();
-                    hienThongTinShop();
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
-
-    private void quanLyDonHang() {
-        String[] options = {
-                "Xem đơn hàng",
-                "Xác nhận đơn hàng",
-                "Từ chối đơn hàng",
-                "Cập nhật trạng thái giao hàng"
-        };
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Quản lý đơn hàng")
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) {
-                        hienThongTin("Danh sách đơn hàng",
-                                "Đơn chờ xác nhận\nĐơn đang chuẩn bị\nĐơn đang giao\nĐơn hoàn tất");
-                    } else if (which == 1) {
-                        Toast.makeText(getContext(), "Đã xác nhận đơn hàng", Toast.LENGTH_SHORT).show();
-                    } else if (which == 2) {
-                        Toast.makeText(getContext(), "Đã từ chối đơn hàng", Toast.LENGTH_SHORT).show();
-                    } else if (which == 3) {
-                        capNhatTrangThaiDonHang();
-                    }
-                })
-                .show();
-    }
-
-    private void capNhatTrangThaiDonHang() {
-        String[] trangThai = {
-                "Đang chuẩn bị",
-                "Đang giao",
-                "Đã giao",
-                "Hoàn tất"
-        };
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Cập nhật trạng thái")
-                .setItems(trangThai, (dialog, which) ->
-                        Toast.makeText(getContext(), "Đã cập nhật: " + trangThai[which], Toast.LENGTH_SHORT).show()
-                )
-                .show();
-    }
-
-    private void quanLyKhuyenMai() {
-        String[] options = {
-                "Xem khuyến mãi",
-                "Tạo voucher",
-                "Sửa voucher",
-                "Xóa voucher"
-        };
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Quản lý khuyến mãi")
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) {
-                        hienThongTin("Danh sách khuyến mãi",
-                                "Giảm giá theo đơn hàng\nMiễn phí vận chuyển\nVoucher khách hàng mới");
-                    } else if (which == 1) {
-                        nhapNoiDung("Tạo voucher", "Nhập tên voucher", "Đã tạo voucher");
-                    } else if (which == 2) {
-                        nhapNoiDung("Sửa voucher", "Nhập nội dung voucher mới", "Đã sửa voucher");
-                    } else if (which == 3) {
-                        xacNhan("Xóa voucher", "Bạn có chắc muốn xóa voucher này không?", "Đã xóa voucher");
-                    }
-                })
-                .show();
-    }
-
-    private void xuLyYeuCauDangKy() {
-        String[] options = {
-                "Xem yêu cầu chờ duyệt",
-                "Duyệt yêu cầu",
-                "Từ chối yêu cầu"
-        };
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Xử lý yêu cầu đăng ký")
-                .setItems(options, (dialog, which) -> {
-                    if (which == 0) {
-                        hienThongTin("Yêu cầu đăng ký",
-                                "Danh sách yêu cầu đăng ký bán hàng đang chờ xử lý.");
-                    } else if (which == 1) {
-                        Toast.makeText(getContext(), "Đã duyệt yêu cầu", Toast.LENGTH_SHORT).show();
-                    } else if (which == 2) {
-                        Toast.makeText(getContext(), "Đã từ chối yêu cầu", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .show();
+        hienThongBao("Thông tin cửa hàng", info);
     }
 
     private void caiDatShop() {
-        String[] options = {
-                "Sửa số điện thoại",
-                "Sửa địa chỉ",
-                "Sửa mô tả shop"
-        };
+        if (shopRequest == null) {
+            hienThongBao("Cài đặt cửa hàng", "Không tìm thấy cửa hàng đã được phê duyệt.");
+            return;
+        }
 
+        String[] options = {"Sửa tên cửa hàng", "Sửa số điện thoại", "Sửa địa chỉ kinh doanh", "Sửa mô tả"};
         new AlertDialog.Builder(requireContext())
-                .setTitle("Cài đặt shop")
+                .setTitle("Cài đặt cửa hàng")
                 .setItems(options, (dialog, which) -> {
-                    if (which == 0) suaSoDienThoai();
-                    else if (which == 1) suaDiaChi();
-                    else if (which == 2) suaMoTa();
+                    if (which == 0) suaField("Tên cửa hàng", "tenGianHang", shopRequest.getTenGianHang());
+                    else if (which == 1) suaField("Số điện thoại", "soDienThoai", shopRequest.getSoDienThoai());
+                    else if (which == 2) suaField("Địa chỉ kinh doanh", "diaChiKinhDoanh", shopRequest.getDiaChiKinhDoanh());
+                    else suaField("Mô tả cửa hàng", "moTaGianHang", shopRequest.getMoTaGianHang());
                 })
                 .show();
     }
 
-    private void suaSoDienThoai() {
+    private void suaField(String title, String field, String currentValue) {
+        if (TextUtils.isEmpty(requestId)) {
+            hienThongBao(title, "Không tìm thấy dữ liệu cửa hàng để cập nhật.");
+            return;
+        }
+
         EditText input = new EditText(requireContext());
-        input.setHint("Nhập số điện thoại mới");
-        input.setText(currentShop.getSoDienThoai());
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Sửa số điện thoại")
-                .setView(input)
-                .setPositiveButton("Lưu", (dialog, which) -> {
-                    String sdtMoi = input.getText().toString().trim();
-
-                    if (sdtMoi.isEmpty()) {
-                        Toast.makeText(getContext(), "Số điện thoại không được để trống", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    currentShop.setSoDienThoai(sdtMoi);
-                    Toast.makeText(getContext(), "Đã cập nhật số điện thoại", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
-
-    private void suaDiaChi() {
-        EditText input = new EditText(requireContext());
-        input.setHint("Nhập địa chỉ mới");
-        input.setText(currentShop.getDiaChi());
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Sửa địa chỉ")
-                .setView(input)
-                .setPositiveButton("Lưu", (dialog, which) -> {
-                    String diaChiMoi = input.getText().toString().trim();
-
-                    if (diaChiMoi.isEmpty()) {
-                        Toast.makeText(getContext(), "Địa chỉ không được để trống", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    currentShop.setDiaChi(diaChiMoi);
-                    Toast.makeText(getContext(), "Đã cập nhật địa chỉ", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
-
-    private void suaMoTa() {
-        EditText input = new EditText(requireContext());
-        input.setHint("Nhập mô tả shop");
-        input.setText(currentShop.getMoTa());
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Sửa mô tả shop")
-                .setView(input)
-                .setPositiveButton("Lưu", (dialog, which) -> {
-                    String moTaMoi = input.getText().toString().trim();
-
-                    if (moTaMoi.isEmpty()) {
-                        Toast.makeText(getContext(), "Mô tả không được để trống", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    currentShop.setMoTa(moTaMoi);
-                    Toast.makeText(getContext(), "Đã cập nhật mô tả shop", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
-
-    private void nhapNoiDung(String title, String hint, String successMessage) {
-        EditText input = new EditText(requireContext());
-        input.setHint(hint);
+        input.setText(currentValue == null ? "" : currentValue);
+        input.setHint(title);
+        input.setSingleLine(false);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
         new AlertDialog.Builder(requireContext())
                 .setTitle(title)
                 .setView(input)
+                .setNegativeButton("Hủy", null)
                 .setPositiveButton("Lưu", (dialog, which) -> {
                     String value = input.getText().toString().trim();
-
                     if (value.isEmpty()) {
                         Toast.makeText(getContext(), "Không được để trống", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), successMessage + ": " + value, Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    capNhatField(field, value);
                 })
-                .setNegativeButton("Hủy", null)
                 .show();
     }
 
-    private void xacNhan(String title, String message, String successMessage) {
+    private void capNhatField(String field, String value) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(field, value);
+
+        db.collection("seller_requests")
+                .document(requestId)
+                .update(data)
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(requireContext(), "Đã cập nhật cửa hàng", Toast.LENGTH_SHORT).show();
+                    loadShopDaDuyet();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(requireContext(), "Lỗi cập nhật: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
+    }
+
+    private void hienThongBao(String title, String message) {
         new AlertDialog.Builder(requireContext())
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("Đồng ý", (dialog, which) ->
-                        Toast.makeText(getContext(), successMessage, Toast.LENGTH_SHORT).show()
-                )
-                .setNegativeButton("Hủy", null)
+                .setPositiveButton("Đóng", null)
                 .show();
     }
 
-    private void hienThongTin(String tieuDe, String noiDung) {
-        new AlertDialog.Builder(requireContext())
-                .setTitle(tieuDe)
-                .setMessage(noiDung)
-                .setPositiveButton("Đóng", null)
-                .show();
+    private String giaTri(String value, String fallback) {
+        return value == null || value.trim().isEmpty() ? fallback : value.trim();
+    }
+
+    private String formatGia(int gia) {
+        return NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(gia) + "đ";
     }
 }

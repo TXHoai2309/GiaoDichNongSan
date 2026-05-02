@@ -17,10 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.adapter.SanPhamTrongDonAdapter;
 import com.example.giaodichnongsan.model.DonHang;
-import com.example.giaodichnongsan.model.GioHangItem;
 import com.example.giaodichnongsan.viewmodel.DonHangViewModel;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -44,7 +41,6 @@ public class ChiTietDonHangActivity extends AppCompatActivity {
 
         initView();
         loadData();
-        checkRole(); // kiểm tra quyền để hiện nút đổi trạng thái
     }
 
     private void initView() {
@@ -57,6 +53,7 @@ public class ChiTietDonHangActivity extends AppCompatActivity {
         tvTongTien   = findViewById(R.id.tvTongTien); // (khai báo biến tương ứng ở đầu class)
         btnCapNhat   = findViewById(R.id.btnCapNhatTrangThai);
         btnHuyDon    = findViewById(R.id.btnHuyDon);
+        btnCapNhat.setVisibility(View.GONE);
 
         RecyclerView rvSanPham = findViewById(R.id.rvSanPham);
         rvSanPham.setLayoutManager(new LinearLayoutManager(this));
@@ -108,67 +105,6 @@ public class ChiTietDonHangActivity extends AppCompatActivity {
         }
     }
 
-    // ===== KIỂM TRA ROLE: chỉ seller/admin mới thấy nút đổi trạng thái =====
-    private void checkRole() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser() != null
-                ? FirebaseAuth.getInstance().getCurrentUser().getUid() : null;
-        if (uid == null) { btnCapNhat.setVisibility(View.GONE); return; }
-
-        FirebaseFirestore.getInstance().collection("users").document(uid)
-                .get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        // Chỉ cần kiểm tra "seller" thay vì isAdmin
-                        Boolean isSeller = doc.getBoolean("seller"); // field là "seller" không phải "isSeller"
-                        boolean coQuyen = Boolean.TRUE.equals(isSeller);
-
-                        if (coQuyen && !DonHang.DA_GIAO.equals(donHang.getTrangThai())
-                                && !DonHang.DA_HUY.equals(donHang.getTrangThai())) {
-                            btnCapNhat.setVisibility(View.VISIBLE);
-                            btnCapNhat.setOnClickListener(v -> showDialogCapNhat());
-                        } else {
-                            btnCapNhat.setVisibility(View.GONE);
-                        }
-                    }
-                });
-    }
-
-    // ===== DIALOG CHỌN TRẠNG THÁI MỚI =====
-    private void showDialogCapNhat() {
-        String[] options = {DonHang.DA_GIAO, DonHang.DA_HUY};
-
-        new AlertDialog.Builder(this)
-                .setTitle("Cập nhật trạng thái")
-                .setItems(options, (dialog, which) -> {
-                    String trangThaiMoi = options[which];
-                    xacNhanCapNhat(trangThaiMoi);
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
-
-    // ===== XÁC NHẬN & GỌI UPDATE =====
-    private void xacNhanCapNhat(String trangThaiMoi) {
-        new AlertDialog.Builder(this)
-                .setTitle("Xác nhận")
-                .setMessage("Chuyển sang \"" + trangThaiMoi + "\"?")
-                .setPositiveButton("Đồng ý", (d, w) -> {
-                    MutableLiveData<Boolean> ketQua = new MutableLiveData<>();
-                    ketQua.observe(this, success -> {
-                        if (Boolean.TRUE.equals(success)) {
-                            donHang.setTrangThai(trangThaiMoi);
-                            setTrangThaiUI(trangThaiMoi);
-                            btnCapNhat.setVisibility(View.GONE); // ẩn nút sau khi xong
-                            Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    viewModel.capNhatTrangThai(donHang.getId(), trangThaiMoi, ketQua);
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
     // ===== XÁC NHẬN HUỶ ĐƠN =====
     private void xacNhanHuy() {
         new AlertDialog.Builder(this)

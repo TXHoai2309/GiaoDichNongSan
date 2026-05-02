@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.giaodichnongsan.ui.fragment.ChiTietSanPhamFragment;
 import com.example.giaodichnongsan.R;
 import com.example.giaodichnongsan.model.SanPham;
+import com.example.giaodichnongsan.utils.ImageUrlHelper;
 
 import java.util.ArrayList;
 
@@ -58,9 +59,10 @@ public class SanPhamMoiAdapter extends RecyclerView.Adapter<SanPhamMoiAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         SanPham sp = list.get(position);
 
-        if (sp.getImageUrl() != null && !sp.getImageUrl().isEmpty()) {
+        String imageUrl = ImageUrlHelper.normalize(sp.getImageUrl());
+        if (!imageUrl.isEmpty()) {
             Glide.with(context)
-                    .load(sp.getImageUrl())
+                    .load(imageUrl)
                     .centerCrop()
                     .placeholder(R.drawable.ic_product)
                     .error(R.drawable.ic_product)

@@ -230,6 +230,43 @@ public class TaiKhoanFragment extends Fragment {
                 .getSharedPreferences("USER", MODE_PRIVATE)
                 .getBoolean("isSeller", false);
 
+        hienThiTrangThaiSeller(isSeller);
+        loadTrangThaiSellerTuFirestore();
+    }
+
+    private void loadTrangThaiSellerTuFirestore() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) {
+            hienThiTrangThaiSeller(false);
+            return;
+        }
+
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(firebaseUser.getUid())
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!isAdded()) return;
+
+                    Boolean isSellerValue = snapshot.getBoolean("isSeller");
+                    Boolean sellerValue = snapshot.getBoolean("seller");
+                    boolean isSeller = Boolean.TRUE.equals(isSellerValue) || Boolean.TRUE.equals(sellerValue);
+
+                    requireActivity()
+                            .getSharedPreferences("USER", MODE_PRIVATE)
+                            .edit()
+                            .putBoolean("isSeller", isSeller)
+                            .apply();
+
+                    hienThiTrangThaiSeller(isSeller);
+                })
+                .addOnFailureListener(e -> {
+                    if (!isAdded()) return;
+                    hienThiTrangThaiSeller(false);
+                });
+    }
+
+    private void hienThiTrangThaiSeller(boolean isSeller) {
         if (isSeller) {
             itemDangKyBanHang.setVisibility(View.GONE);
             itemQuanLyCuaHang.setVisibility(View.VISIBLE);

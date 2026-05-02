@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,24 +21,22 @@ import com.example.giaodichnongsan.model.GioHangItem;
 import com.example.giaodichnongsan.ui.activity.DatHangThanhCongActivity;
 import com.example.giaodichnongsan.viewmodel.DonHangViewModel;
 import com.example.giaodichnongsan.viewmodel.GioHangViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class ThanhToanFragment extends Fragment {
 
-    // ===== VIEW =====
     private RecyclerView rvThanhToan;
-    private TextView tvTongTien;
+    private TextView tvTongTien, tvTienHang;
+    private EditText edtTenNguoiNhan, edtSdtNguoiNhan, edtDiaChiGiao, edtGhiChu;
     private Button btnDatHang;
 
-    // ===== ADAPTER =====
     private ThanhToanAdapter adapter;
-
-    // ===== VIEWMODEL =====
     private GioHangViewModel gioHangViewModel;
     private DonHangViewModel donHangViewModel;
-
-    // ===== DATA =====
     private ArrayList<GioHangItem> listMua;
 
     public ThanhToanFragment() {}
@@ -51,9 +50,7 @@ public class ThanhToanFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_thanhtoan, container, false);
 
         initView(view);
@@ -61,94 +58,143 @@ public class ThanhToanFragment extends Fragment {
         initViewModel();
         setupRecyclerView();
         setupUI();
+        loadThongTinNguoiDung();
         setupEvent();
 
         return view;
     }
 
-    // ===== INIT VIEW =====
     private void initView(View view) {
         rvThanhToan = view.findViewById(R.id.rvThanhToan);
-        tvTongTien = view.findViewById(R.id.tvTong); // ⚠️ nhớ đúng ID XML
+        tvTongTien = view.findViewById(R.id.tvTong);
+        tvTienHang = view.findViewById(R.id.tvTienHang);
+        edtTenNguoiNhan = view.findViewById(R.id.edtTenNguoiNhan);
+        edtSdtNguoiNhan = view.findViewById(R.id.edtSdtNguoiNhan);
+        edtDiaChiGiao = view.findViewById(R.id.edtDiaChiGiao);
+        edtGhiChu = view.findViewById(R.id.edtGhiChu);
         btnDatHang = view.findViewById(R.id.btnDatHang);
     }
 
-    // ===== INIT DATA =====
     private void initData() {
         if (getArguments() != null) {
             listMua = (ArrayList<GioHangItem>) getArguments().getSerializable("list");
         }
-
         if (listMua == null) {
             listMua = new ArrayList<>();
         }
     }
 
-    // ===== INIT VIEWMODEL =====
     private void initViewModel() {
-        gioHangViewModel  = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
-        donHangViewModel  = new ViewModelProvider(requireActivity()).get(DonHangViewModel.class);
+        gioHangViewModel = new ViewModelProvider(requireActivity()).get(GioHangViewModel.class);
+        donHangViewModel = new ViewModelProvider(requireActivity()).get(DonHangViewModel.class);
 
-        // Observe kết quả đặt hàng
         donHangViewModel.getDatHangSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success == null) return;
 
             if (success) {
-                // Xóa giỏ hàng
                 gioHangViewModel.clearCart();
-
-                // Chuyển màn thành công
                 startActivity(new Intent(getActivity(), DatHangThanhCongActivity.class));
-
-                // Quay về TrangChu
                 requireActivity().getSupportFragmentManager()
-                        .popBackStack(null,
-                                androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        .popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
             } else {
-                Toast.makeText(getContext(),
-                        "Đặt hàng thất bại, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Đặt hàng thất bại, vui lòng thử lại", Toast.LENGTH_SHORT).show();
                 btnDatHang.setEnabled(true);
             }
         });
     }
 
-    // ===== SETUP RECYCLER =====
     private void setupRecyclerView() {
         rvThanhToan.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ThanhToanAdapter(listMua);
         rvThanhToan.setAdapter(adapter);
     }
 
-    // ===== UI =====
     private void setupUI() {
         int tongTien = tinhTongTien(listMua);
-        tvTongTien.setText("Tổng tiền: " + tongTien + "đ");
+        tvTienHang.setText(formatGia(tongTien));
+        tvTongTien.setText(formatGia(tongTien));
     }
 
-    // ===== EVENT =====
+    private void loadThongTinNguoiDung() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        FirebaseFirestore.getInstance().collection("users").document(user.getUid())
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (!isAdded() || !doc.exists()) return;
+                    setTextIfEmpty(edtTenNguoiNhan,
+                            firstNonEmpty(doc.getString("hoTen"), doc.getString("ten"), doc.getString("name")));
+                    setTextIfEmpty(edtSdtNguoiNhan,
+                            firstNonEmpty(doc.getString("soDienThoai"), doc.getString("sdt"), doc.getString("phone")));
+                    setTextIfEmpty(edtDiaChiGiao,
+                            firstNonEmpty(doc.getString("diaChi"), doc.getString("diaChiGiao"), doc.getString("address")));
+                });
+    }
+
     private void setupEvent() {
         btnDatHang.setOnClickListener(v -> {
-
             if (listMua.isEmpty()) {
                 Toast.makeText(getContext(), "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            btnDatHang.setEnabled(false); // tránh bấm 2 lần
+            String tenNguoiNhan = text(edtTenNguoiNhan);
+            String sdtNguoiNhan = text(edtSdtNguoiNhan);
+            String diaChiGiao = text(edtDiaChiGiao);
+            String ghiChu = text(edtGhiChu);
 
+            if (tenNguoiNhan.isEmpty()) {
+                edtTenNguoiNhan.setError("Vui lòng nhập họ tên người nhận");
+                edtTenNguoiNhan.requestFocus();
+                return;
+            }
+            if (sdtNguoiNhan.isEmpty()) {
+                edtSdtNguoiNhan.setError("Vui lòng nhập số điện thoại");
+                edtSdtNguoiNhan.requestFocus();
+                return;
+            }
+            if (diaChiGiao.isEmpty()) {
+                edtDiaChiGiao.setError("Vui lòng nhập địa chỉ nhận hàng");
+                edtDiaChiGiao.requestFocus();
+                return;
+            }
+
+            btnDatHang.setEnabled(false);
             int tongTien = tinhTongTien(listMua);
-            donHangViewModel.addDonHang(new ArrayList<>(listMua), tongTien);
+            donHangViewModel.addDonHang(new ArrayList<>(listMua), tongTien,
+                    tenNguoiNhan, sdtNguoiNhan, diaChiGiao, ghiChu);
         });
     }
 
-    // ===== TÍNH TIỀN =====
     private int tinhTongTien(ArrayList<GioHangItem> list) {
         int total = 0;
-
         for (GioHangItem item : list) {
-            total += item.getSanPham().getGia() * item.getSoLuong();
+            if (item != null && item.getSanPham() != null) {
+                total += item.getSanPham().getGia() * item.getSoLuong();
+            }
         }
-
         return total;
+    }
+
+    private String text(EditText editText) {
+        return editText.getText().toString().trim();
+    }
+
+    private void setTextIfEmpty(EditText editText, String value) {
+        if (editText.getText().toString().trim().isEmpty() && value != null && !value.trim().isEmpty()) {
+            editText.setText(value.trim());
+        }
+    }
+
+    private String firstNonEmpty(String... values) {
+        for (String value : values) {
+            if (value != null && !value.trim().isEmpty()) return value.trim();
+        }
+        return "";
+    }
+
+    private String formatGia(int gia) {
+        return String.format("%,dđ", gia);
     }
 }

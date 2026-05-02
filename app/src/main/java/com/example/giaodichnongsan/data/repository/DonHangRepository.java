@@ -23,6 +23,12 @@ public class DonHangRepository {
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
 
     public MutableLiveData<Boolean> addDonHang(ArrayList<GioHangItem> list, int tongTien) {
+        return addDonHang(list, tongTien, "", "", "", "");
+    }
+
+    public MutableLiveData<Boolean> addDonHang(ArrayList<GioHangItem> list, int tongTien,
+                                               String tenNguoiMua, String sdtNguoiMua,
+                                               String diaChiGiao, String ghiChu) {
         MutableLiveData<Boolean> result = new MutableLiveData<>();
 
         if (auth.getCurrentUser() == null) {
@@ -49,10 +55,11 @@ public class DonHangRepository {
         donHangData.put("trangThai", DonHang.DANG_GIAO);
         donHangData.put("ngayDat", ngayDat);
         donHangData.put("ngayDatMillis", ngayDatMillis);
+        donHangData.put("tenNguoiMua", tenNguoiMua);
+        donHangData.put("sdtNguoiMua", sdtNguoiMua);
+        donHangData.put("diaChiGiao", diaChiGiao);
+        donHangData.put("ghiChu", ghiChu);
 
-        orderRef.set(donHangData)
-                .addOnSuccessListener(unused -> result.setValue(true))
-                .addOnFailureListener(e -> result.setValue(false));
         orderRef.set(donHangData)
                 .addOnSuccessListener(unused -> {
                     capNhatDaBan(list); // ← THÊM DÒNG NÀY

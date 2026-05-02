@@ -24,12 +24,19 @@ public class DonHangViewModel extends ViewModel {
 
     // ===== THÊM ĐƠN HÀNG =====
     public void addDonHang(ArrayList<GioHangItem> list, int tongTien) {
+        addDonHang(list, tongTien, "", "", "", "");
+    }
+
+    public void addDonHang(ArrayList<GioHangItem> list, int tongTien,
+                           String tenNguoiMua, String sdtNguoiMua,
+                           String diaChiGiao, String ghiChu) {
         isLoading.setValue(true);
 
-        repository.addDonHang(list, tongTien).observeForever(success -> {
-            isLoading.setValue(false);
-            datHangSuccess.setValue(success);
-        });
+        repository.addDonHang(list, tongTien, tenNguoiMua, sdtNguoiMua, diaChiGiao, ghiChu)
+                .observeForever(success -> {
+                    isLoading.setValue(false);
+                    datHangSuccess.setValue(success);
+                });
     }
 
     // ===== LOAD ĐƠN HÀNG =====
