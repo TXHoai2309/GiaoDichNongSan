@@ -1,31 +1,108 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:layout_marginBottom="8dp"
-    android:background="@drawable/bg_border"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp">
 
-    <TextView
-        android:id="@+id/tvTenSP"
-        android:text="Cà chua x2"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvTongTien"
-        android:text="100.000đ"
-        android:textColor="#FF5722"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <!-- HEADER: Shop + Trạng thái -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F8F8F8"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/tvTrangThai"
-        android:text="Đang giao"
-        android:textColor="#4CAF50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_shop"
+                android:layout_marginEnd="6dp"/>
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/tvTenShop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tên shop"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="#212121"/>
+
+            <TextView
+                android:id="@+id/tvTrangThai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đang giao"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="#FFA000"/>
+
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="#EEEEEE"/>
+
+        <!-- DANH SÁCH SẢN PHẨM -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSanPhamTrongDon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:paddingHorizontal="14dp"
+            android:paddingTop="8dp"/>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="#EEEEEE" android:layout_marginTop="8dp"/>
+
+        <!-- TỔNG TIỀN -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thành tiền: "
+                android:textSize="13sp"
+                android:textColor="#757575"/>
+
+            <TextView
+                android:id="@+id/tvTongTien"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="150.000đ"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#E53935"/>
+
+        </LinearLayout>
+
+        <!-- NGÀY ĐẶT -->
+        <TextView
+            android:id="@+id/tvNgayDat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="14dp"
+            android:paddingBottom="10dp"
+            android:text="Ngày đặt: 01/05/2026"
+            android:textSize="12sp"
+            android:textColor="#AAAAAA"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

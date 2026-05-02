@@ -11,20 +11,27 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.giaodichnongsan.R;
+import com.example.giaodichnongsan.adapter.SanPhamTrongDonAdapter;
 import com.example.giaodichnongsan.model.DonHang;
 import com.example.giaodichnongsan.model.GioHangItem;
 import com.example.giaodichnongsan.viewmodel.DonHangViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 
 public class ChiTietDonHangActivity extends AppCompatActivity {
 
-    private TextView tvTen, tvSoLuong, tvTien, tvTrangThai;
-    private Button btnCapNhat;
-    private Button btnHuyDon;
+    private TextView tvTrangThai, tvNgayDat;
+    private TextView tvTenNguoiMua, tvSdt, tvDiaChi;
+    private TextView tvTien, tvTongTien;
+    private Button btnCapNhat, btnHuyDon;
+    private SanPhamTrongDonAdapter rvSanPhamAdapter;
     private DonHang donHang;
     private DonHangViewModel viewModel;
 
@@ -41,41 +48,52 @@ public class ChiTietDonHangActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        tvTen      = findViewById(R.id.tvTen);
-        tvSoLuong  = findViewById(R.id.tvSoLuong);
-        tvTien     = findViewById(R.id.tvTien);
-        tvTrangThai = findViewById(R.id.tvTrangThai);
-        btnCapNhat = findViewById(R.id.btnCapNhatTrangThai);
-        btnHuyDon = findViewById(R.id.btnHuyDon);
+        tvTrangThai  = findViewById(R.id.tvTrangThai);
+        tvNgayDat    = findViewById(R.id.tvNgayDat);
+        tvTenNguoiMua = findViewById(R.id.tvTenNguoiMua);
+        tvSdt        = findViewById(R.id.tvSdt);
+        tvDiaChi     = findViewById(R.id.tvDiaChi);
+        tvTien       = findViewById(R.id.tvTien);
+        tvTongTien   = findViewById(R.id.tvTongTien); // (khai báo biến tương ứng ở đầu class)
+        btnCapNhat   = findViewById(R.id.btnCapNhatTrangThai);
+        btnHuyDon    = findViewById(R.id.btnHuyDon);
+
+        RecyclerView rvSanPham = findViewById(R.id.rvSanPham);
+        rvSanPham.setLayoutManager(new LinearLayoutManager(this));
+        rvSanPham.setNestedScrollingEnabled(false);
+        rvSanPhamAdapter = new SanPhamTrongDonAdapter(new ArrayList<>());
+        rvSanPham.setAdapter(rvSanPhamAdapter);
     }
 
     private void loadData() {
         donHang = (DonHang) getIntent().getSerializableExtra("don");
         if (donHang == null) { finish(); return; }
 
-        StringBuilder tenSP = new StringBuilder();
-        int tongSoLuong = 0;
+        // Trạng thái + ngày
+        setTrangThaiUI(donHang.getTrangThai());
+        tvNgayDat.setText("Đặt lúc: " + donHang.getNgayDat());
 
-        if (donHang.getDanhSachSP() != null) {
-            for (GioHangItem item : donHang.getDanhSachSP()) {
-                tenSP.append(item.getSanPham().getTen())
-                        .append(" x").append(item.getSoLuong()).append("\n");
-                tongSoLuong += item.getSoLuong();
-            }
-        }
-        // Chỉ hiện nút huỷ nếu đơn đang giao
+        // Thông tin người mua
+        tvTenNguoiMua.setText(donHang.getTenNguoiMua() != null ? donHang.getTenNguoiMua() : "Chưa cập nhật");
+        tvSdt.setText(donHang.getSdtNguoiMua() != null ? donHang.getSdtNguoiMua() : "Chưa cập nhật");
+        tvDiaChi.setText(donHang.getDiaChiGiao() != null ? donHang.getDiaChiGiao() : "Chưa cập nhật");
+
+        // Danh sách sản phẩm
+        rvSanPhamAdapter = new SanPhamTrongDonAdapter(donHang.getDanhSachSP());
+        ((RecyclerView) findViewById(R.id.rvSanPham)).setAdapter(rvSanPhamAdapter);
+
+        // Tiền
+        tvTien.setText(String.format("%,dđ", donHang.getTongTien()));
+        tvTongTien.setText(String.format("%,dđ", donHang.getTongTien()));
+
+        // Nút huỷ
         if (DonHang.DANG_GIAO.equals(donHang.getTrangThai())) {
             btnHuyDon.setVisibility(View.VISIBLE);
             btnHuyDon.setOnClickListener(v -> xacNhanHuy());
-        } else {
-            btnHuyDon.setVisibility(View.GONE);
         }
-
-        tvTen.setText(tenSP.toString().trim());
-        tvSoLuong.setText("Tổng SL: " + tongSoLuong);
-        tvTien.setText(String.format("Tổng: %,dđ", donHang.getTongTien()));
-        setTrangThaiUI(donHang.getTrangThai());
     }
+
+
 
     // ===== HIỂN THỊ MÀU TRẠNG THÁI =====
     private void setTrangThaiUI(String trangThai) {

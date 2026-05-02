@@ -46,8 +46,10 @@ public class GioHangFragment extends Fragment {
         setupRecyclerView();
         setupObserver();
         setupEvents();
+        viewModel.loadGioHang();
 
         return view;
+
     }
 
     // ===== INIT VIEW =====
@@ -117,6 +119,7 @@ public class GioHangFragment extends Fragment {
         });
     }
 
+
     // ===== CALLBACK =====
     private final GioHangAdapter.OnItemClickListener listener = new GioHangAdapter.OnItemClickListener() {
 
@@ -139,5 +142,12 @@ public class GioHangFragment extends Fragment {
         public void onCheckChanged() {
             viewModel.updateSelection(); // 🔥 tính lại total trong VM
         }
+
     };
+    // Thêm onResume() vào cuối class:
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.loadGioHang(); // reload khi quay lại tab giỏ hàng
+    }
 }
