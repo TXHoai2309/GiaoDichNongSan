@@ -43,7 +43,30 @@ public class AuthRepository {
         MutableLiveData<String> result = new MutableLiveData<>();
 
         auth.signInWithEmailAndPassword(email, pass)
-                .addOnSuccessListener(authResult -> result.setValue(null)) // null = ok
+                .addOnSuccessListener(authResult -> {
+                    FirebaseUser firebaseUser = authResult.getUser();
+                    if (firebaseUser == null) {
+                        result.setValue("Không tìm thấy tài khoản");
+                        return;
+                    }
+
+                    db.collection("users")
+                            .document(firebaseUser.getUid())
+                            .get()
+                            .addOnSuccessListener(snapshot -> {
+                                User user = snapshot.toObject(User.class);
+                                if (user != null && user.isBiKhoa()) {
+                                    auth.signOut();
+                                    result.setValue("Tài khoản đã bị admin khóa");
+                                } else {
+                                    result.setValue(null);
+                                }
+                            })
+                            .addOnFailureListener(e -> {
+                                auth.signOut();
+                                result.setValue("Không kiểm tra được trạng thái tài khoản: " + e.getMessage());
+                            });
+                })
                 .addOnFailureListener(e -> result.setValue(e.getMessage()));
 
         return result;

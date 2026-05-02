@@ -8,25 +8,25 @@ public class User implements Serializable {
     private String hoTen;
     private String soDienThoai;
     private String email;
-    private String avatarUrl;   // ảnh đại diện (Firebase Storage sau này)
-    private String diaChi;      // địa chỉ giao hàng mặc định
-    private boolean isSeller;   // đã đăng ký bán hàng chưa
-    private String shopId;      // nếu là seller thì có shopId
-    private long ngayTao;       // timestamp tạo tài khoản
+    private String avatarUrl;
+    private String diaChi;
+    private boolean isSeller;
+    private String shopId;
+    private long ngayTao;
+    private boolean biKhoa;
 
     public User() {}
 
-    // Constructor đăng ký cơ bản
     public User(String uid, String hoTen, String soDienThoai, String email) {
         this.uid = uid;
         this.hoTen = hoTen;
         this.soDienThoai = soDienThoai;
         this.email = email;
         this.isSeller = false;
+        this.biKhoa = false;
         this.ngayTao = System.currentTimeMillis();
     }
 
-    // Getter
     public String getUid() { return uid; }
     public String getHoTen() { return hoTen; }
     public String getSoDienThoai() { return soDienThoai; }
@@ -36,8 +36,8 @@ public class User implements Serializable {
     public boolean isSeller() { return isSeller; }
     public String getShopId() { return shopId; }
     public long getNgayTao() { return ngayTao; }
+    public boolean isBiKhoa() { return biKhoa; }
 
-    // Setter
     public void setUid(String uid) { this.uid = uid; }
     public void setHoTen(String hoTen) { this.hoTen = hoTen; }
     public void setSoDienThoai(String soDienThoai) { this.soDienThoai = soDienThoai; }
@@ -47,4 +47,5 @@ public class User implements Serializable {
     public void setSeller(boolean seller) { isSeller = seller; }
     public void setShopId(String shopId) { this.shopId = shopId; }
     public void setNgayTao(long ngayTao) { this.ngayTao = ngayTao; }
+    public void setBiKhoa(boolean biKhoa) { this.biKhoa = biKhoa; }
 }
