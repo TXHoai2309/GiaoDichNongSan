@@ -3,6 +3,8 @@ package com.example.giaodichnongsan.model;
 import java.io.Serializable;
 
 public class SellerRegistrationRequest implements Serializable {
+    private String id;
+    private String userId;
     private String hoTen;
     private String soDienThoai;
     private String email;
@@ -47,6 +49,8 @@ public class SellerRegistrationRequest implements Serializable {
         this.trangThai = trangThai;
     }
 
+    public String getId() { return id; }
+    public String getUserId() { return userId; }
     public String getHoTen() { return hoTen; }
     public String getSoDienThoai() { return soDienThoai; }
     public String getEmail() { return email; }
@@ -62,4 +66,8 @@ public class SellerRegistrationRequest implements Serializable {
     public String getSoTaiKhoan() { return soTaiKhoan; }
     public String getTenChuTaiKhoan() { return tenChuTaiKhoan; }
     public String getTrangThai() { return trangThai; }
+
+    public void setId(String id) { this.id = id; }
+    public void setUserId(String userId) { this.userId = userId; }
+    public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
 }

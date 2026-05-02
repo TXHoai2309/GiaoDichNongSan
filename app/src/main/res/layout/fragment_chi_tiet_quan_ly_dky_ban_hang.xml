@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="#F8F1EC">
+    android:background="#F8F1EC"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="16dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -17,234 +18,59 @@
 
             <ImageView
                 android:id="@+id/btnBack"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_centerVertical="true"
-                android:src="@android:drawable/ic_media_previous" />
+                android:contentDescription="Quay lại"
+                android:src="@android:drawable/ic_media_previous"
+                app:tint="#4A423D" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Quản lý đăng ký bán hàng"
-                android:textColor="#2F2F2F"
-                android:textSize="18sp"
+                android:text="Chi tiết yêu cầu"
+                android:textColor="#4A423D"
+                android:textSize="22sp"
                 android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/btnMenu"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@android:drawable/ic_menu_sort_by_size" />
         </RelativeLayout>
 
-        <!-- 1. Thông tin cá nhân -->
+        <LinearLayout
+            android:id="@+id/layoutNoiDung"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="#FFFDFC"
-            android:orientation="vertical">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ECE8E2"
-                android:padding="10dp"
-                android:text="1. Thông tin cá nhân"
-                android:textColor="#2F2F2F"
-                android:textSize="16sp"
+            <Button
+                android:id="@+id/btnTuChoi"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:backgroundTint="#D9534F"
+                android:text="Từ chối"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvHoTen"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:text="Họ và tên: Nguyễn Văn A"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvSoDienThoai"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="12dp"
-                android:text="Số điện thoại: 0912 345 567"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="12dp"
-                android:text="Email: nguyenvana@example.com"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="12dp"
-                android:text="Số CCCD: 012345678901"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="12dp"
-                android:text="Địa chỉ cư trú: Đà Lạt, Lâm Đồng"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <!-- 2. Thông tin gian hàng -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="#FFFDFC"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ECE8E2"
-                android:padding="10dp"
-                android:text="2. Thông tin gian hàng"
-                android:textColor="#2F2F2F"
-                android:textSize="16sp"
+            <Button
+                android:id="@+id/btnPheDuyet"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:backgroundTint="#68A25A"
+                android:text="Phê duyệt"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:text="Tên gian hàng: Nông sản sạch Đà Lạt"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="12dp"
-                android:text="Mô tả gian hàng: Chuyên cung cấp nông sản sạch."
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="12dp"
-                android:text="Địa chỉ sản xuất / kinh doanh: Đức Trọng, Lâm Đồng"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="12dp"
-                android:text="Loại nông sản kinh doanh: Rau, củ, quả"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="6dp"
-                android:text="Giấy chứng nhận an toàn thực phẩm"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/imgGiayChungNhanAnToan"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="#E9E9E9"
-                android:scaleType="centerCrop"
-                android:src="@android:drawable/ic_menu_gallery" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="6dp"
-                android:text="Giấy chứng nhận VietGAP / hữu cơ"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/imgGiayChungNhanVietGap"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="12dp"
-                android:background="#E9E9E9"
-                android:scaleType="centerCrop"
-                android:src="@android:drawable/ic_menu_gallery" />
         </LinearLayout>
-
-        <!-- 3. Thông tin thanh toán -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="16dp"
-            android:background="#FFFDFC"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ECE8E2"
-                android:padding="10dp"
-                android:text="3. Thông tin thanh toán"
-                android:textColor="#2F2F2F"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:text="Số tài khoản ngân hàng: 123456789"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingBottom="12dp"
-                android:text="Tên chủ tài khoản: Nguyễn Văn A"
-                android:textColor="#555555"
-                android:textSize="14sp" />
-        </LinearLayout>
-
     </LinearLayout>
 </ScrollView>
